@@ -15,6 +15,7 @@ export interface cais{
 //-------------------------------------- main company --------------------------------------//
 export interface company{
     id : number,
+    image: string, // imagen guardada en base64
     companyname : string,
     rtn : string,
     direccion_company : string,

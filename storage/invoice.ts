@@ -46,6 +46,8 @@ export interface invoice {
     id_company: number;
     numero_de_factura: rangos; // register the id of rangos
     cai: string; // the cai of the company
+    comprador : string,
+    comprador_rtn : string
   };
   lineasfacturadas : lineafacturada[],
   id_impuesto : impuesto[]
