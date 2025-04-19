@@ -18,6 +18,19 @@ const styles = StyleSheet.create({
         borderRadius : 4,
         margin : 5,
         fontSize : 20,
+    },
+    mainbuttonstyle : {
+        borderRadius : 50,
+        backgroundColor : 'black',
+        borderWidth : 0,
+        margin : 20
+    },
+    flexcomponentsRow : {
+        display : 'flex',
+        flexDirection : 'row',
+        //justifyContent : 'space-around',
+        margin : 10,
+        padding : 5
     }
 })
 

@@ -13,6 +13,7 @@ export interface cais{
 }
 
 //-------------------------------------- main company --------------------------------------//
+
 export interface company{
     id : number,
     image: string, // imagen guardada en base64
@@ -22,7 +23,7 @@ export interface company{
     direccion_correo : string,
     numero_telefono_compay : string,
     cais : cais[],
-    active : boolean
+    active : boolean,
 }
 //--------------------------------------------------------------------------------------------//
 
