@@ -23,7 +23,8 @@ const styles = StyleSheet.create({
         borderRadius : 50,
         backgroundColor : 'black',
         borderWidth : 0,
-        margin : 20
+        margin : 20,
+        padding : 10
     },
     flexcomponentsRow : {
         display : 'flex',

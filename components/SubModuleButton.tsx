@@ -4,13 +4,12 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 type props = {
     title: string,
-    iconname: string,
-    _onclick_: (value: string) => (void);
+    iconname: string
 }
 
-const ModuleSubbutton = ({ title, iconname, _onclick_ }: props) => {
+const ModuleSubbutton = ({ title, iconname}: props) => {
     return (
-        <TouchableOpacity style={[styles.mainbuttonstyle, { alignItems: 'center', height : 50, width : 50 }]} onPress={() => _onclick_(title)}>
+        <TouchableOpacity style={[styles.mainbuttonstyle, { alignItems: 'center', height : 50, width : 50 }]}>
             <View style={[{ margin: 10, marginLeft: 20 }]}>
                 <Icon name={iconname} size={40} color="white" />
             </View>

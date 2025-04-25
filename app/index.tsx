@@ -1,16 +1,14 @@
-import { Text, View } from "react-native";
+import { View, TouchableOpacity, Text } from "react-native";
 import Modulebutton from "@/components/ModuleButton";
-import { useRouter } from 'expo-router';
-import ModuleIndex from "./modules.index";
-
+import { useRouter, Link } from 'expo-router';
+const router = useRouter();
+//import { routeCompany } from "./modules.index";
+// <Modulebutton title={"GENERACION DE FACTURAS"} iconname="file-present" />
 export default function Index() {
-  const router = useRouter();
-  const routesModules = ModuleIndex;
-  const value = (value: string) => { router.push( routesModules.company)}
 
   return (
-    <View>
-      <Modulebutton title={"GENERACION DE FACTURAS"} iconname="file-present" _onclick_={value} />
-    </View>
+    <Link href={'/modules/company/indexcompany'}>
+      <Modulebutton title={"GENERACION DE FACTURAS"} iconname="file-present" />
+    </Link>
   );
 }
