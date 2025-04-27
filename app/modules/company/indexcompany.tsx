@@ -1,16 +1,26 @@
-import { TouchableOpacity, Text} from "react-native";
-import ModuleSubbutton from "@/components/SubModuleButton";
-import { useRouter, Link } from "expo-router";
-const router = useRouter();
+import { TouchableOpacity, Text } from "react-native";
+//import ModuleSubbutton from "@/components/SubModuleButton"
+import { createStackNavigator } from '@react-navigation/stack';
 
- //<ModuleSubbutton title="CREAR COMPAÑIA" iconname="menu"/>
-const indexCompany = () =>{
+// pages 
+import RegisterCompany from "./pages/registercompany";
+import HomeCompany from "./pages/home";
 
-    return(
-        <Link href={'/modules/company/pages/registercompany'}>
-           <Text>IR a compañia</Text>
-        </Link>
+const Stack = createStackNavigator();
+
+const IndexCompany = () => {
+
+    return (
+        <Stack.Navigator
+            initialRouteName="Home"
+            screenOptions={{ 
+                headerShown: false,
+            }}
+        >
+            <Stack.Screen name="Home" component={HomeCompany}/>
+            <Stack.Screen name="Settings" component={RegisterCompany}/>
+        </Stack.Navigator>
     )
 }
 
-export default indexCompany;
+export default IndexCompany;

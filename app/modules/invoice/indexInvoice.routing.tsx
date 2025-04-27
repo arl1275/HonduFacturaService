@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 
-const indexInvoice = () =>{
+const IndexInvoice = () =>{
 
     return(
         <View>
@@ -9,4 +9,4 @@ const indexInvoice = () =>{
     )
 }
 
-export default indexInvoice;
+export default IndexInvoice;
