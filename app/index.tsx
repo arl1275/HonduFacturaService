@@ -10,7 +10,9 @@ import IndexCompany from './modules/company/indexcompany';
 const Tab = createBottomTabNavigator();
 
 const HomeScreen = () => {
-  return (<Text>Hola</Text>)
+  return (
+    <Text>Hola</Text>
+  )
 }
 
 export default function App() {
@@ -18,21 +20,21 @@ export default function App() {
     <Tab.Navigator
       screenOptions={({ route }) => ({
 
-        tabBarStyle:{
-          margin : 10, 
-          borderRadius : 50,
-          elevation : 10
+        tabBarStyle: {
+          margin: 10,
+          borderRadius: 50,
+          elevation: 10
         },
-        headerShown : false,
-        tabBarAllowFontScaling : true,
+        headerShown: false,
+        tabBarAllowFontScaling: true,
         tabBarIcon: ({ focused, color, size }) => {
           let iconName = '';
 
           if (route.name === 'Inicio') {
-            iconName = focused ? 'home-sharp' : 'home-sharp'; 
+            iconName = focused ? 'home-sharp' : 'home-sharp';
           } else if (route.name === 'Invoices') {
             iconName = focused ? 'document-text-sharp' : 'document-text-sharp';
-          }else if (route.name === 'Company') {
+          } else if (route.name === 'Company') {
             iconName = focused ? 'settings-sharp' : 'settings-sharp';
           }
 
@@ -45,7 +47,7 @@ export default function App() {
       <Tab.Screen name="Inicio" component={HomeScreen} />
       <Tab.Screen name="Invoices" component={IndexInvoice} />
       <Tab.Screen name="Company" component={IndexCompany} />
-      
+
     </Tab.Navigator>
   );
 }
