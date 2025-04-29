@@ -24,6 +24,7 @@ export interface invoicesconfig {
   fechalimite: Date;
   rangodefacturas: number;
   cantidad_maxima_efectivo: number;
+  referencia_facturas : rangos,
   piedehoja: string;
   active: boolean;
 }
