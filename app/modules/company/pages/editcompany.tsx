@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Button, Alert, Image } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Button, Alert, Image, Animated } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '../indexcompany';
 import styles from '@/assets/styles/styles';
@@ -7,6 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { updatecompany } from '@/storage/company.storage';
+import Index_invoice_company from '../components/indexInvoiceConfig';
 
 import { company } from '@/storage/empresa';
 
@@ -90,12 +91,12 @@ export default function EditCompanyPage({ route, navigation }: Props) {
               />
             )}
 
-            <View style={[styles.flexcomponentsRow,  {width : '100%', justifyContent : 'space-around', padding : 10}]}>
-              <Button title="Cambiar Logo" onPress={pickImage} color={'blue'}/>
+            <View style={[styles.flexcomponentsRow, { width: '100%', justifyContent: 'space-around', padding: 10 }]}>
+              <Button title="Cambiar Logo" onPress={pickImage} color={'blue'} />
               <Button title="Guardar" onPress={onSave} color={'green'} />
               <Button title="Cancelar" onPress={iseditingCompany} color={'red'} />
             </View>
-            
+
           </View>
           :
           <View style={[styles.rectanglebutton, styles.flexcomponentsRow,
@@ -116,7 +117,7 @@ export default function EditCompanyPage({ route, navigation }: Props) {
           </View>
       }
 
-      <Text style={[styles.textalingleft, styles.smallText]}>Invoice configuration</Text>
+     <Index_invoice_company />
 
     </View>
   );
