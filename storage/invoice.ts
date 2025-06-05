@@ -1,4 +1,5 @@
 import { impuesto } from "./empresa";
+import { cais } from "./empresa";
 
 export interface rangos {
   id: number;
@@ -22,8 +23,9 @@ export interface invoicesconfig {
   id_company: number; // this id, is related to the company
   encabezado: string;
   fechalimite: Date;
+  cai : cais,
   rangodefacturas: number;
-  cantidad_maxima_efectivo: number;
+  numero_maximo: number;
   referencia_facturas : rangos,
   piedehoja: string;
   active: boolean;

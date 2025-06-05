@@ -22,7 +22,6 @@ export interface company{
     direccion_company : string,
     direccion_correo : string,
     numero_telefono_compay : string,
-    cais : cais[],
     active : boolean,
 }
 //--------------------------------------------------------------------------------------------//
