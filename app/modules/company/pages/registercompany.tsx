@@ -57,7 +57,6 @@ export default function RegisterCompany() {
       direccion_company: direccion,
       direccion_correo: correo,
       numero_telefono_compay: telefono,
-      cais: [],
       active: true
     };
 

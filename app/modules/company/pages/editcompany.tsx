@@ -49,7 +49,7 @@ export default function EditCompanyPage({ route, navigation }: Props) {
 
 
   return (
-    <View>
+    <View style={{flex : 1}}>
       <View style={[styles.flexcomponentsRow, { margin: 5 }]}>
         <TouchableOpacity onPress={() => oncancel()}>
           <Ionicons name="chevron-back" size={30} color="black" />

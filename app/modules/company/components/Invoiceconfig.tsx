@@ -6,8 +6,9 @@ import styles from "@/assets/styles/styles";
 import { cais } from "@/storage/empresa";
 import { useState } from "react";
 
-type sendingprops = {
+type ForEditParams = {
     parentprops: (value: invoicesconfig) => void;
+    _onclose_ : ()=> void;
 }
 // this is to configurate teh invoices information
 
@@ -15,7 +16,7 @@ const InvoiceConfig = () => {
     const [show, setShow] = useState(false);
     const [cais_, setcais] = useState<cais>({ id: 0, nombre: "", active: true })
     const [rango, setRangos] = useState<rangos>({
-        id: 0,
+        id: Date.now(),
         numero_uno: 0,
         numero_dos: 0,
         numero_tres: 0,
@@ -24,7 +25,7 @@ const InvoiceConfig = () => {
     })
 
     const [form, setForm] = useState<invoicesconfig>({
-        id: 0,
+        id: Date.now(),
         id_company: 0,
         encabezado: "",
         cai: cais_,
@@ -36,32 +37,32 @@ const InvoiceConfig = () => {
         active: false,
     });
 
-    const handleInputChange = (field: string, value: string | number | boolean) => {
+    const handleInputChange = (field: string, value: string | number | boolean | rangos | cais) => {
         setForm({ ...form, [field]: value });
     };
 
-    const handleReferenciaChange = (field: "inicio" | "fin", value: string) => {
-        setForm({
-            ...form,
-            referencia_facturas: {
-                ...form.referencia_facturas,
-                [field]: value,
-            },
-        });
-    };
-
-    const handleFacturaRannge = (field: string, value: number) => {
+    const handleFacturaRannge = (field: string, value: any) => {
+        const num = parseInt(value);
         setRangos(prev => ({
             ...prev,
-            [field]: value,
+            [field]: num,
         }));
     };
 
 
     const handleSave = () => {
-        addInvoiceconfig(form);
-        console.log("📦 Datos guardados:", form);
+    const finalForm: invoicesconfig = {
+        ...form,
+        referencia_facturas: rango,
+        cai: cais_
     };
+
+    if(finalForm.cai.nombre != "" && finalForm.referencia_facturas.numero_cuatro != 0){
+        addInvoiceconfig(finalForm);
+        return
+    }
+    alert('Values are not carget yet')
+};
 
 
     return (
@@ -93,21 +94,21 @@ const InvoiceConfig = () => {
                 </View>
 
                 <View style={[{ borderBottomWidth: 1, borderBlockColor: '#e5e7e9', marginTop: 5, marginBottom: 5 }]} />
-                <TextInput placeholder="Ingrese CAI" style={[styles.textinput]} multiline={true} onChangeText={(val) => setcais(prev =>({...prev, nombre : val}))} />
+                <TextInput placeholder="Ingrese CAI" style={[styles.textinput]} multiline={true} onChangeText={(val) => setcais(prev =>({...prev, nombre : val.toString()}))} />
 
                 <View style={[{ borderBottomWidth: 1, borderBlockColor: '#e5e7e9', marginTop: 5, marginBottom: 5 }]} />
 
                 <Text style={styles.smallText}>Rango de facturas</Text>
                 <View style={[styles.flexcomponentsRow, { margin: 0, justifyContent: 'space-between' }]}>
-                    <TextInput placeholder="Numero 1" keyboardType="numeric" style={[styles.textinput, { margin: 0 }]} onChangeText={(val) => handleFacturaRannge("numero_uno", parseInt(val))} />
-                    <TextInput placeholder="Numero 2" keyboardType="numeric" style={[styles.textinput, { margin: 0 }]} onChangeText={(val) => handleFacturaRannge("numero_dos", parseInt(val))} />
-                    <TextInput placeholder="Numero 3" keyboardType="numeric" style={[styles.textinput, { margin: 0 }]} onChangeText={(val) => handleFacturaRannge("numero_tres", parseInt(val))} />
-                    <TextInput placeholder="Numero 4" keyboardType="numeric" style={[styles.textinput, { margin: 0 }]} onChangeText={(val) => handleFacturaRannge("numero_cuatro", parseInt(val))} />
+                    <TextInput placeholder="Numero 1" keyboardType="numeric" style={[styles.textinput, { margin: 0, width : '23%' }]} onChangeText={(val) => handleFacturaRannge("numero_uno", val)} />
+                    <TextInput placeholder="Numero 2" keyboardType="numeric" style={[styles.textinput, { margin: 0, width : '23%' }]} onChangeText={(val) => handleFacturaRannge("numero_dos", val)} />
+                    <TextInput placeholder="Numero 3" keyboardType="numeric" style={[styles.textinput, { margin: 0, width : '23%' }]} onChangeText={(val) => handleFacturaRannge("numero_tres",val)} />
+                    <TextInput placeholder="Numero 4" keyboardType="numeric" style={[styles.textinput, { margin: 0, width : '23%' }]} onChangeText={(val) => handleFacturaRannge("numero_cuatro", val)} />
                 </View>
 
 
                 <View style={[{ borderBottomWidth: 1, borderBlockColor: '#e5e7e9', marginTop: 5, marginBottom: 5 }]} />
-                <TextInput placeholder="Máximo efectivo" keyboardType="numeric" style={styles.textinput} onChangeText={(val) => handleInputChange("numero_maximo", val)} />
+                <TextInput placeholder="Cantidad maxima de factura" keyboardType="numeric" style={styles.textinput} onChangeText={(val : string) => handleInputChange("numero_maximo", parseInt(val))} />
 
                 <TextInput placeholder="Pie de hoja" style={styles.textinput} onChangeText={(val) => handleInputChange("piedehoja", val)} />
                 <View style={[{ borderBottomWidth: 1, borderBlockColor: '#e5e7e9', marginTop: 5 }]} />
@@ -121,7 +122,7 @@ const InvoiceConfig = () => {
             </View>
 
             <TouchableOpacity 
-            onPress={handleSave}
+            onPress={()=>{handleSave()}}
             style={[styles.rectanglebutton, { backgroundColor: '#1e8449', aspectRatio: 'auto' }]}>
                 <Text style={[{ color: 'white' }]}>SAVE INVOICE CONFIG</Text>
             </TouchableOpacity>
