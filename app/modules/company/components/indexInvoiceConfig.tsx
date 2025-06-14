@@ -1,13 +1,16 @@
-import { View, Text, Button, Animated, FlatList } from "react-native";
+import { View, Text, Button, Animated, FlatList, TouchableOpacity } from "react-native";
 import { invoicesconfig } from "@/storage/invoice";
 import { getInvoicesconfigs } from "@/storage/invoiceconfig.storage";
 import { useEffect, useState, useRef } from "react";
 import InvoiceConfig from "./Invoiceconfig";
 import styles from "@/assets/styles/styles";
+import Ionicons from "react-native-vector-icons/Ionicons";
+
 
 const Index_invoice_company = () => {
     const [configlist, setConfiglist] = useState<invoicesconfig[]>([]);
     const updateList = async () => { setConfiglist(getInvoicesconfigs()) };
+    const [SendtoEdit, setSendtoEdit] = useState<invoicesconfig | undefined>()
     const [isCreating, setIsCreating] = useState(false);
 
     const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -18,7 +21,7 @@ const Index_invoice_company = () => {
 
     useEffect(() => {
         updateList();
-    }, [configlist.length]);
+    }, [isCreating]);
 
     // Ejecutar animación cuando se activa "crear"
     useEffect(() => {
@@ -32,19 +35,22 @@ const Index_invoice_company = () => {
         }
     }, [isCreating]);
 
-    const formatrefenciafactura = ( props : any) =>{
+    const formatrefenciafactura = (props: any) => {
         return `${props.numero_uno} - ${props.numero_dos} - ${props.numero_tres} - ${props.numero_cuatro}`
     }
 
     return (
-        <View>
+        <View style={{ flex: 1 }}>
             <View style={{ width: '90%', alignSelf: 'center', marginBottom: 10 }}>
-                <Button title={!isCreating ? 'CREAR INVOICE CONFIG' : 'CANCELAR'} color={!isCreating ? 'black' : '#c0392b'} onPress={creating} />
+                <Button title={!isCreating ? 'CREAR INVOICE CONFIG' : 'CANCELAR'} color={!isCreating ? 'black' : '#c0392b'} 
+                onPress={()=>{
+                    if(!isCreating) setSendtoEdit(undefined)
+                    creating()}} />
             </View>
 
             {isCreating && (
                 <Animated.View style={{ opacity: fadeAnim }}>
-                    <InvoiceConfig />
+                    <InvoiceConfig _onclose_={creating}  parentprops={SendtoEdit}/>
                 </Animated.View>
             )}
 
@@ -52,14 +58,21 @@ const Index_invoice_company = () => {
                 data={configlist}
                 keyExtractor={item => item.id.toString()}
                 renderItem={({ item }) => (
-                    <View style={[styles.rectanglebutton, { height: 'auto', alignSelf : 'center', justifyContent: 'space-between', margin : 5, padding : 5 }]}>
-                        <View style={[{ alignSelf : 'flex-start' }]}>
-                            <Text style={[styles.smallText, styles.textalingleft, { color: 'black', marginVertical : 0 }]}>CAI : {item.cai.nombre}</Text>
-                            <Text style={[styles.smallText, styles.textalingleft, { color: 'black', marginVertical : 0 }]}>Fecha Maxima : {item.fechalimite.toString()}</Text>
-                            <Text style={[styles.smallText, styles.textalingleft, { color: 'black', marginVertical : 0 }]}>Rango Maximo : {item.numero_maximo}</Text>
-                            <Text style={[styles.smallText, styles.textalingleft, { color: 'black', marginVertical : 0 }]}>Rango inicial : {formatrefenciafactura(item.referencia_facturas)}</Text>
-                            <Text style={[styles.smallText, styles.textalingleft, { color: item.active ? "green" : 'red' , marginVertical : 0}]}>{item.active ? "ACTIVO" : 'DESACTIVADO'}</Text>
+                    <View style={[styles.rectanglebutton, styles.flexcomponentsRow, { height: 'auto', alignSelf: 'center', justifyContent: 'space-between', margin: 5, padding: 5 }]}>
+
+                        <View style={[{ alignSelf: 'flex-start' }]}>
+                            <Text style={[styles.smallText, styles.textalingleft, { color: 'black', marginVertical: 0, fontWeight: 'bold' }]}>CAI : {item.cai.nombre}</Text>
+                            <Text style={[styles.smallText, styles.textalingleft, { color: 'black', marginVertical: 0 }]}>Fecha Maxima : <Text style={[styles.smallText, styles.textalingleft, { color: 'black', marginVertical: 0, fontWeight: 'bold' }]}>{item.fechalimite.toString()}</Text></Text>
+                            <Text style={[styles.smallText, styles.textalingleft, { color: 'black', marginVertical: 0 }]}>Rango Maximo : {item.numero_maximo}</Text>
+                            <Text style={[styles.smallText, styles.textalingleft, { color: 'black', marginVertical: 0 }]}>Rango inicial : {formatrefenciafactura(item.referencia_facturas)}</Text>
+                            <Text style={[styles.smallText, styles.textalingleft, { color: item.active ? "green" : 'red', marginVertical: 0 }]}>{item.active ? "ACTIVO" : 'DESACTIVADO'}</Text>
                         </View>
+                        <View style={{alignContent : 'center'}}>
+                            <TouchableOpacity onPress={()=> {setSendtoEdit(item), creating()}}>
+                                <Ionicons name={"create-outline"} size={30} color={"black"} />
+                            </TouchableOpacity>
+                        </View>
+
                     </View>
                 )}
                 ListEmptyComponent={

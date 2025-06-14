@@ -35,3 +35,10 @@ export const deleteInvoicesconfig = (id: number) => {
 export const clearInvoicesconfigs = () => {
   storage.delete(STORAGE_KEY);
 };
+
+//---------------------------------------------------------//
+//functions of invoiceconfigs
+
+const politic_one = () =>{
+  // this politic is about to block all the invoices except the last one
+}

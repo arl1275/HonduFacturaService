@@ -1,18 +1,19 @@
 import { View, Text, TouchableOpacity, TextInput, Switch, Button, Platform } from "react-native";
+import React from "react";
 import { invoicesconfig, rangos } from "@/storage/invoice";
 import { addInvoiceconfig } from "@/storage/invoiceconfig.storage";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import styles from "@/assets/styles/styles";
 import { cais } from "@/storage/empresa";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type ForEditParams = {
-    parentprops: (value: invoicesconfig) => void;
+    parentprops:  invoicesconfig | undefined;
     _onclose_ : ()=> void;
 }
 // this is to configurate teh invoices information
 
-const InvoiceConfig = () => {
+const InvoiceConfig = ({parentprops, _onclose_} : ForEditParams) => {
     const [show, setShow] = useState(false);
     const [cais_, setcais] = useState<cais>({ id: 0, nombre: "", active: true })
     const [rango, setRangos] = useState<rangos>({
@@ -22,6 +23,10 @@ const InvoiceConfig = () => {
         numero_tres: 0,
         numero_cuatro: 0,
         active: true
+    })
+
+    useEffect(()=>{
+        parentprops != undefined ? setForm(parentprops) : null 
     })
 
     const [form, setForm] = useState<invoicesconfig>({
@@ -59,6 +64,7 @@ const InvoiceConfig = () => {
 
     if(finalForm.cai.nombre != "" && finalForm.referencia_facturas.numero_cuatro != 0){
         addInvoiceconfig(finalForm);
+        _onclose_();
         return
     }
     alert('Values are not carget yet')
@@ -72,10 +78,10 @@ const InvoiceConfig = () => {
                 <Text style={styles.smallText}>Registrar la configuracion de las facturas, esta configuracion se agregara en todas las facturas generadas para esta empresa. Siempre y cuando la configuracion se mantenga activa</Text>
                 <View style={[{ borderBottomWidth: 1, borderBlockColor: '#e5e7e9', marginTop: 5, marginBottom: 5 }]} />
 
-                <TextInput placeholder="Encabezado de la factura" style={styles.textinput} multiline={true} onChangeText={(val) => handleInputChange("encabezado", val)} />
+                <TextInput placeholder={parentprops ? form.encabezado : "Encabezado de la factura"} style={styles.textinput} multiline={true} onChangeText={(val) => handleInputChange("encabezado", val)} />
 
                 <View style={[{ borderBottomWidth: 1, borderBlockColor: '#e5e7e9', marginTop: 5, marginBottom: 5 }]} />
-                <View>
+                {/*<View>
                     <Text style={styles.smallText}>Fecha límite:</Text>
                     <Button title={form.fechalimite.toDateString()} onPress={() => setShow(!show)} />
                     {show && (
@@ -91,10 +97,10 @@ const InvoiceConfig = () => {
                             }}
                         />
                     )}
-                </View>
+                </View>*/}
 
                 <View style={[{ borderBottomWidth: 1, borderBlockColor: '#e5e7e9', marginTop: 5, marginBottom: 5 }]} />
-                <TextInput placeholder="Ingrese CAI" style={[styles.textinput]} multiline={true} onChangeText={(val) => setcais(prev =>({...prev, nombre : val.toString()}))} />
+                <TextInput value={parentprops && form.cai.nombre} placeholder={parentprops ? form.cai.nombre : "Ingrese CAI"} style={[styles.textinput]} multiline={true} onChangeText={(val) => setcais(prev =>({...prev, nombre : val.toString()}))} />
 
                 <View style={[{ borderBottomWidth: 1, borderBlockColor: '#e5e7e9', marginTop: 5, marginBottom: 5 }]} />
 

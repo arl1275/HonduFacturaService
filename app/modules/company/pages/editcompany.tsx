@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Button, Alert, Image, Animated } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Button, Alert, Image } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '../indexcompany';
 import styles from '@/assets/styles/styles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native';
+//import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { updatecompany } from '@/storage/company.storage';
 import Index_invoice_company from '../components/indexInvoiceConfig';
@@ -117,7 +117,7 @@ export default function EditCompanyPage({ route, navigation }: Props) {
           </View>
       }
 
-     <Index_invoice_company />
+     <Index_invoice_company/>
 
     </View>
   );
