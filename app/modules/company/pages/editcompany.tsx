@@ -117,7 +117,7 @@ export default function EditCompanyPage({ route, navigation }: Props) {
           </View>
       }
 
-     <Index_invoice_company/>
+     <Index_invoice_company companyprops={item}/>
 
     </View>
   );

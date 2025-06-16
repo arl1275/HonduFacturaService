@@ -10,6 +10,14 @@ export const getInvoicesconfigs = (): invoicesconfig[] => {
   return data ? JSON.parse(data) : [];
 };
 
+export const getInvoicesconfig_by_id = (term: number) => {
+  const configs = getInvoicesconfigs().filter(c =>
+    c.id_company === term
+  );
+
+  return configs;
+};
+
 export const saveInvoiceconfigs = (configs: invoicesconfig[]) => {
   storage.set(STORAGE_KEY, JSON.stringify(configs));
 };

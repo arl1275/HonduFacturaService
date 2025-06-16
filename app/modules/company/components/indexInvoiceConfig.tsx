@@ -1,19 +1,27 @@
-import { View, Text, Button, Animated, FlatList, TouchableOpacity } from "react-native";
+import { View, Text, Button, Animated, FlatList, TouchableOpacity, Alert } from "react-native";
 import { invoicesconfig } from "@/storage/invoice";
-import { getInvoicesconfigs } from "@/storage/invoiceconfig.storage";
+import { getInvoicesconfig_by_id } from "@/storage/invoiceconfig.storage";
 import { useEffect, useState, useRef } from "react";
 import InvoiceConfig from "./Invoiceconfig";
 import styles from "@/assets/styles/styles";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { company } from "@/storage/empresa";
 
+type companyparams = {
+    companyprops : company | undefined;
+}
 
-const Index_invoice_company = () => {
+const Index_invoice_company = ({ companyprops } : companyparams ) => {
+    const [CompanyParam, setCompanyParam] = useState<company>();
     const [configlist, setConfiglist] = useState<invoicesconfig[]>([]);
-    const updateList = async () => { setConfiglist(getInvoicesconfigs()) };
     const [SendtoEdit, setSendtoEdit] = useState<invoicesconfig | undefined>()
     const [isCreating, setIsCreating] = useState(false);
 
     const fadeAnim = useRef(new Animated.Value(0)).current;
+    const updateList = async () => { 
+        companyprops != undefined ? setCompanyParam(companyprops) : alert("");
+        CompanyParam && setConfiglist(getInvoicesconfig_by_id(CompanyParam.id))
+    };
 
     const creating = () => {
         setIsCreating(prev => !prev);
@@ -21,7 +29,7 @@ const Index_invoice_company = () => {
 
     useEffect(() => {
         updateList();
-    }, [isCreating]);
+    }, [isCreating, companyprops]);
 
     // Ejecutar animación cuando se activa "crear"
     useEffect(() => {
@@ -50,7 +58,7 @@ const Index_invoice_company = () => {
 
             {isCreating && (
                 <Animated.View style={{ opacity: fadeAnim }}>
-                    <InvoiceConfig _onclose_={creating}  parentprops={SendtoEdit}/>
+                    <InvoiceConfig _onclose_={creating}  parentprops={SendtoEdit} id_company={CompanyParam?.id}/>
                 </Animated.View>
             )}
 
