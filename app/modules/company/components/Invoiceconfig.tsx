@@ -67,6 +67,8 @@ const InvoiceConfig = ({ parentprops, _onclose_, id_company }: ForEditParams) =>
             cai: cais_
         };
 
+        if(finalForm.fechalimite < new Date()){ alert("Date seleccted not alowed"); return;}
+
         if (finalForm.cai.nombre != "" && finalForm.referencia_facturas.numero_cuatro != 0) {
             if (parentprops) {
                 updateInvoicesconfig(finalForm);
@@ -99,12 +101,12 @@ const InvoiceConfig = ({ parentprops, _onclose_, id_company }: ForEditParams) =>
                 />
 
                 <View style={[{ borderBottomWidth: 1, borderBlockColor: '#e5e7e9', marginTop: 5, marginBottom: 5 }]} />
-                {/*<View>
+                <View>
                     <Text style={styles.smallText}>Fecha límite:</Text>
-                    <Button title={form.fechalimite.toDateString()} onPress={() => setShow(!show)} />
+                    <Button title={form.fechalimite.toString()} onPress={() => setShow(!show)} />
                     {show && (
                         <DateTimePicker
-                            value={form.fechalimite}
+                            value={new Date(form.fechalimite)}
                             mode="date"
                             display={Platform.OS === "ios" ? "spinner" : "default"}
                             onChange={(event, selectedDate) => {
@@ -115,7 +117,7 @@ const InvoiceConfig = ({ parentprops, _onclose_, id_company }: ForEditParams) =>
                             }}
                         />
                     )}
-                </View>*/}
+                </View>
 
                 <View style={[{ borderBottomWidth: 1, borderBlockColor: '#e5e7e9', marginTop: 5, marginBottom: 5 }]} />
 

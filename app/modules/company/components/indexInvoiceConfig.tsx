@@ -8,17 +8,17 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { company } from "@/storage/empresa";
 
 type companyparams = {
-    companyprops : company | undefined;
+    companyprops: company | undefined;
 }
 
-const Index_invoice_company = ({ companyprops } : companyparams ) => {
+const Index_invoice_company = ({ companyprops }: companyparams) => {
     const [CompanyParam, setCompanyParam] = useState<company>();
     const [configlist, setConfiglist] = useState<invoicesconfig[]>([]);
     const [SendtoEdit, setSendtoEdit] = useState<invoicesconfig | undefined>()
     const [isCreating, setIsCreating] = useState(false);
 
     const fadeAnim = useRef(new Animated.Value(0)).current;
-    const updateList = async () => { 
+    const updateList = async () => {
         companyprops != undefined ? setCompanyParam(companyprops) : alert("");
         CompanyParam && setConfiglist(getInvoicesconfig_by_id(CompanyParam.id))
     };
@@ -27,6 +27,11 @@ const Index_invoice_company = ({ companyprops } : companyparams ) => {
         setIsCreating(prev => !prev);
     };
 
+    useEffect(() => {
+        updateList();
+    }, []);
+
+   
     useEffect(() => {
         updateList();
     }, [isCreating, companyprops]);
@@ -50,15 +55,16 @@ const Index_invoice_company = ({ companyprops } : companyparams ) => {
     return (
         <View style={{ flex: 1 }}>
             <View style={{ width: '90%', alignSelf: 'center', marginBottom: 10 }}>
-                <Button title={!isCreating ? 'CREAR INVOICE CONFIG' : 'CANCELAR'} color={!isCreating ? 'black' : '#c0392b'} 
-                onPress={()=>{
-                    if(!isCreating) setSendtoEdit(undefined)
-                    creating()}} />
+                <Button title={!isCreating ? 'CREAR INVOICE CONFIG' : 'CANCELAR'} color={!isCreating ? 'black' : '#c0392b'}
+                    onPress={() => {
+                        if (!isCreating) setSendtoEdit(undefined)
+                        creating()
+                    }} />
             </View>
 
             {isCreating && (
                 <Animated.View style={{ opacity: fadeAnim }}>
-                    <InvoiceConfig _onclose_={creating}  parentprops={SendtoEdit} id_company={CompanyParam?.id}/>
+                    <InvoiceConfig _onclose_={creating} parentprops={SendtoEdit} id_company={CompanyParam?.id} />
                 </Animated.View>
             )}
 
@@ -66,7 +72,7 @@ const Index_invoice_company = ({ companyprops } : companyparams ) => {
                 data={configlist}
                 keyExtractor={item => item.id.toString()}
                 renderItem={({ item }) => (
-                    <View style={[styles.rectanglebutton, styles.flexcomponentsRow, { height: 'auto', alignSelf: 'center', justifyContent: 'space-between', margin: 5, padding: 5 }]}>
+                    <View style={[styles.rectanglebutton, styles.flexcomponentsRow, { height: 'auto', alignSelf: 'center', justifyContent: 'space-between', margin: 5, padding: 5, borderWidth : 1, borderColor : '#e5e8e8' }]}>
 
                         <View style={[{ alignSelf: 'flex-start' }]}>
                             <Text style={[styles.smallText, styles.textalingleft, { color: 'black', marginVertical: 0, fontWeight: 'bold' }]}>CAI : {item.cai.nombre}</Text>
@@ -75,8 +81,8 @@ const Index_invoice_company = ({ companyprops } : companyparams ) => {
                             <Text style={[styles.smallText, styles.textalingleft, { color: 'black', marginVertical: 0 }]}>Rango inicial : {formatrefenciafactura(item.referencia_facturas)}</Text>
                             <Text style={[styles.smallText, styles.textalingleft, { color: item.active ? "green" : 'red', marginVertical: 0 }]}>{item.active ? "ACTIVO" : 'DESACTIVADO'}</Text>
                         </View>
-                        <View style={{alignContent : 'center'}}>
-                            <TouchableOpacity onPress={()=> {setSendtoEdit(item), creating()}}>
+                        <View style={{ alignContent: 'center' }}>
+                            <TouchableOpacity onPress={() => { setSendtoEdit(item), creating() }}>
                                 <Ionicons name={"create-outline"} size={30} color={"black"} />
                             </TouchableOpacity>
                         </View>
@@ -90,6 +96,6 @@ const Index_invoice_company = ({ companyprops } : companyparams ) => {
 
         </View>
     );
-};
+2};
 
 export default Index_invoice_company;

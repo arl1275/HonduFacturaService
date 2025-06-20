@@ -49,7 +49,7 @@ export default function EditCompanyPage({ route, navigation }: Props) {
 
 
   return (
-    <View style={{flex : 1}}>
+    <View style={{ flex: 1 }}>
       <View style={[styles.flexcomponentsRow, { margin: 5 }]}>
         <TouchableOpacity onPress={() => oncancel()}>
           <Ionicons name="chevron-back" size={30} color="black" />
@@ -59,7 +59,7 @@ export default function EditCompanyPage({ route, navigation }: Props) {
 
       {
         isEditing ?
-          <View style={[{ alignSelf: 'center', justifyContent: 'space-between', padding: 5, borderBlockColor: 'black', borderWidth: 1, elevation: 10, borderRadius: 7, width: '95%', backgroundColor: 'white' }]}>
+          <View style={[{ alignSelf: 'center', justifyContent: 'space-between', padding: 5, borderBlockColor: 'black', borderWidth: 1, elevation: 10, borderRadius: 7, width: '95%', backgroundColor: 'white', marginBottom : 10 }]}>
             <View>
               <Text style={[styles.smallText, styles.textalingleft, { color: 'black', fontWeight: 'bold' }]}>Edit Company</Text>
             </View>
@@ -84,19 +84,20 @@ export default function EditCompanyPage({ route, navigation }: Props) {
               <TextInput placeholder={"Teléfono: " + item.numero_telefono_compay} onChangeText={(e) => valuesEditing("numero_telefono_compay", e)} keyboardType="phone-pad" />
             </View>
 
-            {EditCompany.image !== '' && (
-              <Image
-                source={{ uri: `data:image/jpeg;base64,${EditCompany.image}` }}
-                style={{ width: 100, height: 100, borderRadius: 50, alignSelf: 'center', marginVertical: 10 }}
-              />
-            )}
+            <View style={[styles.flexcomponentsRow, {justifyContent : 'space-between', borderRadius : 5, borderWidth : 1, borderColor : '#e5e8e8'}]}>
+              {EditCompany.image !== '' && (
+                <Image
+                  source={{ uri: `data:image/jpeg;base64,${EditCompany.image}` }}
+                  style={{ width: 100, height: 100, borderRadius: 50, alignSelf: 'center', marginVertical: 10, borderWidth : 1, borderColor : 'grey' }}
+                />
+              )}
 
-            <View style={[styles.flexcomponentsRow, { width: '100%', justifyContent: 'space-around', padding: 10 }]}>
-              <Button title="Cambiar Logo" onPress={pickImage} color={'blue'} />
-              <Button title="Guardar" onPress={onSave} color={'green'} />
-              <Button title="Cancelar" onPress={iseditingCompany} color={'red'} />
+              <View style={[{ width: '50%', justifyContent: 'space-around', padding: 10 }]}>
+                <Button title="Cambiar Logo" onPress={pickImage} color={'blue'} />
+                <Button title="Guardar" onPress={onSave} color={'green'} />
+                <Button title="Cancelar" onPress={iseditingCompany} color={'red'} />
+              </View>
             </View>
-
           </View>
           :
           <View style={[styles.rectanglebutton, styles.flexcomponentsRow,
@@ -117,7 +118,7 @@ export default function EditCompanyPage({ route, navigation }: Props) {
           </View>
       }
 
-     <Index_invoice_company companyprops={item}/>
+      <Index_invoice_company companyprops={item} />
 
     </View>
   );
