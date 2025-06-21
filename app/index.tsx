@@ -4,7 +4,7 @@ import { Text, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // IMPORTS OF SCREENS
-import IndexInvoice from './modules/invoice/indexInvoice.routing';
+import IndexInvoice from './modules/invoice/indexInvoice';
 import IndexCompany from './modules/company/indexcompany';
 
 const Tab = createBottomTabNavigator();
