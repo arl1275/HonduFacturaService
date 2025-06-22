@@ -24,6 +24,11 @@ export const deleteinvoice = (id: number) => {
   saveinvoices(invoices);
 };
 
+export const getInvoices_by_ID = (id: number) => {
+  const invoices = getinvoices().filter(inv => inv.id === id);
+  return invoices;
+};
+
 export const clearinvoices = () => {
   storage.delete(invoice_KEY);
 };
