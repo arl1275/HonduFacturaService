@@ -53,5 +53,9 @@ export interface invoice {
     comprador_rtn : string
   };
   lineasfacturadas : lineafacturada[],
-  id_impuesto : impuesto[]
+  id_impuesto : impuesto[],
+  total : number,
+  subtotal : number,
+  draft : boolean,
+  done : boolean,
 }

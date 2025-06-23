@@ -6,14 +6,24 @@ import { company } from "@/storage/empresa";
 import React, { useEffect, useState } from "react";
 import { invoice } from "@/storage/invoice";
 import { getInvoices_by_ID } from "@/storage/invoices.storage";
+// router imports 
+import { RootStackParamList } from "../indexInvoice";
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
 
+type InvoiceNavigator = StackNavigationProp<RootStackParamList, "HomeInvoice">
 
 const InvoiceHome = () => {
-    const [selectedValue, setSelectedValue] = useState<company>();
+    const [item, setSelectedValue] = useState<company>();
     const [SelectedList, setSelectedList] = useState<company[]>([]);
     const [ListInvoices, setListInvoices] = useState<invoice[]>([])
     const UpdateList = () => { setSelectedList(getCompanies()) }
-    const UpdateInvoices = () => {selectedValue && setListInvoices(getInvoices_by_ID(selectedValue?.id))}
+    const UpdateInvoices = () => {item && setListInvoices(getInvoices_by_ID(item?.id))}
+    const navigation = useNavigation<InvoiceNavigator>();
+
+    const ValidateRoute = () =>{
+        item != undefined ? navigation.navigate("InvoiceGen", {item}) : null
+    }
 
     useEffect(() => {
         UpdateList();
@@ -21,7 +31,7 @@ const InvoiceHome = () => {
 
     useEffect(()=>{
         UpdateInvoices()
-    }, [selectedValue]);
+    }, [item]);
 
     return (
         <View style={{flex : 1}}>
@@ -32,11 +42,11 @@ const InvoiceHome = () => {
             </Text>
 
             <Picker
-                selectedValue={selectedValue}
+                selectedValue={item}
                 onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
                 style={[ styles.rectanglebutton, {alignSelf : 'center', height : 50, aspectRatio: 7.0, marginTop : 10 }]}
             >
-
+                <Picker.Item label={"Select a Company"} value={"Select a Company"} key={"000000"} />
                 {
                     SelectedList &&
                     (
@@ -50,7 +60,7 @@ const InvoiceHome = () => {
             <View style={{ borderBottomColor: '#d5dbdb', borderBottomWidth: 1, marginTop : 15}} />
 
             <View style={[styles.flexcomponentsRow, { justifyContent : 'space-between'}]}>
-                <Button title="GENERATE INVOICE"color={"black"}/>
+                <Button title="GENERATE INVOICE"color={"black"} onPress={()=> ValidateRoute()}/>
                 <Button title="ANULATE INVOICE" color={"red"}/>
             </View>
 

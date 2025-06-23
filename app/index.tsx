@@ -16,15 +16,19 @@ const HomeScreen = () => {
 }
 
 export default function App() {
+  const visibleRoutes = ['Inicio', 'Invoices', 'Company'];
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
 
-        tabBarStyle: {
-          margin: 10,
-          borderRadius: 50,
-          elevation: 10
-        },
+        tabBarStyle: visibleRoutes.includes(route.name)
+          ? {
+            margin: 10,
+            borderRadius: 50,
+            elevation: 10,
+          }
+          : { display: 'none' },
+
         headerShown: false,
         tabBarAllowFontScaling: true,
         tabBarIcon: ({ focused, color, size }) => {
