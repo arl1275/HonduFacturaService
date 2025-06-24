@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Button } from "react-native";
 import { invoice } from "@/storage/invoice";
 // route imports
 import { StackScreenProps } from '@react-navigation/stack';
@@ -15,21 +15,27 @@ const InvoiceGen = ({ route, navigation }: props) => {
     const oncancel = () => { navigation.navigate("HomeInvoice") }
 
     return (
-        <View style={[{flex : 1}]}>
+        <View style={[{ flex: 1 }]}>
             <View style={[styles.flexcomponentsRow, { margin: 5 }]}>
                 <TouchableOpacity onPress={() => oncancel()}>
                     <Ionicons name="chevron-back" size={30} color="black" />
                 </TouchableOpacity>
                 <Text style={[styles.paragraph, styles.textalingleft, { color: 'black' }]}>Invoice Generation</Text>
             </View>
-            <View style={{marginLeft : 20, marginRight : 20}}>
+
+            <View style={{ marginLeft: 20, marginRight: 20 }}>
                 <Text>This invoice is not done thill you press the button of done, meanwhile is created as DRAFT</Text>
             </View>
+
             <View>
 
             </View>
 
-
+            <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between' }]}>
+                <Button title="GENERATE INVOICE" color={"black"} />
+                <Button title="DRAFT" color={"black"} />
+                <Button title="CANCEL" color={"red"} />
+            </View>
         </View>
     )
 }
