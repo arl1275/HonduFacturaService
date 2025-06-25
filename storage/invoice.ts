@@ -36,7 +36,7 @@ export interface lineafacturada{
     cantidad : number,
     detalle : string,
     descuento : number,
-    precio : string,
+    precio : number,
 }
 
 //---------------------------- INVOICE ----------------------------//
