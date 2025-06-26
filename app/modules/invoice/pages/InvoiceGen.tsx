@@ -14,6 +14,8 @@ type props = StackScreenProps<RootStackParamList, "InvoiceGen">
 
 const InvoiceGen = ({ route, navigation }: props) => {
     const { item } = route.params;
+    const [Comprador, setComprador] = useState({ comprador: 'Cliente Final', comprador_rtn: '0000-0000-00000' });
+    const [RegisterComprador, setRegisterComprador] = useState<boolean>(false)
     const [LineasFacutas, setLineasFacturas] = useState<lineafacturada[]>([]);
     const [Linea, setLinea] = useState<lineafacturada>({
         id: Date.now(),
@@ -47,9 +49,7 @@ const InvoiceGen = ({ route, navigation }: props) => {
         }));
     };
 
-
-
-
+    const _RegisterComprador_ = () => { setRegisterComprador(!RegisterComprador) }
     const oncancel = () => { navigation.navigate("HomeInvoice") }
 
     return (
@@ -66,7 +66,40 @@ const InvoiceGen = ({ route, navigation }: props) => {
             </View>
 
             <View>
-                <View style={[styles.flexcomponentsRow]}>
+                <View style={[styles.flexcomponentsRow, { marginLeft: 20, marginRight: 20, borderWidth: 1, borderColor: 'grey', borderRadius: 7 }]}>
+                    <View style={[{ margin: 10 }]}>
+                        <Button title={!RegisterComprador ? "WITH RTN ?" : "<"} color={RegisterComprador ? "blue" : "black"} onPress={_RegisterComprador_} />
+                    </View>
+
+                    {
+                        RegisterComprador &&
+                        <View style={[styles.flexcomponentsRow, { margin: 0 }]}>
+                            <View style={[styles.textinput, { padding: 10, width: '40%' }]}>
+                                <TextInput
+                                    onChangeText={(e) => setRegisterComprador((prev: any) => ({ ...prev, comprador: e }))}
+                                    placeholder="BUYER" style={{ width: '100%', textAlign: 'left', textAlignVertical: 'center' }}
+                                />
+                            </View>
+
+                            <View style={[styles.textinput, { padding: 10, width: '40%' }]}>
+                                <TextInput
+                                    placeholder="RTN"
+                                    onChangeText={(e) => setRegisterComprador((prev: any) => ({ ...prev, comprador_rtn: e }))}
+                                    keyboardType="numeric"
+                                    style={{ width: '100%', textAlign: 'left', textAlignVertical: 'center' }}
+                                />
+                            </View>
+                        </View>
+                    }
+                </View>
+
+                <View style={[{ borderBottomWidth: 1, borderColor: 'grey', marginLeft: 20, marginRight: 20 }]} />
+                <View style={{ marginLeft: 20, marginRight: 20 }}>
+                    <Text style={[styles.smallText, styles.textalingleft]}>Register one invoice line, then it will be show in the list</Text>
+                </View>
+
+
+                <View style={[styles.flexcomponentsRow, { marginTop : 0, paddingTop : 0 }]}>
                     <View style={[styles.textinput, { padding: 10, width: '35%' }]}>
                         <TextInput
                             onChangeText={(e) => UpdateLine(e, 'detalle')}
