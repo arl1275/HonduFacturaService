@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Button, TextInput } from "react-native";
+import { View, Text, TouchableOpacity, Button, TextInput, FlatList } from "react-native";
 import { invoice, lineafacturada } from "@/storage/invoice";
 import { company } from "@/storage/empresa";
 // route imports
@@ -99,7 +99,7 @@ const InvoiceGen = ({ route, navigation }: props) => {
                 </View>
 
 
-                <View style={[styles.flexcomponentsRow, { marginTop : 0, paddingTop : 0 }]}>
+                <View style={[styles.flexcomponentsRow, { marginTop: 0, paddingTop: 0 }]}>
                     <View style={[styles.textinput, { padding: 10, width: '35%' }]}>
                         <TextInput
                             onChangeText={(e) => UpdateLine(e, 'detalle')}
@@ -134,9 +134,21 @@ const InvoiceGen = ({ route, navigation }: props) => {
                         />
                     </View>
                 </View>
+                <View style={[{ borderBottomWidth: 1, borderColor: 'grey', marginLeft: 20, marginRight: 20 }]} />
 
                 <View>
-
+                    <FlatList
+                        data={LineasFacutas}
+                        keyExtractor={(item) => item.id.toString()}
+                        renderItem={({item }) => (
+                            <View style={[styles.flexcomponentsRow, {}]}>
+                                <Text>{item.detalle}</Text>
+                                <Text>{item.descuento}</Text>
+                                <Text>{item.cantidad}</Text>
+                                <Text>{item.precio}</Text>
+                            </View>
+                        )}
+                    />
                 </View>
             </View>
 
