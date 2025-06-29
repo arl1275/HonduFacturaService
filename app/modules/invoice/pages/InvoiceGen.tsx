@@ -1,12 +1,13 @@
-import { View, Text, TouchableOpacity, Button, TextInput, FlatList } from "react-native";
+import { View, Text, TouchableOpacity, Button, TextInput, FlatList, Alert } from "react-native";
 import { invoice, lineafacturada } from "@/storage/invoice";
-import { company } from "@/storage/empresa";
+//import { company } from "@/storage/empresa";
+//import EditInvoiceLine from "../components/editinvoiceline";
 // route imports
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from "../indexInvoice";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import styles from "@/assets/styles/styles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 type props = StackScreenProps<RootStackParamList, "InvoiceGen">
@@ -49,8 +50,19 @@ const InvoiceGen = ({ route, navigation }: props) => {
         }));
     };
 
+    const addFacturaLine = () => {
+        if (Linea.detalle === "") {
+            alert('Register a line to save in this Invoice');
+            return
+        }
+
+        setLineasFacturas((prev) => [...prev, Linea]);
+        CleanFinea();
+    }
+
     const _RegisterComprador_ = () => { setRegisterComprador(!RegisterComprador) }
-    const oncancel = () => { navigation.navigate("HomeInvoice") }
+    const oncancel = () => { navigation.navigate("HomeInvoice") };
+
 
     return (
         <View style={[{ flex: 1 }]}>
@@ -99,53 +111,93 @@ const InvoiceGen = ({ route, navigation }: props) => {
                 </View>
 
 
-                <View style={[styles.flexcomponentsRow, { marginTop: 0, paddingTop: 0 }]}>
-                    <View style={[styles.textinput, { padding: 10, width: '35%' }]}>
+                <View style={[styles.flexcomponentsRow, {
+                    marginTop: 0,
+                    paddingTop: 0,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    flexWrap: 'nowrap'
+                }]}>
+                    <View style={[styles.textinput, { padding: 10, width: '30%' }]}>
                         <TextInput
                             onChangeText={(e) => UpdateLine(e, 'detalle')}
                             placeholder="Detalle de factura"
+                            value={Linea.detalle != "" ? Linea.detalle.toString() : ""}
                             style={{ width: '100%' }}
                         />
                     </View>
 
-                    <View style={[styles.textinput, { padding: 10, width: "17%" }]}>
+                    <View style={[styles.textinput, { padding: 10, width: '15%' }]}>
                         <TextInput
-                            placeholder="Amount"
+                            placeholder="Amo."
                             onChangeText={(e) => UpdateLine(e, 'cantidad')}
+                            value={Linea.cantidad != 0 ? Linea.cantidad.toString() : ""}
                             keyboardType="numeric"
                             style={{ width: '100%' }}
                         />
                     </View>
 
-                    <View style={[styles.textinput, { padding: 10, width: "17%" }]}>
+                    <View style={[styles.textinput, { padding: 10, width: '15%' }]}>
                         <TextInput
                             placeholder="PRICE"
                             onChangeText={(e) => UpdateLine(e, 'precio')}
+                            keyboardType="numeric"
+                            value={Linea.precio != 0 ? Linea.precio.toString() : ""}
                             style={{ width: '100%' }}
                         />
                     </View>
 
-                    <View style={[styles.textinput, { padding: 10, width: "19%" }]}>
+                    <View style={[styles.textinput, { padding: 10, width: '15%' }]}>
                         <TextInput
-                            placeholder="Discount"
+                            placeholder="Disco."
                             onChangeText={(e) => UpdateLine(e, 'descuento')}
+                            value={Linea.descuento != 0 ? Linea.descuento.toString() : ""}
                             keyboardType="numeric"
                             style={{ width: '100%' }}
                         />
                     </View>
+
+                    <View style={{ padding: 10, width: '10%', alignItems: 'center' }}>
+                        <TouchableOpacity onPress={() => addFacturaLine()}>
+                            <Ionicons name="checkbox-outline" color="green" size={24} />
+                        </TouchableOpacity>
+                    </View>
+
+                    <View style={{ padding: 10, width: '10%', alignItems: 'center' }}>
+                        <TouchableOpacity onPress={() => CleanFinea()}>
+                            <Ionicons name="trash-outline" color="red" size={24} />
+                        </TouchableOpacity>
+                    </View>
                 </View>
-                <View style={[{ borderBottomWidth: 1, borderColor: 'grey', marginLeft: 20, marginRight: 20 }]} />
+
+                {
+                    !LineasFacutas && <View style={[{ borderBottomWidth: 1, borderColor: 'grey', marginLeft: 20, marginRight: 20 }]} />
+                }
+
 
                 <View>
                     <FlatList
                         data={LineasFacutas}
                         keyExtractor={(item) => item.id.toString()}
-                        renderItem={({item }) => (
-                            <View style={[styles.flexcomponentsRow, {}]}>
+                        renderItem={({ item }) => (
+                            <View style={[styles.flexcomponentsRow, styles.textinput, { marginLeft: 20, marginRight: 20, padding: 5, justifyContent: 'space-between' }]}>
                                 <Text>{item.detalle}</Text>
                                 <Text>{item.descuento}</Text>
                                 <Text>{item.cantidad}</Text>
                                 <Text>{item.precio}</Text>
+                                    <View style={{ padding: 10, width: '10%', alignItems: 'center' }}>
+                                        <TouchableOpacity onPress={() => addFacturaLine()}>
+                                            <Ionicons name="checkbox-outline" color="green" size={15} />
+                                        </TouchableOpacity>
+                                    </View>
+
+                                    <View style={{ padding: 10, width: '10%', alignItems: 'center' }}>
+                                        <TouchableOpacity onPress={() => CleanFinea()}>
+                                            <Ionicons name="trash-outline" color="red" size={15} />
+                                        </TouchableOpacity>
+                                    </View>
+                                
+
                             </View>
                         )}
                     />
