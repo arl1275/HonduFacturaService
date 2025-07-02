@@ -9,6 +9,8 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import styles from "@/assets/styles/styles";
 import { useEffect, useState } from "react";
 
+import EditlineFacturada from "../modals/editline";
+
 
 type props = StackScreenProps<RootStackParamList, "InvoiceGen">
 
@@ -16,7 +18,9 @@ type props = StackScreenProps<RootStackParamList, "InvoiceGen">
 const InvoiceGen = ({ route, navigation }: props) => {
     const { item } = route.params;
     const [Comprador, setComprador] = useState({ comprador: 'Cliente Final', comprador_rtn: '0000-0000-00000' });
-    const [RegisterComprador, setRegisterComprador] = useState<boolean>(false)
+    const [RegisterComprador, setRegisterComprador] = useState<boolean>(false);
+    const [SelectedtoEdit, setSelectedtoEdit] = useState<lineafacturada | undefined>();
+    const [ViewModal, setViewModal] = useState<boolean>(false);
     const [LineasFacutas, setLineasFacturas] = useState<lineafacturada[]>([]);
     const [Linea, setLinea] = useState<lineafacturada>({
         id: Date.now(),
@@ -38,8 +42,6 @@ const InvoiceGen = ({ route, navigation }: props) => {
 
     const UpdateLine = (value: string, field: string) => {
         if (typeof Linea === "undefined") return;
-
-        // Convertir a número si es numérico
         const parsedValue = !isNaN(Number(value)) && value.trim() !== ""
             ? Number(value)
             : value;
@@ -58,6 +60,13 @@ const InvoiceGen = ({ route, navigation }: props) => {
 
         setLineasFacturas((prev) => [...prev, Linea]);
         CleanFinea();
+    }
+
+    const ShowViewModal = () => { setViewModal(!ViewModal) }
+
+    const SelectToEdit = (item: lineafacturada) => {
+        setSelectedtoEdit(item);
+        ShowViewModal();
     }
 
     const _RegisterComprador_ = () => { setRegisterComprador(!RegisterComprador) }
@@ -88,7 +97,7 @@ const InvoiceGen = ({ route, navigation }: props) => {
                         <View style={[styles.flexcomponentsRow, { margin: 0 }]}>
                             <View style={[styles.textinput, { padding: 10, width: '40%' }]}>
                                 <TextInput
-                                    onChangeText={(e) => setRegisterComprador((prev: any) => ({ ...prev, comprador: e }))}
+                                    onChangeText={(e) => setComprador((prev: any) => ({ ...prev, comprador: e }))}
                                     placeholder="BUYER" style={{ width: '100%', textAlign: 'left', textAlignVertical: 'center' }}
                                 />
                             </View>
@@ -96,7 +105,7 @@ const InvoiceGen = ({ route, navigation }: props) => {
                             <View style={[styles.textinput, { padding: 10, width: '40%' }]}>
                                 <TextInput
                                     placeholder="RTN"
-                                    onChangeText={(e) => setRegisterComprador((prev: any) => ({ ...prev, comprador_rtn: e }))}
+                                    onChangeText={(e) => setComprador((prev: any) => ({ ...prev, comprador_rtn: e }))}
                                     keyboardType="numeric"
                                     style={{ width: '100%', textAlign: 'left', textAlignVertical: 'center' }}
                                 />
@@ -185,18 +194,18 @@ const InvoiceGen = ({ route, navigation }: props) => {
                                 <Text>{item.descuento}</Text>
                                 <Text>{item.cantidad}</Text>
                                 <Text>{item.precio}</Text>
-                                    <View style={{ padding: 10, width: '10%', alignItems: 'center' }}>
-                                        <TouchableOpacity onPress={() => addFacturaLine()}>
-                                            <Ionicons name="checkbox-outline" color="green" size={15} />
-                                        </TouchableOpacity>
-                                    </View>
+                                <View style={{ padding: 10, width: '10%', alignItems: 'center' }}>
+                                    <TouchableOpacity onPress={() => SelectToEdit(item)}>
+                                        <Ionicons name="pencil-outline" color="green" size={15} />
+                                    </TouchableOpacity>
+                                </View>
 
-                                    <View style={{ padding: 10, width: '10%', alignItems: 'center' }}>
-                                        <TouchableOpacity onPress={() => CleanFinea()}>
-                                            <Ionicons name="trash-outline" color="red" size={15} />
-                                        </TouchableOpacity>
-                                    </View>
-                                
+                                <View style={{ padding: 10, width: '10%', alignItems: 'center' }}>
+                                    <TouchableOpacity>
+                                        <Ionicons name="close-circle-outline" color="red" size={15} />
+                                    </TouchableOpacity>
+                                </View>
+
 
                             </View>
                         )}
@@ -209,6 +218,8 @@ const InvoiceGen = ({ route, navigation }: props) => {
                 <Button title="DRAFT" color={"black"} />
                 <Button title="CANCEL" color={"red"} />
             </View>
+
+            {/* <EditlineFacturada _onCancel_={} _onSave_={} value={SelectedtoEdit} _ViewModal_={false} /> */}
         </View>
     )
 }
