@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Button, TextInput, FlatList, Alert } from "react-native";
+import { View, Text, TouchableOpacity, Button, TextInput, FlatList, Alert, Modal } from "react-native";
 import { invoice, lineafacturada } from "@/storage/invoice";
 //import { company } from "@/storage/empresa";
 //import EditInvoiceLine from "../components/editinvoiceline";
@@ -72,6 +72,14 @@ const InvoiceGen = ({ route, navigation }: props) => {
     const _RegisterComprador_ = () => { setRegisterComprador(!RegisterComprador) }
     const oncancel = () => { navigation.navigate("HomeInvoice") };
 
+    //------- function to update one element of the list --------//
+    const updateLineaFacturada = (updatedItem: lineafacturada) => {
+        ShowViewModal();
+        setLineasFacturas(prev =>
+            prev.map(item => item.id === updatedItem.id ? updatedItem : item)
+        );
+    };
+
 
     return (
         <View style={[{ flex: 1 }]}>
@@ -114,112 +122,141 @@ const InvoiceGen = ({ route, navigation }: props) => {
                     }
                 </View>
 
-                <View style={[{ borderBottomWidth: 1, borderColor: 'grey', marginLeft: 20, marginRight: 20 }]} />
                 <View style={{ marginLeft: 20, marginRight: 20 }}>
                     <Text style={[styles.smallText, styles.textalingleft]}>Register one invoice line, then it will be show in the list</Text>
                 </View>
 
-
-                <View style={[styles.flexcomponentsRow, {
-                    marginTop: 0,
-                    paddingTop: 0,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    flexWrap: 'nowrap'
-                }]}>
-                    <View style={[styles.textinput, { padding: 10, width: '30%' }]}>
+                <View
+                    style={[
+                        styles.flexcomponentsRow,
+                        {
+                            marginTop: 0,
+                            paddingTop: 0,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            flexWrap: 'nowrap',
+                            paddingHorizontal: 10,
+                        },
+                    ]}
+                >
+                    {/* Detalle */}
+                    <View style={[styles.textinput, { padding: 8, flex: 4 }]}>
                         <TextInput
                             onChangeText={(e) => UpdateLine(e, 'detalle')}
-                            placeholder="Detalle de factura"
-                            value={Linea.detalle != "" ? Linea.detalle.toString() : ""}
+                            placeholder="Detalle"
+                            multiline={true}
+                            value={Linea.detalle !== "" ? Linea.detalle.toString() : ""}
                             style={{ width: '100%' }}
                         />
                     </View>
 
-                    <View style={[styles.textinput, { padding: 10, width: '15%' }]}>
+                    {/* Cantidad */}
+                    <View style={[styles.textinput, { padding: 8, flex: 2 }]}>
                         <TextInput
                             placeholder="Amo."
                             onChangeText={(e) => UpdateLine(e, 'cantidad')}
-                            value={Linea.cantidad != 0 ? Linea.cantidad.toString() : ""}
+                            value={Linea.cantidad !== 0 ? Linea.cantidad.toString() : ""}
                             keyboardType="numeric"
-                            style={{ width: '100%' }}
+                            style={{ width: '100%', textAlign: 'right' }}
                         />
                     </View>
 
-                    <View style={[styles.textinput, { padding: 10, width: '15%' }]}>
+                    {/* Precio */}
+                    <View style={[styles.textinput, { padding: 8, flex: 2 }]}>
                         <TextInput
-                            placeholder="PRICE"
+                            placeholder="Precio"
                             onChangeText={(e) => UpdateLine(e, 'precio')}
                             keyboardType="numeric"
-                            value={Linea.precio != 0 ? Linea.precio.toString() : ""}
-                            style={{ width: '100%' }}
+                            value={Linea.precio !== 0 ? Linea.precio.toString() : ""}
+                            style={{ width: '100%', textAlign: 'right' }}
                         />
                     </View>
 
-                    <View style={[styles.textinput, { padding: 10, width: '15%' }]}>
+                    {/* Descuento */}
+                    <View style={[styles.textinput, { padding: 8, flex: 2 }]}>
                         <TextInput
                             placeholder="Disco."
                             onChangeText={(e) => UpdateLine(e, 'descuento')}
-                            value={Linea.descuento != 0 ? Linea.descuento.toString() : ""}
+                            value={Linea.descuento !== 0 ? Linea.descuento.toString() : ""}
                             keyboardType="numeric"
-                            style={{ width: '100%' }}
+                            style={{ width: '100%', textAlign: 'right' }}
                         />
                     </View>
 
-                    <View style={{ padding: 10, width: '10%', alignItems: 'center' }}>
-                        <TouchableOpacity onPress={() => addFacturaLine()}>
-                            <Ionicons name="checkbox-outline" color="green" size={24} />
+                    {/* Botón de agregar */}
+                    <View style={{ padding: 8, flex: 1, alignItems: 'center' }}>
+                        <TouchableOpacity onPress={addFacturaLine}>
+                            <Ionicons name="checkbox-outline" color="green" size={20} />
                         </TouchableOpacity>
                     </View>
 
-                    <View style={{ padding: 10, width: '10%', alignItems: 'center' }}>
-                        <TouchableOpacity onPress={() => CleanFinea()}>
-                            <Ionicons name="trash-outline" color="red" size={24} />
+                    {/* Botón de limpiar */}
+                    <View style={{ padding: 8, flex: 1, alignItems: 'center' }}>
+                        <TouchableOpacity onPress={CleanFinea}>
+                            <Ionicons name="trash-outline" color="red" size={20} />
                         </TouchableOpacity>
                     </View>
                 </View>
-
-                {
-                    !LineasFacutas && <View style={[{ borderBottomWidth: 1, borderColor: 'grey', marginLeft: 20, marginRight: 20 }]} />
-                }
-
 
                 <View>
                     <FlatList
                         data={LineasFacutas}
                         keyExtractor={(item) => item.id.toString()}
                         renderItem={({ item }) => (
-                            <View style={[styles.flexcomponentsRow, styles.textinput, { marginLeft: 20, marginRight: 20, padding: 5, justifyContent: 'space-between' }]}>
-                                <Text>{item.detalle}</Text>
-                                <Text>{item.descuento}</Text>
-                                <Text>{item.cantidad}</Text>
-                                <Text>{item.precio}</Text>
-                                <View style={{ padding: 10, width: '10%', alignItems: 'center' }}>
+                            <View
+                                style={[
+                                    styles.flexcomponentsRow,
+                                    styles.textinput,
+                                    {
+                                        flexDirection: 'row',
+                                        paddingVertical: 8,
+                                        paddingHorizontal: 10,
+                                        alignItems: 'center',
+                                        marginHorizontal: 20,
+                                    },
+                                ]}
+                            >
+                                <Text style={{ flex: 3 }}>{item.detalle}</Text>
+                                <Text style={{ flex: 2, textAlign: 'right' }}>{item.descuento}</Text>
+                                <Text style={{ flex: 2, textAlign: 'right' }}>{item.cantidad}</Text>
+                                <Text style={{ flex: 2, textAlign: 'right' }}>{item.precio}</Text>
+
+                                {/* Botones de acción */}
+                                <View style={{ flex: 1, alignItems: 'center' }}>
                                     <TouchableOpacity onPress={() => SelectToEdit(item)}>
-                                        <Ionicons name="pencil-outline" color="green" size={15} />
+                                        <Ionicons name="pencil-outline" color="green" size={18} />
                                     </TouchableOpacity>
                                 </View>
-
-                                <View style={{ padding: 10, width: '10%', alignItems: 'center' }}>
+                                <View style={{ flex: 1, alignItems: 'center' }}>
                                     <TouchableOpacity>
-                                        <Ionicons name="close-circle-outline" color="red" size={15} />
+                                        <Ionicons name="close-circle-outline" color="red" size={18} />
                                     </TouchableOpacity>
                                 </View>
-
-
                             </View>
                         )}
                     />
+
                 </View>
             </View>
-
-            <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between', width: '60%' }]}>
+            <View style={[{ borderBottomWidth: 1, borderColor: 'grey', marginLeft: 20, marginRight: 20, width : '40%', alignSelf : 'center', marginTop : 10 }]} />
+            <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between', width: '90%' }]}>
                 <Button title="GENERATE INVOICE" color={"black"} />
                 <Button title="DRAFT" color={"black"} />
                 <Button title="CANCEL" color={"red"} />
             </View>
 
-            {/* <EditlineFacturada _onCancel_={} _onSave_={} value={SelectedtoEdit} _ViewModal_={false} /> */}
+            <Modal
+                visible={ViewModal}
+                transparent={true}
+                animationType="slide"
+                onRequestClose={ShowViewModal}
+            >
+
+                <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center' }}>
+                    <EditlineFacturada _onCancel_={ShowViewModal} _onSave_={(item) => { updateLineaFacturada(item); }} value={SelectedtoEdit} />
+                </View>
+            </Modal>
+
         </View>
     )
 }
