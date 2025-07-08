@@ -8,8 +8,10 @@ import { RootStackParamList } from "../indexInvoice";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import styles from "@/assets/styles/styles";
 import { useEffect, useState } from "react";
+import EditConsumer from "../components/ConsumerComponent";
 
 import EditlineFacturada from "../modals/editline";
+import CreateLineInvoice from "../components/CreateLineComponent";
 
 
 type props = StackScreenProps<RootStackParamList, "InvoiceGen">
@@ -22,6 +24,7 @@ const InvoiceGen = ({ route, navigation }: props) => {
     const [SelectedtoEdit, setSelectedtoEdit] = useState<lineafacturada | undefined>();
     const [ViewModal, setViewModal] = useState<boolean>(false);
     const [LineasFacutas, setLineasFacturas] = useState<lineafacturada[]>([]);
+
     const [Linea, setLinea] = useState<lineafacturada>({
         id: Date.now(),
         cantidad: 0,
@@ -69,7 +72,7 @@ const InvoiceGen = ({ route, navigation }: props) => {
         ShowViewModal();
     }
 
-    const _RegisterComprador_ = () => { setRegisterComprador(!RegisterComprador) }
+    const _On_SETComprador_ = () => {/* THIS IS TO SAVE CONSUMER */ }
     const oncancel = () => { navigation.navigate("HomeInvoice") };
 
     //------- function to update one element of the list --------//
@@ -95,107 +98,16 @@ const InvoiceGen = ({ route, navigation }: props) => {
             </View>
 
             <View>
-                <View style={[styles.flexcomponentsRow, { marginLeft: 20, marginRight: 20, borderWidth: 1, borderColor: 'grey', borderRadius: 7 }]}>
-                    <View style={[{ margin: 10 }]}>
-                        <Button title={!RegisterComprador ? "WITH RTN ?" : "<"} color={RegisterComprador ? "blue" : "black"} onPress={_RegisterComprador_} />
-                    </View>
-
-                    {
-                        RegisterComprador &&
-                        <View style={[styles.flexcomponentsRow, { margin: 0 }]}>
-                            <View style={[styles.textinput, { padding: 10, width: '40%' }]}>
-                                <TextInput
-                                    onChangeText={(e) => setComprador((prev: any) => ({ ...prev, comprador: e }))}
-                                    placeholder="BUYER" style={{ width: '100%', textAlign: 'left', textAlignVertical: 'center' }}
-                                />
-                            </View>
-
-                            <View style={[styles.textinput, { padding: 10, width: '40%' }]}>
-                                <TextInput
-                                    placeholder="RTN"
-                                    onChangeText={(e) => setComprador((prev: any) => ({ ...prev, comprador_rtn: e }))}
-                                    keyboardType="numeric"
-                                    style={{ width: '100%', textAlign: 'left', textAlignVertical: 'center' }}
-                                />
-                            </View>
-                        </View>
-                    }
+                <View>
+                    <EditConsumer setComprador={setComprador} _onSet_={_On_SETComprador_}/>
                 </View>
 
                 <View style={{ marginLeft: 20, marginRight: 20 }}>
                     <Text style={[styles.smallText, styles.textalingleft]}>Register one invoice line, then it will be show in the list</Text>
                 </View>
 
-                <View
-                    style={[
-                        styles.flexcomponentsRow,
-                        {
-                            marginTop: 0,
-                            paddingTop: 0,
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            flexWrap: 'nowrap',
-                            paddingHorizontal: 10,
-                        },
-                    ]}
-                >
-                    {/* Detalle */}
-                    <View style={[styles.textinput, { padding: 8, flex: 4 }]}>
-                        <TextInput
-                            onChangeText={(e) => UpdateLine(e, 'detalle')}
-                            placeholder="Detalle"
-                            multiline={true}
-                            value={Linea.detalle !== "" ? Linea.detalle.toString() : ""}
-                            style={{ width: '100%' }}
-                        />
-                    </View>
-
-                    {/* Cantidad */}
-                    <View style={[styles.textinput, { padding: 8, flex: 2 }]}>
-                        <TextInput
-                            placeholder="Amo."
-                            onChangeText={(e) => UpdateLine(e, 'cantidad')}
-                            value={Linea.cantidad !== 0 ? Linea.cantidad.toString() : ""}
-                            keyboardType="numeric"
-                            style={{ width: '100%', textAlign: 'right' }}
-                        />
-                    </View>
-
-                    {/* Precio */}
-                    <View style={[styles.textinput, { padding: 8, flex: 2 }]}>
-                        <TextInput
-                            placeholder="Precio"
-                            onChangeText={(e) => UpdateLine(e, 'precio')}
-                            keyboardType="numeric"
-                            value={Linea.precio !== 0 ? Linea.precio.toString() : ""}
-                            style={{ width: '100%', textAlign: 'right' }}
-                        />
-                    </View>
-
-                    {/* Descuento */}
-                    <View style={[styles.textinput, { padding: 8, flex: 2 }]}>
-                        <TextInput
-                            placeholder="Disco."
-                            onChangeText={(e) => UpdateLine(e, 'descuento')}
-                            value={Linea.descuento !== 0 ? Linea.descuento.toString() : ""}
-                            keyboardType="numeric"
-                            style={{ width: '100%', textAlign: 'right' }}
-                        />
-                    </View>
-
-                    {/* Botón de agregar */}
-                    <View style={{ padding: 8, flex: 1, alignItems: 'center' }}>
-                        <TouchableOpacity onPress={addFacturaLine}>
-                            <Ionicons name="checkbox-outline" color="green" size={20} />
-                        </TouchableOpacity>
-                    </View>
-
-                    {/* Botón de limpiar */}
-                    <View style={{ padding: 8, flex: 1, alignItems: 'center' }}>
-                        <TouchableOpacity onPress={CleanFinea}>
-                            <Ionicons name="trash-outline" color="red" size={20} />
-                        </TouchableOpacity>
-                    </View>
+                <View>
+                    <CreateLineInvoice UpdateLine={UpdateLine} addFacturaline={addFacturaLine} CleanLine={CleanFinea}/>
                 </View>
 
                 <View>

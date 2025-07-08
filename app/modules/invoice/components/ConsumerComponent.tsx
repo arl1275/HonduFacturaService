@@ -2,15 +2,17 @@
 
 import styles from "@/assets/styles/styles"
 import { useState } from "react";
-import { Button, TextInput, View } from "react-native"
+import { Button, TextInput, TouchableOpacity, View } from "react-native"
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 type props = {
-    _onClose_: () => void;
+    setComprador: (value: any) => void;
+    _onSet_: () => void;
 }
 
 
-const EditConsumer = () => {
-    const [Comprador, setComprador] = useState({ comprador: 'Cliente Final', comprador_rtn: '0000-0000-00000' });
+const EditConsumer = ({ setComprador, _onSet_ }: props) => {
+    //const [Comprador, setComprador] = useState({ comprador: 'Cliente Final', comprador_rtn: '0000-0000-00000' });
     const [RegisterComprador, setRegisterComprador] = useState<boolean>(false);
     const _RegisterComprador_ = () => { setRegisterComprador(!RegisterComprador) }
 
@@ -38,8 +40,14 @@ const EditConsumer = () => {
                             style={{ width: '100%', textAlign: 'left', textAlignVertical: 'center' }}
                         />
                     </View>
+
+                    <TouchableOpacity onPress={_onSet_}>
+                        <Ionicons name="checkbox-outline" color="green" size={20} />
+                    </TouchableOpacity>
                 </View>
             }
         </View>
     )
 }
+
+export default EditConsumer
