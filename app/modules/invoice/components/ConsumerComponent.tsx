@@ -41,8 +41,8 @@ const EditConsumer = ({ setComprador, _onSet_ }: props) => {
                         />
                     </View>
 
-                    <TouchableOpacity onPress={_onSet_}>
-                        <Ionicons name="checkbox-outline" color="green" size={20} />
+                    <TouchableOpacity onPress={_onSet_} style={[{alignSelf : 'center', alignContent : 'center'}]}>
+                        <Ionicons name="checkbox-outline" color="green" size={25} />
                     </TouchableOpacity>
                 </View>
             }

@@ -83,6 +83,14 @@ const InvoiceGen = ({ route, navigation }: props) => {
         );
     };
 
+    //------ Delete item from line ------//
+    const deleteLineaFacturada = (idToDelete: number) => {
+        ShowViewModal();
+        setLineasFacturas(prev =>
+            prev.filter(item => item.id !== idToDelete)
+        );
+    };
+
 
     return (
         <View style={[{ flex: 1 }]}>
@@ -99,7 +107,7 @@ const InvoiceGen = ({ route, navigation }: props) => {
 
             <View>
                 <View>
-                    <EditConsumer setComprador={setComprador} _onSet_={_On_SETComprador_}/>
+                    <EditConsumer setComprador={setComprador} _onSet_={_On_SETComprador_} />
                 </View>
 
                 <View style={{ marginLeft: 20, marginRight: 20 }}>
@@ -107,8 +115,9 @@ const InvoiceGen = ({ route, navigation }: props) => {
                 </View>
 
                 <View>
-                    <CreateLineInvoice UpdateLine={UpdateLine} addFacturaline={addFacturaLine} CleanLine={CleanFinea}/>
+                    <CreateLineInvoice UpdateLine={UpdateLine} addFacturaline={addFacturaLine} CleanLine={CleanFinea} vAlue={Linea}/>
                 </View>
+                <View style={[{ borderBottomWidth: 1, borderColor: 'grey', marginLeft: 20, marginRight: 20, width: '40%', alignSelf: 'center', marginTop: 0 }]} />
 
                 <View>
                     <FlatList
@@ -140,7 +149,7 @@ const InvoiceGen = ({ route, navigation }: props) => {
                                     </TouchableOpacity>
                                 </View>
                                 <View style={{ flex: 1, alignItems: 'center' }}>
-                                    <TouchableOpacity>
+                                    <TouchableOpacity onPress={() => deleteLineaFacturada(item.id)}>
                                         <Ionicons name="close-circle-outline" color="red" size={18} />
                                     </TouchableOpacity>
                                 </View>
@@ -150,7 +159,7 @@ const InvoiceGen = ({ route, navigation }: props) => {
 
                 </View>
             </View>
-            <View style={[{ borderBottomWidth: 1, borderColor: 'grey', marginLeft: 20, marginRight: 20, width : '40%', alignSelf : 'center', marginTop : 10 }]} />
+            <View style={[{ borderBottomWidth: 1, borderColor: 'grey', marginLeft: 20, marginRight: 20, width: '40%', alignSelf: 'center', marginTop: 10 }]} />
             <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between', width: '90%' }]}>
                 <Button title="GENERATE INVOICE" color={"black"} />
                 <Button title="DRAFT" color={"black"} />

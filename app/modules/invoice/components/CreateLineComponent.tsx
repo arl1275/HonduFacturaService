@@ -1,14 +1,22 @@
 import styles from "@/assets/styles/styles"
+import { lineafacturada } from "@/storage/invoice";
+import { useEffect, useState } from "react";
 import { TextInput, TouchableOpacity, View } from "react-native"
 import Ionicons from "react-native-vector-icons/Ionicons"
 
 type props = {
-    UpdateLine : (value : any, detalle : string) => void;
-    addFacturaline : () => void;
-    CleanLine : () => void;
+    UpdateLine: (value: any, detalle: string) => void;
+    addFacturaline: () => void;
+    CleanLine: () => void;
+    vAlue: lineafacturada 
 }
 
-const CreateLineInvoice = ({ UpdateLine, addFacturaline, CleanLine} : props) => {
+const CreateLineInvoice = ({ UpdateLine, addFacturaline, CleanLine, vAlue }: props) => {
+    const [Linea, setValue] = useState<lineafacturada>();
+    
+    useEffect(() => {
+        setValue(vAlue);
+    }, [CleanLine])
 
     return (
         <View>
@@ -31,7 +39,7 @@ const CreateLineInvoice = ({ UpdateLine, addFacturaline, CleanLine} : props) => 
                         onChangeText={(e) => UpdateLine(e, 'detalle')}
                         placeholder="Detalle"
                         multiline={true}
-                        //value={Linea.detalle !== "" ? Linea.detalle.toString() : ""}
+                        value={Linea?.detalle !== "" ? Linea?.detalle.toString() : ""}
                         style={{ width: '100%' }}
                     />
                 </View>
@@ -41,7 +49,7 @@ const CreateLineInvoice = ({ UpdateLine, addFacturaline, CleanLine} : props) => 
                     <TextInput
                         placeholder="Amo."
                         onChangeText={(e) => UpdateLine(e, 'cantidad')}
-                        //value={Linea.cantidad !== 0 ? Linea.cantidad.toString() : ""}
+                        value={Linea?.cantidad !== 0 ? Linea?.cantidad.toString() : ""}
                         keyboardType="numeric"
                         style={{ width: '100%', textAlign: 'right' }}
                     />
@@ -53,7 +61,7 @@ const CreateLineInvoice = ({ UpdateLine, addFacturaline, CleanLine} : props) => 
                         placeholder="Precio"
                         onChangeText={(e) => UpdateLine(e, 'precio')}
                         keyboardType="numeric"
-                        //value={Linea.precio !== 0 ? Linea.precio.toString() : ""}
+                        value={Linea?.precio !== 0 ? Linea?.precio.toString() : ""}
                         style={{ width: '100%', textAlign: 'right' }}
                     />
                 </View>
@@ -63,7 +71,7 @@ const CreateLineInvoice = ({ UpdateLine, addFacturaline, CleanLine} : props) => 
                     <TextInput
                         placeholder="Disco."
                         onChangeText={(e) => UpdateLine(e, 'descuento')}
-                        //value={Linea.descuento !== 0 ? Linea.descuento.toString() : ""}
+                        value={Linea?.descuento !== 0 ? Linea?.descuento.toString() : ""}
                         keyboardType="numeric"
                         style={{ width: '100%', textAlign: 'right' }}
                     />

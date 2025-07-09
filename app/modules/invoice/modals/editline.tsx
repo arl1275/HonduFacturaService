@@ -35,7 +35,7 @@ function EditlineFacturada({ _onCancel_, _onSave_, value }: props) {
             <View>
                 <Text style={[styles.title, { color: 'black' }]}>Editar Línea Facturada</Text>
 
-                <View style={[styles.textinput, { padding: 10 }]}>
+                <View style={[styles.textinput,styles.flexcomponentsRow, { padding: 10 }]}>
                     <TextInput
                         placeholder="Cantidad"
                         keyboardType="numeric"
