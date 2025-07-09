@@ -12,7 +12,6 @@ type ForEditParams = {
     parentprops: invoicesconfig | undefined;
     _onclose_: () => void;
 }
-// this is to configurate teh invoices information
 
 const InvoiceConfig = ({ parentprops, _onclose_, id_company }: ForEditParams) => {
     const [show, setShow] = useState(false);
@@ -36,6 +35,7 @@ const InvoiceConfig = ({ parentprops, _onclose_, id_company }: ForEditParams) =>
 
     const [form, setForm] = useState<invoicesconfig>({
         id: Date.now(),
+        created_at : new Date(),
         id_company: id_company ? id_company : 0,
         encabezado: "",
         cai: cais_,

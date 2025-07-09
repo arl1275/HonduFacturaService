@@ -20,6 +20,7 @@ export interface descuentos {
 // this is not saved on invoices, it is use to check the values before save
 export interface invoicesconfig {
   id: number;
+  created_at : Date;
   id_company: number; // this id, is related to the company
   encabezado: string;
   fechalimite: Date;
