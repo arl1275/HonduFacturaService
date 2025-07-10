@@ -20,43 +20,54 @@ export interface descuentos {
 // this is not saved on invoices, it is use to check the values before save
 export interface invoicesconfig {
   id: number;
-  created_at : Date;
+  created_at: Date;
   id_company: number; // this id, is related to the company
   encabezado: string;
   fechalimite: Date;
-  cai : cais,
+  cai: cais;
   rangodefacturas: number;
   numero_maximo: number;
-  referencia_facturas : rangos,
+  referencia_facturas: rangos;
   piedehoja: string;
   active: boolean;
 }
 
-export interface lineafacturada{
-    id: number,
-    cantidad : number,
-    detalle : string,
-    descuento : number,
-    precio : number,
+export interface lineafacturada {
+  id: number;
+  cantidad: number;
+  detalle: string;
+  descuento: number;
+  precio: number;
 }
 
 //---------------------------- INVOICE ----------------------------//
 export interface invoice {
   id: number;
+
   formato_general: {
     encabezado: string;
+    RTN : string,
     piehoja: string;
     fecha_emision: Date;
     id_company: number;
     numero_de_factura: rangos; // register the id of rangos
     cai: string; // the cai of the company
-    comprador : string,
-    comprador_rtn : string
+    comprador: string;
+    comprador_rtn: string;
   };
-  lineasfacturadas : lineafacturada[],
-  id_impuesto : impuesto[],
-  total : number,
-  subtotal : number,
-  draft : boolean,
-  done : boolean,
+
+  lineasfacturadas: lineafacturada[];
+  id_impuesto: impuesto[];
+  total: number;
+  subtotal: number;
+
+  status: {
+    draft: boolean;
+    done: boolean;
+    creditnote: {
+      done: boolean;
+      creditnote_id: number;
+    };
+  };
+
 }

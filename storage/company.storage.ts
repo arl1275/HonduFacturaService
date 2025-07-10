@@ -34,3 +34,8 @@ export const deletecompany = (id: number) => {
 export const clearCompanies = () => {
   storage.delete(STORAGE_KEY);
 };
+
+export const getCompany_by_ID = (id : number) =>{
+   const companies = getCompanies().filter(c => c.id === id);
+   return companies[0]
+}

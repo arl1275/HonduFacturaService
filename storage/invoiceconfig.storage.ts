@@ -14,7 +14,6 @@ export const getInvoicesconfig_by_id = (term: number) => {
   const configs = getInvoicesconfigs().filter(c =>
     c.id_company === term
   );
-
   return configs;
 };
 
@@ -47,6 +46,10 @@ export const clearInvoicesconfigs = () => {
 //---------------------------------------------------------//
 //functions of invoiceconfigs
 
-const politic_one = () =>{
-  // this politic is about to block all the invoices except the last one
+export const getCurrent = () => {
+  const configs = getInvoicesconfigs()
+    .filter(c => c.active === true)
+    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    
+  return configs[0]; // Devuelve solo la más reciente y activa
 }
