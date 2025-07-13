@@ -1,6 +1,6 @@
 import { invoice, rangos } from "@/storage/invoice";
 import { invoicesconfig } from "@/storage/invoice";
-import { getCurrent } from "@/storage/invoiceconfig.storage";
+import { getCurrent_by_company_id } from "@/storage/invoiceconfig.storage";
 import { getCompany_by_ID } from "@/storage/company.storage";
 import { company } from "@/storage/empresa";
 
@@ -8,17 +8,24 @@ function getLastconfig() {
 
 }
 
-function GenerateInvoiceNumber() {
-
+function GenerateInvoiceNumber( basenumber : rangos, numerolimite : number, fechalimite : Date ) {
+    if(Date.now() > fechalimite.getDate()){
+        
+    }else{
+        return null
+    }
 }
 
-function Generate_Invoice_Item(){
-    const last : invoicesconfig = getCurrent();
-    const company : company = getCompany_by_ID(last.id_company);
+// this function should send a draft invoice 
+
+function Generate_Invoice_Item( company_id : number, id_invoice_company : number){
+    const last : invoicesconfig = getCurrent_by_company_id(company_id);
+    const company : company = getCompany_by_ID(company_id);
 
     const item: invoice = {
         id: Date.now(),
-
+        id_invoice_config : id_invoice_company,
+        
         formato_general: {
             RTN : company.rtn,
             encabezado: last.encabezado,

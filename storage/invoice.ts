@@ -43,7 +43,8 @@ export interface lineafacturada {
 //---------------------------- INVOICE ----------------------------//
 export interface invoice {
   id: number;
-
+  id_invoice_config : number,
+   
   formato_general: {
     encabezado: string;
     RTN : string,

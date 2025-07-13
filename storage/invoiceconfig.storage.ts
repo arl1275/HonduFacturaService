@@ -46,9 +46,9 @@ export const clearInvoicesconfigs = () => {
 //---------------------------------------------------------//
 //functions of invoiceconfigs
 
-export const getCurrent = () => {
+export const getCurrent_by_company_id = ( id : number) => {
   const configs = getInvoicesconfigs()
-    .filter(c => c.active === true)
+    .filter(c => c.active === true && c.id_company === id)
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
     
   return configs[0]; // Devuelve solo la más reciente y activa
