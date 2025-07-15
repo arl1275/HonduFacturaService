@@ -3,36 +3,45 @@ import { invoicesconfig } from "@/storage/invoice";
 import { getCurrent_by_company_id } from "@/storage/invoiceconfig.storage";
 import { getCompany_by_ID } from "@/storage/company.storage";
 import { company } from "@/storage/empresa";
+import { get_last_invoice_by_company } from "@/storage/invoices.storage";
 
-function getLastconfig() {
-
-}
-
-function GenerateInvoiceNumber( basenumber : rangos, numerolimite : number, fechalimite : Date ) {
-    if(Date.now() > fechalimite.getDate()){
-        
-    }else{
-        return null
+function GenerateInvoiceNumber(LastInvoice: invoice) {
+    let newlastnumber: rangos = {
+        id: Date.now(),
+        numero_uno: LastInvoice.formato_general.numero_de_factura.numero_uno,
+        numero_dos: LastInvoice.formato_general.numero_de_factura.numero_dos,
+        numero_tres: LastInvoice.formato_general.numero_de_factura.numero_tres,
+        numero_cuatro: LastInvoice.formato_general.numero_de_factura.numero_cuatro + 1,
+        active: false
     }
+
+    return newlastnumber;
 }
 
-// this function should send a draft invoice 
+function Generate_Invoice_Item(company_id: number): [invoice | string, boolean] {
+    const last: invoicesconfig = getCurrent_by_company_id(company_id);
+    const LastInvoice: invoice = get_last_invoice_by_company(company_id);
+    const company: company = getCompany_by_ID(company_id);
 
-function Generate_Invoice_Item( company_id : number, id_invoice_company : number){
-    const last : invoicesconfig = getCurrent_by_company_id(company_id);
-    const company : company = getCompany_by_ID(company_id);
+    if (LastInvoice.formato_general.numero_de_factura.numero_cuatro + 1 > last.numero_maximo ||
+        new Date() > last.fechalimite){
+        return ["LIMIT OR NUMBER MAX REACED", false];
+    }
+
+    const newlastnumber : rangos = GenerateInvoiceNumber(LastInvoice);
+    
 
     const item: invoice = {
         id: Date.now(),
-        id_invoice_config : id_invoice_company,
-        
+        id_invoice_config: last.id,
+
         formato_general: {
-            RTN : company.rtn,
+            RTN: company.rtn,
             encabezado: last.encabezado,
             piehoja: last.piedehoja,
             fecha_emision: new Date(),
             id_company: last.id_company,
-            numero_de_factura: last.referencia_facturas,
+            numero_de_factura: newlastnumber,
             cai: last.cai.nombre, // the cai of the company
             comprador: "Cliente Final",
             comprador_rtn: "0000-0000-00000",
@@ -53,6 +62,8 @@ function Generate_Invoice_Item( company_id : number, id_invoice_company : number
         }
     }
 
+    return [item, true];
+
 }
 
-    export default GenerateInvoiceNumber
+export default Generate_Invoice_Item;
