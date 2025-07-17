@@ -91,6 +91,12 @@ const InvoiceGen = ({ route, navigation }: props) => {
     //------- this is when u cancel an invoice---------------//
     const oncancel = () => { navigation.navigate("HomeInvoice") };
 
+    //------- cancel comprador ---------------//
+    const oncancel_Comprador = () => { 
+         setComprador({ comprador: 'Cliente Final', comprador_rtn: '0000-0000-00000' });
+         _On_SETComprador_();
+    };
+
     //------- function to update one element of the list --------//
     const updateLineaFacturada = (updatedItem: lineafacturada) => {
         ShowViewModal();
@@ -123,7 +129,15 @@ const InvoiceGen = ({ route, navigation }: props) => {
 
             <View>
                 <View>
-                    {Comprador ? null :
+                    {RegisterComprador ?
+                        <View style={[styles.flexcomponentsRow, { marginLeft: 20, marginRight: 20, borderWidth: 1, borderColor: 'grey', borderRadius: 7 }]}>
+                            <Text  style={{ width: '100%', textAlign: 'left', textAlignVertical: 'center' }}>{Comprador.comprador}</Text>
+                            <Text  style={{ width: '100%', textAlign: 'left', textAlignVertical: 'center' }}>{Comprador.comprador_rtn}</Text>
+                            <TouchableOpacity style={[{ alignSelf: 'center', alignContent: 'center' }]} onPress={oncancel_Comprador}>
+                                <Ionicons name="close-circle-outline" color="green" size={25} />
+                            </TouchableOpacity>
+                        </View>
+                        :
                         <EditConsumer setComprador={setComprador} _onSet_={_On_SETComprador_} />
                     }
 
