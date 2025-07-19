@@ -18,58 +18,57 @@ function GenerateInvoiceNumber(LastInvoice: invoice) {
     return _new_rango_;
 }
 
-function Generate_Invoice_Item(company_id: number): [invoice | string, boolean] {
-    const last: invoicesconfig = getCurrent_by_company_id(company_id);
-    const LastInvoice: invoice = get_last_invoice_by_company(company_id);
-    const company: company = getCompany_by_ID(company_id);
-    let newlastnumber : rangos;
+function Generate_Invoice_Item(company_: company): [invoice | string, boolean] {
+    const last: invoicesconfig | undefined = getCurrent_by_company_id(company_.id);
+    const LastInvoice: invoice | undefined = get_last_invoice_by_company(company_.id);
+    let newlastnumber: rangos;
 
-    if (typeof LastInvoice === undefined) {
+    if (!last) return ["ERROR", false];
+    if (!company_) return ["ERROR2", false];
+
+    if (!LastInvoice) {
         newlastnumber = {
             id: Date.now(),
             numero_uno: last.referencia_facturas.numero_uno,
             numero_dos: last.referencia_facturas.numero_dos,
             numero_tres: last.referencia_facturas.numero_tres,
-            numero_cuatro: last.referencia_facturas.numero_cuatro + 1,
+            numero_cuatro: last.referencia_facturas.numero_cuatro + 1, // revisa esto según negocio
             active: false
-        }
-    }else if(typeof LastInvoice != undefined){
+        };
+    } else {
         newlastnumber = GenerateInvoiceNumber(LastInvoice);
     }
-    
+
     const item: invoice = {
         id: Date.now(),
         id_invoice_config: last.id,
-
         formato_general: {
-            RTN: company.rtn,
+            RTN: company_.rtn,
             encabezado: last.encabezado,
             piehoja: last.piedehoja,
             fecha_emision: new Date(),
             id_company: last.id_company,
             numero_de_factura: newlastnumber,
-            cai: last.cai.nombre, // the cai of the company
+            cai: last.cai.nombre,
             comprador: "Cliente Final",
-            comprador_rtn: "0000-0000-00000",
+            comprador_rtn: "0000-0000-00000"
         },
-
         lineasfacturadas: [],
         id_impuesto: [],
         total: 0,
         subtotal: 0,
-
         status: {
             draft: true,
             done: false,
             creditnote: {
                 done: false,
                 creditnote_id: 0
-            },
+            }
         }
-    }
+    };
 
     return [item, true];
-
 }
+
 
 export default Generate_Invoice_Item;

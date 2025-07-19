@@ -26,11 +26,17 @@ const InvoiceGen = ({ route, navigation }: props) => {
     const [SelectedtoEdit, setSelectedtoEdit] = useState<lineafacturada | undefined>();
     const [ViewModal, setViewModal] = useState<boolean>(false);
     const [LineasFacutas, setLineasFacturas] = useState<lineafacturada[]>([]);
-    const [invoice, setInvoice] = useState<invoice>();
+    const [_invoice_, setInvoice] = useState<invoice>();
 
     useEffect(() => {
-        const Result: [invoice | string, boolean] = Generate_Invoice_Item(item.id);
-        typeof Result[0] === 'object' ? setInvoice(Result[0]) : alert('An error ocurred')
+        const Result: [invoice | string | undefined, boolean] = Generate_Invoice_Item(item);
+        if(Result[0] === "ERROR"){
+            alert('NO SE OBTUVO EL INVOICE CONFIG');
+        }else if(Result[0] === "ERROR2"){
+            alert('NO SE OBTUVO la COMPANY');
+        }else if(typeof Result[0] === "object"){
+            setInvoice(Result[0])
+        }
     }, [item])
 
     const [Linea, setLinea] = useState<lineafacturada>({
@@ -126,6 +132,8 @@ const InvoiceGen = ({ route, navigation }: props) => {
             <View style={{ marginLeft: 20, marginRight: 20 }}>
                 <Text>This invoice is not done thill you press the button of done, meanwhile is created as DRAFT</Text>
             </View>
+
+            <Text style={{color : 'black'}}>{_invoice_? _invoice_.formato_general.RTN : "no existe"}</Text>
 
             <View>
                 <View>

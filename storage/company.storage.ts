@@ -37,5 +37,5 @@ export const clearCompanies = () => {
 
 export const getCompany_by_ID = (id : number) =>{
    const companies = getCompanies().filter(c => c.id === id);
-   return companies[0]
+   return companies[0];
 }
