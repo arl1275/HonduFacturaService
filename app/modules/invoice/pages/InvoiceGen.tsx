@@ -15,6 +15,7 @@ import EditlineFacturada from "../modals/editline";
 import CreateLineInvoice from "../components/CreateLineComponent";
 import LineFlatlist from "../components/flatlist_line_component";
 
+import { formated_invoice_number } from "../utils/InvoiceNumberGenerator";
 
 type props = StackScreenProps<RootStackParamList, "InvoiceGen">
 
@@ -30,11 +31,11 @@ const InvoiceGen = ({ route, navigation }: props) => {
 
     useEffect(() => {
         const Result: [invoice | string | undefined, boolean] = Generate_Invoice_Item(item);
-        if(Result[0] === "ERROR"){
+        if (Result[0] === "ERROR") {
             alert('NO SE OBTUVO EL INVOICE CONFIG');
-        }else if(Result[0] === "ERROR2"){
+        } else if (Result[0] === "ERROR2") {
             alert('NO SE OBTUVO la COMPANY');
-        }else if(typeof Result[0] === "object"){
+        } else if (typeof Result[0] === "object") {
             setInvoice(Result[0])
         }
     }, [item])
@@ -58,27 +59,14 @@ const InvoiceGen = ({ route, navigation }: props) => {
         })
     };
 
-    //------ this is to update the line of the invoicelist----//
-    const UpdateLine = (value: string, field: string) => {
-        if (typeof Linea === "undefined") return;
-        const parsedValue = !isNaN(Number(value)) && value.trim() !== ""
-            ? Number(value)
-            : value;
-
-        setLinea((prev) => ({
-            ...prev,
-            [field]: parsedValue
-        }));
-    };
-
     //----- this add a line in the invoicelines array-------//
-    const addFacturaLine = () => {
-        if (Linea.detalle === "") {
+    const addFacturaLine = ( value : lineafacturada) => {
+        if (value.detalle === "") {
             alert('Register a line to save in this Invoice');
             return
         }
 
-        setLineasFacturas((prev) => [...prev, Linea]);
+        setLineasFacturas((prev) => [...prev, value]);
         CleanFinea();
     }
 
@@ -98,9 +86,9 @@ const InvoiceGen = ({ route, navigation }: props) => {
     const oncancel = () => { navigation.navigate("HomeInvoice") };
 
     //------- cancel comprador ---------------//
-    const oncancel_Comprador = () => { 
-         setComprador({ comprador: 'Cliente Final', comprador_rtn: '0000-0000-00000' });
-         _On_SETComprador_();
+    const oncancel_Comprador = () => {
+        setComprador({ comprador: 'Cliente Final', comprador_rtn: '0000-0000-00000' });
+        _On_SETComprador_();
     };
 
     //------- function to update one element of the list --------//
@@ -133,16 +121,22 @@ const InvoiceGen = ({ route, navigation }: props) => {
                 <Text>This invoice is not done thill you press the button of done, meanwhile is created as DRAFT</Text>
             </View>
 
-            <Text style={{color : 'black'}}>{_invoice_? _invoice_.formato_general.RTN : "no existe"}</Text>
+            <View style={{ marginLeft: 20, marginRight: 20 }}>
+                <Text style={[styles.smallText, styles.textalingleft]}>{formated_invoice_number(_invoice_?.formato_general.numero_de_factura)}</Text>
+            </View>
 
             <View>
                 <View>
                     {RegisterComprador ?
-                        <View style={[styles.flexcomponentsRow, { marginLeft: 20, marginRight: 20, borderWidth: 1, borderColor: 'grey', borderRadius: 7 }]}>
-                            <Text  style={{ width: '100%', textAlign: 'left', textAlignVertical: 'center' }}>{Comprador.comprador}</Text>
-                            <Text  style={{ width: '100%', textAlign: 'left', textAlignVertical: 'center' }}>{Comprador.comprador_rtn}</Text>
+                        <View style={[styles.flexcomponentsRow, { marginLeft: 20, marginRight: 20, borderWidth: 1, borderColor: 'grey', borderRadius: 7, justifyContent: 'space-between' }]}>
+                            <View style={[styles.flexcomponentsRow, { width : '70%'}]}>
+                                <Text style={{ width: '50%', textAlign: 'left', textAlignVertical: 'center', fontWeight : 'bold' }}>{Comprador.comprador}</Text>
+                                <Text style={{ width: '50%', textAlign: 'left', textAlignVertical: 'center' }}>{Comprador.comprador_rtn}</Text>
+                            </View>
+
+
                             <TouchableOpacity style={[{ alignSelf: 'center', alignContent: 'center' }]} onPress={oncancel_Comprador}>
-                                <Ionicons name="close-circle-outline" color="green" size={25} />
+                                <Ionicons name="close-circle-outline" color="red" size={25} />
                             </TouchableOpacity>
                         </View>
                         :
@@ -156,7 +150,7 @@ const InvoiceGen = ({ route, navigation }: props) => {
                 </View>
 
                 <View>
-                    <CreateLineInvoice UpdateLine={UpdateLine} addFacturaline={addFacturaLine} CleanLine={CleanFinea} vAlue={Linea} />
+                    <CreateLineInvoice addFacturaline={addFacturaLine} CleanLine={CleanFinea} vAlue={Linea} />
                 </View>
                 <View style={[{ borderBottomWidth: 1, borderColor: 'grey', marginLeft: 20, marginRight: 20, width: '40%', alignSelf: 'center', marginTop: 0 }]} />
 

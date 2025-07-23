@@ -18,6 +18,14 @@ function GenerateInvoiceNumber(LastInvoice: invoice) {
     return _new_rango_;
 }
 
+export function formated_invoice_number(valor: rangos | undefined) {
+    if (typeof valor === 'object') {
+        return `${valor.numero_uno}- ${valor.numero_dos} - ${valor.numero_tres} - ${valor.numero_cuatro}`
+    }else{
+        return 'ERROR, number cannot be formated'    
+    }
+}
+
 function Generate_Invoice_Item(company_: company): [invoice | string, boolean] {
     const last: invoicesconfig | undefined = getCurrent_by_company_id(company_.id);
     const LastInvoice: invoice | undefined = get_last_invoice_by_company(company_.id);
