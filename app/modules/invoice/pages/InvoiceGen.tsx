@@ -1,5 +1,6 @@
 import { View, Text, TouchableOpacity, Button, TextInput, FlatList, Alert, Modal } from "react-native";
 import { invoice, lineafacturada } from "@/storage/invoice";
+import { addinvoice, saveinvoices } from "@/storage/invoices.storage";
 //import { company } from "@/storage/empresa";
 //import EditInvoiceLine from "../components/editinvoiceline";
 // route imports
@@ -27,7 +28,7 @@ const InvoiceGen = ({ route, navigation }: props) => {
     const [SelectedtoEdit, setSelectedtoEdit] = useState<lineafacturada | undefined>();
     const [ViewModal, setViewModal] = useState<boolean>(false);
     const [LineasFacutas, setLineasFacturas] = useState<lineafacturada[]>([]);
-    const [_invoice_, setInvoice] = useState<invoice>();
+    const [_invoice_, setInvoice] = useState<invoice | undefined>(undefined);
 
     useEffect(() => {
         const Result: [invoice | string | undefined, boolean] = Generate_Invoice_Item(item);
@@ -60,12 +61,11 @@ const InvoiceGen = ({ route, navigation }: props) => {
     };
 
     //----- this add a line in the invoicelines array-------//
-    const addFacturaLine = ( value : lineafacturada) => {
+    const addFacturaLine = (value: lineafacturada) => {
         if (value.detalle === "") {
             alert('Register a line to save in this Invoice');
             return
         }
-
         setLineasFacturas((prev) => [...prev, value]);
         CleanFinea();
     }
@@ -107,6 +107,69 @@ const InvoiceGen = ({ route, navigation }: props) => {
         );
     };
 
+    const save_invoice_inStorage = (isDraft: boolean) => {
+        if (typeof _invoice_ === "object") {
+            if (isDraft) {
+                addinvoice(_invoice_);
+                Alert.alert("FINISH", "Invoice is well generated");
+            } else {
+                setInvoice(prev => {
+                    if (!prev) return prev;
+                    return {
+                        ...prev,
+                        status: {
+                            ...prev.status,
+                            draft: false,
+                            done: true,
+                            creditnote: {
+                                ...prev.status.creditnote
+                            }
+                        }
+                    };
+                });
+            }
+            oncancel();
+        } else {
+            Alert.alert("ERROR", "Invoice is not well generated");
+        }
+    };
+
+
+    const _on_cancel_invoice_generation = () => {
+        Alert.alert('CANCEL INVOICE',
+            'You pressed cancel Invoice, Are you sure u want to delete the invoice? (the invoice is going to be deleted and u cannot recover it)',
+            [
+                {
+                    text: "NO",
+                    onPress: () => { },
+                    style: "cancel"
+                },
+                {
+                    text: "YES",
+                    onPress: () => { setInvoice(undefined), oncancel() }
+                }
+            ],
+            { cancelable: false })
+    }
+
+    const _on_save_invoice = () => {
+        Alert.alert('Please select an option',
+            `Every option of the next ones, case u are not sure select draft
+            DRAFT   > Create a draft of the invoice, not a finished.
+            INVOICE > Create a invoice.`,
+            [
+                {
+                    text: " INVOICE",
+                    onPress: () => {save_invoice_inStorage(false)},
+                    style: 'default'
+                }, {
+                    text: "DRAFT",
+                    onPress: () => {save_invoice_inStorage(true)}
+                },
+                { text: "NO" }
+            ],
+            { cancelable: false })
+    }
 
     return (
         <View style={[{ flex: 1 }]}>
@@ -129,8 +192,8 @@ const InvoiceGen = ({ route, navigation }: props) => {
                 <View>
                     {RegisterComprador ?
                         <View style={[styles.flexcomponentsRow, { marginLeft: 20, marginRight: 20, borderWidth: 1, borderColor: 'grey', borderRadius: 7, justifyContent: 'space-between' }]}>
-                            <View style={[styles.flexcomponentsRow, { width : '70%'}]}>
-                                <Text style={{ width: '50%', textAlign: 'left', textAlignVertical: 'center', fontWeight : 'bold' }}>{Comprador.comprador}</Text>
+                            <View style={[styles.flexcomponentsRow, { width: '70%' }]}>
+                                <Text style={{ width: '50%', textAlign: 'left', textAlignVertical: 'center', fontWeight: 'bold' }}>{Comprador.comprador}</Text>
                                 <Text style={{ width: '50%', textAlign: 'left', textAlignVertical: 'center' }}>{Comprador.comprador_rtn}</Text>
                             </View>
 
@@ -167,9 +230,8 @@ const InvoiceGen = ({ route, navigation }: props) => {
             </View>
             <View style={[{ borderBottomWidth: 1, borderColor: 'grey', marginLeft: 20, marginRight: 20, width: '40%', alignSelf: 'center', marginTop: 10 }]} />
             <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between', width: '90%' }]}>
-                <Button title="GENERATE INVOICE" color={"black"} />
-                <Button title="DRAFT" color={"black"} />
-                <Button title="CANCEL" color={"red"} />
+                <Button title="GENERATE INVOICE" color={"black"} onPress={_on_save_invoice} />
+                <Button title="CANCEL" color={"red"} onPress={_on_cancel_invoice_generation} />
             </View>
 
             <Modal visible={ViewModal} transparent={true} animationType="slide" onRequestClose={ShowViewModal}>
