@@ -37,7 +37,7 @@ const InvoiceGen = ({ route, navigation }: props) => {
         } else if (Result[0] === "ERROR2") {
             alert('NO SE OBTUVO la COMPANY');
         } else if (typeof Result[0] === "object") {
-            setInvoice(Result[0])
+            setInvoice(Result[0]);
         }
     }, [item])
 
@@ -108,7 +108,17 @@ const InvoiceGen = ({ route, navigation }: props) => {
     };
 
     const save_invoice_inStorage = (isDraft: boolean) => {
-        if (typeof _invoice_ === "object") {
+        if (typeof _invoice_ === "object" && typeof _invoice_ === 'object') {
+            // this part if to add the lines in the invoice object
+            setInvoice(prev => {
+                if (!prev) return prev;
+                    return {
+                        ...prev,
+                        lineasfacturadas : LineasFacutas
+                    };
+            })
+
+
             if (isDraft) {
                 addinvoice(_invoice_);
                 Alert.alert("FINISH", "Invoice is well generated");
@@ -127,6 +137,7 @@ const InvoiceGen = ({ route, navigation }: props) => {
                         }
                     };
                 });
+                addinvoice(_invoice_);
             }
             oncancel();
         } else {

@@ -1,11 +1,11 @@
-import { View, Text, Button} from "react-native";
+import { View, Text, Button, FlatList} from "react-native";
 import styles from "@/assets/styles/styles";
 import { Picker } from '@react-native-picker/picker';
 import { getCompanies } from "@/storage/company.storage";
 import { company } from "@/storage/empresa";
 import React, { useEffect, useState } from "react";
 import { invoice } from "@/storage/invoice";
-import { getInvoices_by_ID } from "@/storage/invoices.storage";
+import { getInvoices_by_ID, getInvoices_by_company } from "@/storage/invoices.storage";
 // router imports 
 import { RootStackParamList } from "../indexInvoice";
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -18,7 +18,7 @@ const InvoiceHome = () => {
     const [SelectedList, setSelectedList] = useState<company[]>([]);
     const [ListInvoices, setListInvoices] = useState<invoice[]>([])
     const UpdateList = () => { setSelectedList(getCompanies()) }
-    const UpdateInvoices = () => {item && setListInvoices(getInvoices_by_ID(item?.id))}
+    const UpdateInvoices = () => {item && setListInvoices(getInvoices_by_company(item?.id))}
     const navigation = useNavigation<InvoiceNavigator>();
 
     const ValidateRoute = () =>{
@@ -32,6 +32,7 @@ const InvoiceHome = () => {
     useEffect(()=>{
         UpdateInvoices()
     }, [item]);
+
 
     return (
         <View style={{flex : 1}}>
@@ -62,6 +63,18 @@ const InvoiceHome = () => {
             <View style={[styles.flexcomponentsRow, { justifyContent : 'space-between'}]}>
                 <Button title="GENERATE INVOICE"color={"black"} onPress={()=> ValidateRoute()}/>
                 <Button title="ANULATE INVOICE" color={"red"}/>
+            </View>
+
+            <View>
+                <FlatList 
+                data={ListInvoices}
+                style={[styles.flexcomponentsRow]}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                    <View>{item.id}</View>
+                )}
+                ListEmptyComponent={<Text>NONE DATA YET</Text>}
+                />
             </View>
 
         </View>

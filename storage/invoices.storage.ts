@@ -29,12 +29,18 @@ export const getInvoices_by_ID = (id: number) => {
   return invoices;
 };
 
+// this take consideration the invoice config
 export const getInvoices_by_company_id = (id: number, id_invoice_config : number) => {
   const invoices = getinvoices().filter(inv => inv.formato_general.id_company === id
     && inv.id_invoice_config === id_invoice_config
   ).sort((a, b) => 
       b.formato_general.fecha_emision.getTime() - a.formato_general.fecha_emision.getTime() // Orden descendente
     );
+  return invoices;
+};
+
+export const getInvoices_by_company = (id: number) => {
+  const invoices = getinvoices().filter(inv => inv.formato_general.id_company === id)
   return invoices;
 };
 
