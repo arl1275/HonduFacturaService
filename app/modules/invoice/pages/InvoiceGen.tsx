@@ -241,7 +241,7 @@ const InvoiceGen = ({ route, navigation }: props) => {
             </View>
             <View style={[{ borderBottomWidth: 1, borderColor: 'grey', marginLeft: 20, marginRight: 20, width: '40%', alignSelf: 'center', marginTop: 10 }]} />
             <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between', width: '90%' }]}>
-                <Button title="GENERATE INVOICE" color={"black"} onPress={_on_save_invoice} />
+                <Button title="GENERATE INVOICE" color={"black"} onPress={()=>_on_save_invoice()} />
                 <Button title="CANCEL" color={"red"} onPress={_on_cancel_invoice_generation} />
             </View>
 
