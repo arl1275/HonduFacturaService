@@ -41,7 +41,7 @@ export const getInvoices_by_company_id = (id: number, id_invoice_config : number
 };
 
 export const getInvoices_by_company = (id: number) => {
-  console.log('Companya', id)
+  //console.log('Companya', id)
   const invoices = getinvoices().filter(inv => inv.formato_general.id_company === id)
   return invoices;
 };

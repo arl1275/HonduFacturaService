@@ -188,7 +188,7 @@ const InvoiceGen = ({ route, navigation }: props) => {
                 <TouchableOpacity onPress={() => oncancel()}>
                     <Ionicons name="chevron-back" size={30} color="black" />
                 </TouchableOpacity>
-                <Text style={[styles.paragraph, styles.textalingleft, { color: 'black' }]}>Invoice Generation</Text>
+                <Text style={[styles.paragraph, styles.textalingleft, { color: 'black' }]}>Invoice Generation ( {item.companyname} )</Text>
             </View>
 
             <View style={{ marginLeft: 20, marginRight: 20 }}>

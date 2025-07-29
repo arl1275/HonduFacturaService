@@ -5,7 +5,8 @@ import { getCompanies } from "@/storage/company.storage";
 import { company } from "@/storage/empresa";
 import React, { useEffect, useState } from "react";
 import { invoice } from "@/storage/invoice";
-import { getInvoices_by_ID, getInvoices_by_company } from "@/storage/invoices.storage";
+import { getInvoices_by_company } from "@/storage/invoices.storage";
+import { formated_invoice_number } from "../utils/InvoiceNumberGenerator";
 // router imports 
 import { RootStackParamList } from "../indexInvoice";
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -77,19 +78,22 @@ const InvoiceHome = () => {
                 <Button title="ANULATE INVOICE" color={"red"} />
             </View>
 
-            <View>
+            <View style={{}}>
                 <FlatList
-                    data={ListInvoices}
-                    style={[styles.flexcomponentsRow]}
-                    keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => (
-                        <View style={[styles.title]}>
-                            <Text>{item.id}</Text>
-                        </View>
-                    )}
-                    ListEmptyComponent={<Text>NONE DATA YET</Text>}
-                />
-            </View>
+                data={ListInvoices}
+                style={[styles.flexcomponentsRow]}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                    <View style={[styles.flexcomponentsRow,
+                    { marginLeft: 20, marginRight: 20, borderWidth: 1, padding: 10, borderColor: 'grey', borderRadius: 7, justifyContent: 'space-between' }]}>
+                        <Text style={{ flex: 3 }}>{formated_invoice_number(item.formato_general.numero_de_factura)}</Text>
+                        <Text style={{ flex: 2, textAlign: 'right' }}>{item.status.done}</Text>
+                        <Text style={{ flex: 2, textAlign: 'right' }}>{item.total}</Text>
+                        <Text style={{ flex: 2, textAlign: 'right' }}>{item.formato_general.comprador}</Text>
+                    </View>
+                )}
+                ListEmptyComponent={<Text>NONE DATA YET</Text>}
+            /></View>
 
         </View>
     )
