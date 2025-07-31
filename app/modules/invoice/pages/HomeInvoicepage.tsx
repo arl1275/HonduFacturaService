@@ -1,4 +1,4 @@
-import { View, Text, Button, FlatList } from "react-native";
+import { View, Text, Button, FlatList, TouchableOpacity, Alert } from "react-native";
 import styles from "@/assets/styles/styles";
 import { Picker } from '@react-native-picker/picker';
 import { getCompanies } from "@/storage/company.storage";
@@ -24,13 +24,11 @@ const InvoiceHome = () => {
     const UpdateInvoices = () => {
         if (typeof item === 'object') {
             setListInvoices(getInvoices_by_company(item.id))
-        } else {
-            console.log('error', typeof item)
         }
     }
 
     const ValidateRoute = () => {
-        item != undefined ? navigation.navigate("InvoiceGen", { item }) : null
+        item != undefined ? navigation.navigate("InvoiceGen", { item }) :  Alert.alert('Detail', 'Select a Company before create an invoice')
     }
 
     useEffect(() => {
@@ -78,22 +76,35 @@ const InvoiceHome = () => {
                 <Button title="ANULATE INVOICE" color={"red"} />
             </View>
 
-            <View style={{}}>
-                <FlatList
-                data={ListInvoices}
-                style={[styles.flexcomponentsRow]}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
-                    <View style={[styles.flexcomponentsRow,
-                    { marginLeft: 20, marginRight: 20, borderWidth: 1, padding: 10, borderColor: 'grey', borderRadius: 7, justifyContent: 'space-between' }]}>
-                        <Text style={{ flex: 3 }}>{formated_invoice_number(item.formato_general.numero_de_factura)}</Text>
-                        <Text style={{ flex: 2, textAlign: 'right' }}>{item.status.done}</Text>
-                        <Text style={{ flex: 2, textAlign: 'right' }}>{item.total}</Text>
-                        <Text style={{ flex: 2, textAlign: 'right' }}>{item.formato_general.comprador}</Text>
+            <View>
+                {
+                    ListInvoices.length > 0 &&
+                    <View style={[styles.flexcomponentsRow, { marginLeft: 15, marginRight: 20, justifyContent: 'space-between', marginBottom: 0, marginTop: 0 }]}>
+                        <Text style={{ flex: 2, textAlign: 'right' }}>invoice</Text>
+                        <Text style={{ flex: 2, textAlign: 'right' }}>status</Text>
+                        <Text style={{ flex: 2, textAlign: 'right' }}>total</Text>
+                        <Text style={{ flex: 2, textAlign: 'right' }}>client</Text>
                     </View>
-                )}
-                ListEmptyComponent={<Text>NONE DATA YET</Text>}
-            /></View>
+                }
+
+
+                <FlatList
+                    data={ListInvoices}
+                    style={{ marginTop: 0 }}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item }) => (
+                        <TouchableOpacity>
+                            <View style={[styles.flexcomponentsRow,
+                            { marginLeft: 15, marginRight: 15, borderWidth: 1, padding: 10, borderColor: 'grey', borderRadius: 7, justifyContent: 'space-between' }]}>
+                                <Text style={{ flex: 3 }}>{formated_invoice_number(item.formato_general.numero_de_factura)}</Text>
+                                <Text style={{ flex: 2, textAlign: 'right' }}>{item.status.draft}</Text>
+                                <Text style={{ flex: 2, textAlign: 'right' }}>{item.total}</Text>
+                                <Text style={{ flex: 2, textAlign: 'right' }}>{item.formato_general.comprador}</Text>
+                            </View>
+                        </TouchableOpacity>
+                    )}
+                    ListEmptyComponent={<Text>NONE DATA YET</Text>}
+                /></View>
 
         </View>
     )
