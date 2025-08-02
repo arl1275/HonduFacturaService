@@ -23,6 +23,7 @@ export interface company{
     direccion_correo : string,
     numero_telefono_compay : string,
     active : boolean,
+    impuestos : impuesto[]
 }
 //--------------------------------------------------------------------------------------------//
 

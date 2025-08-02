@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Button, TextInput, FlatList, Alert, Modal } from "react-native";
+import { View, Text, TouchableOpacity, Button, FlatList, Alert, Modal } from "react-native";
 import { invoice, lineafacturada } from "@/storage/invoice";
 import { addinvoice, saveinvoices } from "@/storage/invoices.storage";
 //import { company } from "@/storage/empresa";
@@ -17,6 +17,7 @@ import CreateLineInvoice from "../components/CreateLineComponent";
 import LineFlatlist from "../components/flatlist_line_component";
 
 import { formated_invoice_number } from "../utils/InvoiceNumberGenerator";
+import { impuesto } from "@/storage/empresa";
 
 type props = StackScreenProps<RootStackParamList, "InvoiceGen">
 
@@ -30,6 +31,9 @@ const InvoiceGen = ({ route, navigation }: props) => {
     const [LineasFacutas, setLineasFacturas] = useState<lineafacturada[]>([]);
     const [_invoice_, setInvoice] = useState<invoice | undefined>(undefined);
 
+    const [Listtax, setListTax] = useState<impuesto[]>([])
+    const [result, setResult] = useState({ total: 0, subtotal: 0 })
+
     useEffect(() => {
         const Result: [invoice | string | undefined, boolean] = Generate_Invoice_Item(item);
         if (Result[0] === "ERROR") {
@@ -39,7 +43,20 @@ const InvoiceGen = ({ route, navigation }: props) => {
         } else if (typeof Result[0] === "object") {
             setInvoice(Result[0]);
         }
-    }, [item])
+    }, [item]);
+
+    const UpdateResultValue = () => {
+        const total = LineasFacutas.reduce((sum, item) => sum + item.precio, 0);
+
+        setResult(prev => ({
+            ...prev,
+            total: total
+        }));
+    };
+
+    useEffect(() => {
+        UpdateResultValue()
+    }, [LineasFacutas])
 
     const [Linea, setLinea] = useState<lineafacturada>({
         id: Date.now(),
@@ -112,10 +129,10 @@ const InvoiceGen = ({ route, navigation }: props) => {
             // this part if to add the lines in the invoice object
             setInvoice(prev => {
                 if (!prev) return prev;
-                    return {
-                        ...prev,
-                        lineasfacturadas : LineasFacutas
-                    };
+                return {
+                    ...prev,
+                    lineasfacturadas: LineasFacutas
+                };
             })
 
 
@@ -171,11 +188,11 @@ const InvoiceGen = ({ route, navigation }: props) => {
             [
                 {
                     text: " INVOICE",
-                    onPress: () => {save_invoice_inStorage(false)},
+                    onPress: () => { save_invoice_inStorage(false) },
                     style: 'default'
                 }, {
                     text: "DRAFT",
-                    onPress: () => {save_invoice_inStorage(true)}
+                    onPress: () => { save_invoice_inStorage(true) }
                 },
                 { text: "NO" }
             ],
@@ -226,7 +243,6 @@ const InvoiceGen = ({ route, navigation }: props) => {
                 <View>
                     <CreateLineInvoice addFacturaline={addFacturaLine} CleanLine={CleanFinea} vAlue={Linea} />
                 </View>
-                <View style={[{ borderBottomWidth: 1, borderColor: 'grey', marginLeft: 20, marginRight: 20, width: '40%', alignSelf: 'center', marginTop: 0 }]} />
 
                 <View>
                     <FlatList
@@ -239,10 +255,34 @@ const InvoiceGen = ({ route, navigation }: props) => {
 
                 </View>
             </View>
-            <View style={[{ borderBottomWidth: 1, borderColor: 'grey', marginLeft: 20, marginRight: 20, width: '40%', alignSelf: 'center', marginTop: 10 }]} />
-            <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between', width: '90%' }]}>
-                <Button title="GENERATE INVOICE" color={"black"} onPress={()=>_on_save_invoice()} />
-                <Button title="CANCEL" color={"red"} onPress={_on_cancel_invoice_generation} />
+
+            <View style={[{ marginLeft: 20, marginRight: 20, borderWidth: 1, borderColor: 'grey', borderRadius: 7, justifyContent: 'space-between' }]}>
+
+                <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between', width: '90%', marginBottom: 0 }]}>
+                    <Button title="GENERATE INVOICE" color={"black"} onPress={() => _on_save_invoice()} />
+                    <Button title="CANCEL" color={"red"} onPress={_on_cancel_invoice_generation} />
+                </View>
+
+                <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between', marginTop: 0, marginBottom: 0 }]}>
+
+                    <View>
+                        <Text>Total</Text>
+                        <Text>Sub total</Text>
+                        <Text>Impuesto aplicado</Text>
+                        <View>
+                            
+                        </View>
+                    </View>
+
+                    <View>
+                        <Text>{result.total}</Text>
+                        <Text>x2</Text>
+                        <Text>x3</Text>
+                        <Text></Text>
+                    </View>
+
+                </View>
+
             </View>
 
             <Modal visible={ViewModal} transparent={true} animationType="slide" onRequestClose={ShowViewModal}>

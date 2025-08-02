@@ -22,14 +22,10 @@ const InvoiceHome = () => {
     const navigation = useNavigation<InvoiceNavigator>();
 
     const UpdateInvoices = () => {
-        if (typeof item === 'object') {
-            setListInvoices(getInvoices_by_company(item.id))
-        }
+        if (typeof item === 'object') {setListInvoices(getInvoices_by_company(item.id))}
     }
 
-    const ValidateRoute = () => {
-        item != undefined ? navigation.navigate("InvoiceGen", { item }) :  Alert.alert('Detail', 'Select a Company before create an invoice')
-    }
+    const ValidateRoute = () => { item != undefined ? navigation.navigate("InvoiceGen", { item }) :  Alert.alert('Detail', 'Select a Company before create an invoice')}
 
     useEffect(() => {
         UpdateList();
