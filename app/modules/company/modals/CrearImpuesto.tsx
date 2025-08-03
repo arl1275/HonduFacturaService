@@ -15,6 +15,10 @@ const ModalCreateImpuesto = ({addImpuesto, onclose} : props) => {
         active : false
     });
 
+    const OnUpdateValue = ( e : string | number | boolean , field : string) =>{
+        setNewImpuesto((prev) =>({...prev, [field] : e}))
+    }
+
     return(
         <View>
 
