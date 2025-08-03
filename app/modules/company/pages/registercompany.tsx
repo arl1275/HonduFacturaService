@@ -53,6 +53,7 @@ export default function RegisterCompany() {
       id: Date.now(),
       image,  // Aquí ya va el base64
       companyname,
+      impuestos : [],
       rtn,
       direccion_company: direccion,
       direccion_correo: correo,
