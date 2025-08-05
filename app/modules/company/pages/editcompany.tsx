@@ -20,7 +20,7 @@ export default function EditCompanyPage({ route, navigation }: Props) {
   const [EditCompany, setEditCompany] = useState<company>(item);
   const [ShowModalTax, setShowModalTax] = useState<boolean>(false);
   const [ShowModalTaxEdit, setShowModalTaxEdit] = useState<boolean>(false);
-  const [editTax, setEditTax] =useState<impuesto | undefined>(undefined);
+  const [editTax, setEditTax] = useState<impuesto | undefined>(undefined);
 
   const iseditingCompany = () => { setIsEditing(!isEditing) };
   const oncancel = () => { navigation.navigate('HomeCompany') }
@@ -31,35 +31,62 @@ export default function EditCompanyPage({ route, navigation }: Props) {
 
   const onSave = () => { updatecompany(EditCompany); oncancel() }
 
-  // this funtions are for tax configurations -----------
-  const appendNewTax = (newTAX : impuesto) =>{
-    if(item.impuestos.length <= 0){
-      const alterArray : impuesto[] = [];
-      alterArray.push(newTAX);
-      return alterArray;
-    }else{
-      const alterArray : impuesto[] = item.impuestos;
-      alterArray.push(newTAX);
-      return alterArray
-    }
+  //-----------------------------------------------------this funtions are for tax configurations -----------------------------------------------------
+  // this is to set the object before save the updates
+  const appendNewTax = (newTAX: impuesto): impuesto[] => {
+  if (!EditCompany.impuestos || EditCompany.impuestos.length === 0) {
+    return [newTAX];
+  }
+  const exists = EditCompany.impuestos.some(item => item.id === newTAX.id);
+  let alterArray: impuesto[] = [];
+  if (exists) {
+    alterArray = EditCompany.impuestos.map(item =>
+      item.id === newTAX.id ? newTAX : item
+    );
+  } else {
+    alterArray = [...EditCompany.impuestos, newTAX];
   }
 
+  return alterArray;
+};
+
+
+  // this is to open modal of editing and create Taxes
   const onViewModalTax = () => { setShowModalTax(!ShowModalTax) };
   const onViewModalTaxEdit = () => { setShowModalTaxEdit(!ShowModalTaxEdit) };
 
   const onSaveTaxAdd = (newTax: impuesto) => {
     const ArrayTax: impuesto[] = appendNewTax(newTax);
-    ArrayTax.push(newTax);
     valuesEditing("impuestos", ArrayTax);
   };
 
   const OnEditTax = (UpdatedTax: impuesto) => {
-    const ArrayTax: impuesto[] = [];
-    ArrayTax.push(UpdatedTax);
+    const ArrayTax: impuesto[] = appendNewTax(UpdatedTax);
     valuesEditing("impuestos", ArrayTax);
   }
 
-  //-----------------------------------------------------
+  // onDelte Tax
+  const DeleteTax = (DeleteTax: impuesto) => {
+    Alert.alert("WAARNING", "You will delete a Tax from this company",
+      [
+        {
+          text: "CANCEL",
+          style: "cancel"
+        },
+        {
+          text: "YEX",
+          onPress: () => {
+            const UpdateArrayTax: impuesto[] = item.impuestos.filter(imp => imp.id != DeleteTax.id);
+            valuesEditing("impuestos", UpdateArrayTax);
+          }
+        }
+      ],
+      { cancelable: false }
+    )
+
+  }
+
+  //---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
   const pickImage = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -160,23 +187,28 @@ export default function EditCompanyPage({ route, navigation }: Props) {
 
             <View>
               <Text style={[styles.smallText, styles.textalingleft, { marginBottom: 0 }]}>TAXs</Text>
-              
+
               <FlatList
                 data={item.impuestos}
                 keyExtractor={(_item_) => _item_.id.toString()}
                 renderItem={({ item }) => (
-                  <View style={[styles.flexcomponentsRow, { borderBottomWidth: 0.5, borderBottomColor: 'grey', width: '95%', justifyContent: 'space-between', alignItems: 'center' }]}>
+                  <View style={[styles.flexcomponentsRow, { borderBottomWidth: 0.5, borderBottomColor: 'grey', width: '95%', justifyContent: 'space-between', alignItems: 'center', margin: 0 }]}>
 
                     <View style={[styles.flexcomponentsRow, { alignItems: 'center', margin: 0 }]}>
-                      <TouchableOpacity onPress={() => {setEditTax(item); onViewModalTaxEdit()}}>
+                      <TouchableOpacity onPress={() => { setEditTax(item); onViewModalTaxEdit() }}>
                         <Ionicons name={"create"} size={25} color={"black"} />
                       </TouchableOpacity>
+
+                      <TouchableOpacity style={[{ marginLeft: 5, marginRight: 5 }]} onPress={()=> DeleteTax(item)}>
+                        <Ionicons name={"trash"} size={25} color={"grey"} />
+                      </TouchableOpacity>
+
                       <Text>{item.nombre}</Text>
                     </View>
-                    
-                    <Text>{item.porcentaje}</Text>
+
+                    <Text>{item.porcentaje} %</Text>
                     <Text style={[styles.smallText, { color: item.active ? 'green' : 'red' }]}>{item.active ? 'ACTIVE' : 'DEACTIVE'}</Text>
-                  
+
                   </View>
                 )}
                 ListEmptyComponent={
