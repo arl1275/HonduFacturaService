@@ -29,26 +29,26 @@ export default function EditCompanyPage({ route, navigation }: Props) {
     setEditCompany(prev => ({ ...prev, [key]: value }));
   }
 
-  const onSave = () => { updatecompany(EditCompany); oncancel() }
+  const onSave = () => { updatecompany(EditCompany); oncancel(); }
 
   //-----------------------------------------------------this funtions are for tax configurations -----------------------------------------------------
   // this is to set the object before save the updates
   const appendNewTax = (newTAX: impuesto): impuesto[] => {
-  if (!EditCompany.impuestos || EditCompany.impuestos.length === 0) {
-    return [newTAX];
-  }
-  const exists = EditCompany.impuestos.some(item => item.id === newTAX.id);
-  let alterArray: impuesto[] = [];
-  if (exists) {
-    alterArray = EditCompany.impuestos.map(item =>
-      item.id === newTAX.id ? newTAX : item
-    );
-  } else {
-    alterArray = [...EditCompany.impuestos, newTAX];
-  }
+    if (!EditCompany.impuestos || EditCompany.impuestos.length === 0) {
+      return [newTAX];
+    }
+    const exists = EditCompany.impuestos.some(item => item.id === newTAX.id);
+    let alterArray: impuesto[] = [];
+    if (exists) {
+      alterArray = EditCompany.impuestos.map(item =>
+        item.id === newTAX.id ? newTAX : item
+      );
+    } else {
+      alterArray = [...EditCompany.impuestos, newTAX];
+    }
 
-  return alterArray;
-};
+    return alterArray;
+  };
 
 
   // this is to open modal of editing and create Taxes
@@ -58,11 +58,13 @@ export default function EditCompanyPage({ route, navigation }: Props) {
   const onSaveTaxAdd = (newTax: impuesto) => {
     const ArrayTax: impuesto[] = appendNewTax(newTax);
     valuesEditing("impuestos", ArrayTax);
+    //onSaveTAxes('The Value has been created');
   };
 
   const OnEditTax = (UpdatedTax: impuesto) => {
     const ArrayTax: impuesto[] = appendNewTax(UpdatedTax);
     valuesEditing("impuestos", ArrayTax);
+    //onSaveTAxes('The value has been updated');
   }
 
   // onDelte Tax
@@ -78,6 +80,7 @@ export default function EditCompanyPage({ route, navigation }: Props) {
           onPress: () => {
             const UpdateArrayTax: impuesto[] = item.impuestos.filter(imp => imp.id != DeleteTax.id);
             valuesEditing("impuestos", UpdateArrayTax);
+            //onSaveTAxes('The value has been deleted.')
           }
         }
       ],
@@ -115,7 +118,7 @@ export default function EditCompanyPage({ route, navigation }: Props) {
 
       <Modal visible={ShowModalTax} transparent={true} animationType="fade" >
         <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)', justifyContent: 'center', alignItems: 'center' }}>
-          <View>
+          <View style={[{ width: '70%' }]}>
             <ModalCreateImpuesto addImpuesto={onSaveTaxAdd} onclose={onViewModalTax} />
           </View>
         </View>
@@ -123,7 +126,7 @@ export default function EditCompanyPage({ route, navigation }: Props) {
 
       <Modal visible={ShowModalTaxEdit} transparent={true} animationType="fade" >
         <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)', justifyContent: 'center', alignItems: 'center' }}>
-          <View>
+          <View style={[{ width: '70%' }]}>
             <ModalEditImpuesto item={editTax} saveUpdate={OnEditTax} onclose={onViewModalTaxEdit} />
           </View>
         </View>
@@ -144,10 +147,12 @@ export default function EditCompanyPage({ route, navigation }: Props) {
         isEditing ?
           <View style={[{ alignSelf: 'center', justifyContent: 'space-between', padding: 5, borderBlockColor: 'black', borderWidth: 1, elevation: 10, borderRadius: 7, width: '95%', backgroundColor: 'white', marginBottom: 10 }]}>
             <View>
-              <Text style={[styles.smallText, styles.textalingleft, { color: 'black', fontWeight: 'bold' }]}>Edit Company</Text>
-              <TouchableOpacity onPress={onViewModalTax}>
-                <Text style={[styles.smallText, { color: 'black' }]}>PRESS HERE TO ADD A TAX</Text>
+              <Text style={[styles.paragraph, styles.textalingleft, { color: 'black', fontWeight: 'bold', marginBottom: 10 }]}>EDIT COMPANY</Text>
+
+              <TouchableOpacity onPress={onViewModalTax} style={[{ padding: 10, backgroundColor: 'black', borderRadius: 50 }]}>
+                <Text style={[styles.smallText, { color: 'white', alignSelf: 'center' }]}>PRESS HERE TO ADD A TAX</Text>
               </TouchableOpacity>
+
             </View>
 
             <View style={[styles.textinput, { padding: 10 }]}>
@@ -179,17 +184,18 @@ export default function EditCompanyPage({ route, navigation }: Props) {
               )}
 
               <View style={[{ width: '50%', justifyContent: 'space-around', padding: 10 }]}>
-                <Button title="Cambiar Logo" onPress={pickImage} color={'blue'} />
-                <Button title="Guardar" onPress={onSave} color={'green'} />
-                <Button title="Cancelar" onPress={iseditingCompany} color={'red'} />
+                <Button title="CHANCE LOGO" onPress={pickImage} color={'blue'} />
+                <Button title="SAVE CHANGES" onPress={onSave} color={'green'} />
+                <Button title="CANCEL" onPress={iseditingCompany} color={'red'} />
               </View>
             </View>
 
             <View>
-              <Text style={[styles.smallText, styles.textalingleft, { marginBottom: 0 }]}>TAXs</Text>
+              <Text style={[styles.paragraph, styles.textalingleft, { marginBottom: 0, color: 'grey' }]}>TAXes</Text>
 
               <FlatList
-                data={item.impuestos}
+                style={[{ height: '15%', borderWidth: 1, borderRadius: 5, borderColor: 'grey', marginLeft: 5, marginRight: 5, marginBottom: 5 }]}
+                data={EditCompany.impuestos}
                 keyExtractor={(_item_) => _item_.id.toString()}
                 renderItem={({ item }) => (
                   <View style={[styles.flexcomponentsRow, { borderBottomWidth: 0.5, borderBottomColor: 'grey', width: '95%', justifyContent: 'space-between', alignItems: 'center', margin: 0 }]}>
@@ -199,7 +205,7 @@ export default function EditCompanyPage({ route, navigation }: Props) {
                         <Ionicons name={"create"} size={25} color={"black"} />
                       </TouchableOpacity>
 
-                      <TouchableOpacity style={[{ marginLeft: 5, marginRight: 5 }]} onPress={()=> DeleteTax(item)}>
+                      <TouchableOpacity style={[{ marginLeft: 5, marginRight: 5 }]} onPress={() => DeleteTax(item)}>
                         <Ionicons name={"trash"} size={25} color={"grey"} />
                       </TouchableOpacity>
 
