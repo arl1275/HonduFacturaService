@@ -93,7 +93,7 @@ const InvoiceHome = () => {
                             <View style={[styles.flexcomponentsRow,
                             { marginLeft: 15, marginRight: 15, borderWidth: 1, padding: 10, borderColor: 'grey', borderRadius: 7, justifyContent: 'space-between' }]}>
                                 <Text style={{ flex: 3 }}>{formated_invoice_number(item.formato_general.numero_de_factura)}</Text>
-                                <Text style={{ flex: 2, textAlign: 'right' }}>{item.status.draft}</Text>
+                                <Text style={{ flex: 2, textAlign: 'right' }}>{item.status.draft ? "DRAFT" : item.status.done ? "INVOICE" : item.status.creditnote.done ? "CREDIT NOTE" : 'UNDEFINED'}</Text>
                                 <Text style={{ flex: 2, textAlign: 'right' }}>{item.total}</Text>
                                 <Text style={{ flex: 2, textAlign: 'right' }}>{item.formato_general.comprador}</Text>
                             </View>

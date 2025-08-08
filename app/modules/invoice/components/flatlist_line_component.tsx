@@ -28,7 +28,7 @@ const LineFlatlist = ({item, Select_to_Edit, delete_linea} : props) => {
             ]}
         >
             <Text style={{ flex: 3 }}>{item.detalle}</Text>
-            <Text style={{ flex: 2, textAlign: 'right' }}>{item.descuento}</Text>
+            <Text style={{ flex: 2, textAlign: 'right' }}>{item.descuento}%</Text>
             <Text style={{ flex: 2, textAlign: 'right' }}>{item.cantidad}</Text>
             <Text style={{ flex: 2, textAlign: 'right' }}>{item.precio}</Text>
 

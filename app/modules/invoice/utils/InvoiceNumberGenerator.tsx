@@ -63,8 +63,8 @@ function Generate_Invoice_Item(company_: company): [invoice | string, boolean] {
         },
         lineasfacturadas: [],
         id_impuesto: [],
-        total: 0,
-        subtotal: 0,
+        total: 0.0,
+        subtotal: 0.0,
         status: {
             draft: true,
             done: false,

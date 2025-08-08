@@ -5,34 +5,27 @@ import { TextInput, TouchableOpacity, View } from "react-native"
 import Ionicons from "react-native-vector-icons/Ionicons"
 
 type props = {
-    addFacturaline: ( valoe : lineafacturada) => void;
+    addFacturaline: (valoe: lineafacturada) => void;
     CleanLine: () => void;
-    vAlue: lineafacturada 
+    vAlue: lineafacturada
 }
 
 const CreateLineInvoice = ({ addFacturaline, CleanLine, vAlue }: props) => {
     const [Linea, setValue] = useState<lineafacturada>({
-        id : Date.now(),
-        descuento : 0,
-        detalle : '',
-        precio : 0,
-        cantidad : 0
+        id: Date.now(),
+        descuento: 0.0,
+        detalle: '',
+        precio: 0.0,
+        cantidad: 0
     });
 
-    const _UpdateLine_ = (value: string, field: string) => {
-        if (typeof Linea === "undefined") return;
-        const parsedValue = !isNaN(Number(value)) && value.trim() !== ""
-            ? Number(value)
-            : value;
-
+    const _UpdateLine_ = (value: string | number, field: string) => {
         setValue((prev) => ({
             ...prev,
-            [field]: parsedValue
+            [field]: value
         }));
     };
 
-
-    
     useEffect(() => {
         setValue(vAlue);
     }, [CleanLine])
@@ -67,7 +60,7 @@ const CreateLineInvoice = ({ addFacturaline, CleanLine, vAlue }: props) => {
                 <View style={[styles.textinput, { padding: 8, flex: 2 }]}>
                     <TextInput
                         placeholder="Amo."
-                        onChangeText={(e) => _UpdateLine_(e, 'cantidad')}
+                        onChangeText={(e) => _UpdateLine_(parseFloat(e), 'cantidad')}
                         value={Linea?.cantidad !== 0 ? Linea?.cantidad.toString() : ""}
                         keyboardType="numeric"
                         style={{ width: '100%', textAlign: 'right' }}
@@ -79,7 +72,7 @@ const CreateLineInvoice = ({ addFacturaline, CleanLine, vAlue }: props) => {
                     <TextInput
                         placeholder="Precio"
                         onChangeText={(e) => _UpdateLine_(e, 'precio')}
-                        keyboardType="numeric"
+                        keyboardType="decimal-pad"
                         value={Linea?.precio !== 0 ? Linea?.precio.toString() : ""}
                         style={{ width: '100%', textAlign: 'right' }}
                     />
@@ -89,7 +82,7 @@ const CreateLineInvoice = ({ addFacturaline, CleanLine, vAlue }: props) => {
                 <View style={[styles.textinput, { padding: 8, flex: 2 }]}>
                     <TextInput
                         placeholder="Disco."
-                        onChangeText={(e) => _UpdateLine_(e, 'descuento')}
+                        onChangeText={(e) => _UpdateLine_(parseFloat(e), 'descuento')}
                         value={Linea?.descuento !== 0 ? Linea?.descuento.toString() : ""}
                         keyboardType="numeric"
                         style={{ width: '100%', textAlign: 'right' }}
@@ -98,7 +91,7 @@ const CreateLineInvoice = ({ addFacturaline, CleanLine, vAlue }: props) => {
 
                 {/* Botón de agregar */}
                 <View style={{ padding: 8, flex: 1, alignItems: 'center' }}>
-                    <TouchableOpacity onPress={()=> addFacturaline(Linea)}>
+                    <TouchableOpacity onPress={() => addFacturaline(Linea)}>
                         <Ionicons name="checkbox-outline" color="green" size={20} />
                     </TouchableOpacity>
                 </View>

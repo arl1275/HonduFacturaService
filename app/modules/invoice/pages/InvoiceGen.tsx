@@ -1,9 +1,7 @@
 import { View, Text, TouchableOpacity, Button, FlatList, Alert, Modal } from "react-native";
 import { invoice, lineafacturada } from "@/storage/invoice";
 import { addinvoice, saveinvoices } from "@/storage/invoices.storage";
-//import { company } from "@/storage/empresa";
-//import EditInvoiceLine from "../components/editinvoiceline";
-// route imports
+
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from "../indexInvoice";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -19,6 +17,8 @@ import LineFlatlist from "../components/flatlist_line_component";
 import { formated_invoice_number } from "../utils/InvoiceNumberGenerator";
 import { impuesto } from "@/storage/empresa";
 
+import PickerTaxInvoice from "../modals/defTaxModal";
+
 type props = StackScreenProps<RootStackParamList, "InvoiceGen">
 
 
@@ -31,8 +31,10 @@ const InvoiceGen = ({ route, navigation }: props) => {
     const [LineasFacutas, setLineasFacturas] = useState<lineafacturada[]>([]);
     const [_invoice_, setInvoice] = useState<invoice | undefined>(undefined);
 
-    const [Listtax, setListTax] = useState<impuesto[]>([])
-    const [result, setResult] = useState({ total: 0, subtotal: 0 })
+    const [ShowModalTax, setShowModalTax] = useState<boolean>(false);
+    const [Listtax, setListTax] = useState<impuesto[]>([]);
+    const [OnSelectTax, setOnSelectTax] = useState<impuesto>()
+    const [result, setResult] = useState({ total: 0, subtotal: 0 });
 
     useEffect(() => {
         const Result: [invoice | string | undefined, boolean] = Generate_Invoice_Item(item);
@@ -42,12 +44,16 @@ const InvoiceGen = ({ route, navigation }: props) => {
             alert('NO SE OBTUVO la COMPANY');
         } else if (typeof Result[0] === "object") {
             setInvoice(Result[0]);
+            setListTax(item.impuestos);
         }
     }, [item]);
 
-    const UpdateResultValue = () => {
-        const total = LineasFacutas.reduce((sum, item) => sum + item.precio, 0);
+    const SelectedTax = (value: impuesto) => {
+        setOnSelectTax(value)
+    };
 
+    const UpdateResultValue = () => {
+        let total: number = LineasFacutas.reduce((sum, item) => sum + item.cantidad * item.precio * (item.descuento === 0 ? 1 : (100 - item.descuento) / 100), 0);
         setResult(prev => ({
             ...prev,
             total: total
@@ -89,6 +95,28 @@ const InvoiceGen = ({ route, navigation }: props) => {
 
     //------- this is to show the modal of edit line --------//
     const ShowViewModal = () => { setViewModal(!ViewModal) }
+    const ShowViewModalTax = () => { setShowModalTax(!ShowModalTax) };
+
+    const CalculateSubTax = () => {
+        if (OnSelectTax) {
+            let factor = OnSelectTax.porcentaje / 100
+            let res: number = result.total - (result.total * factor);
+            return res.toString();
+        } else {
+            return '...waiting'
+        }
+    }
+
+    const Calculatetax = () => {
+        if (OnSelectTax) {
+            let factor = OnSelectTax.porcentaje / 100
+            let res: number = (result.total * factor);
+            return res.toString();
+        } else {
+            return '...waiting'
+        }
+    }
+
 
     //-------this select a flatlist item to edit ------------//
     const SelectToEdit = (item: lineafacturada) => {
@@ -131,10 +159,15 @@ const InvoiceGen = ({ route, navigation }: props) => {
                 if (!prev) return prev;
                 return {
                     ...prev,
-                    lineasfacturadas: LineasFacutas
+                    lineasfacturadas: LineasFacutas,
+                    formato_general: {
+                        ...prev.formato_general,
+                        comprador: Comprador.comprador,
+                        comprador_rtn: Comprador.comprador_rtn
+                    }
+
                 };
             })
-
 
             if (isDraft) {
                 addinvoice(_invoice_);
@@ -201,6 +234,19 @@ const InvoiceGen = ({ route, navigation }: props) => {
 
     return (
         <View style={[{ flex: 1 }]}>
+
+            {/*-------------------THIS IS TO MODALS-------------------*/}
+
+            <Modal visible={ShowModalTax} transparent={true} animationType="fade" >
+                <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)', justifyContent: 'center', alignItems: 'center' }}>
+                    <View style={[{ width: '70%' }]}>
+                        <PickerTaxInvoice taxes={Listtax} SendSelected={SelectedTax} On_Close={ShowViewModalTax} />
+                    </View>
+                </View>
+            </Modal>
+
+
+
             <View style={[styles.flexcomponentsRow, { margin: 5 }]}>
                 <TouchableOpacity onPress={() => oncancel()}>
                     <Ionicons name="chevron-back" size={30} color="black" />
@@ -245,6 +291,18 @@ const InvoiceGen = ({ route, navigation }: props) => {
                 </View>
 
                 <View>
+                    {
+                        LineasFacutas.length > 0 &&
+                        <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between', width: '90%', margin: 0, alignSelf: 'center' }]}>
+                            <Text style={{ flex: 3 }}>Detail</Text>
+                            <Text style={{ flex: 2, textAlign: 'right' }}>Discount</Text>
+                            <Text style={{ flex: 2, textAlign: 'right' }}>Amount</Text>
+                            <Text style={{ flex: 2, textAlign: 'right' }}>Price</Text>
+                            <Text style={{ flex: 2, textAlign: 'right' }}></Text>
+                        </View>
+                    }
+
+
                     <FlatList
                         data={LineasFacutas}
                         keyExtractor={(item) => item.id.toString()}
@@ -261,24 +319,23 @@ const InvoiceGen = ({ route, navigation }: props) => {
                 <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between', width: '90%', marginBottom: 0 }]}>
                     <Button title="GENERATE INVOICE" color={"black"} onPress={() => _on_save_invoice()} />
                     <Button title="CANCEL" color={"red"} onPress={_on_cancel_invoice_generation} />
+                    <Button title="CHOOSE TAX" color={"black"} onPress={() => ShowViewModalTax()} />
                 </View>
 
                 <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between', marginTop: 0, marginBottom: 0 }]}>
 
                     <View>
-                        <Text>Total</Text>
+                        <Text style={[{ color: 'black', fontWeight: 'bold' }]}>Total</Text>
                         <Text>Sub total</Text>
+                        <Text>Total en impuestos</Text>
                         <Text>Impuesto aplicado</Text>
-                        <View>
-                            
-                        </View>
                     </View>
 
                     <View>
-                        <Text>{result.total}</Text>
-                        <Text>x2</Text>
-                        <Text>x3</Text>
-                        <Text></Text>
+                        <Text style={[{ color: 'black', fontWeight: 'bold' }]}>{result.total}</Text>
+                        <Text>{CalculateSubTax()}</Text>
+                        <Text>{Calculatetax()}</Text>
+                        <Text>{!OnSelectTax ? "...waiting" : OnSelectTax.nombre + " - " + OnSelectTax.porcentaje}</Text>
                     </View>
 
                 </View>
