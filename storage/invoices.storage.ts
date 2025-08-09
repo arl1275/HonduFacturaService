@@ -1,8 +1,8 @@
-import { MMKV } from 'react-native-mmkv';
-import { invoice } from './invoice';
+import { MMKV } from "react-native-mmkv";
+import { invoice } from "./invoice";
 
 const storage = new MMKV();
-const invoice_KEY = 'invoices';
+const invoice_KEY = "invoices";
 
 export const getinvoices = (): invoice[] => {
   const data = storage.getString(invoice_KEY);
@@ -21,38 +21,46 @@ export const addinvoice = (invoice: invoice) => {
 };
 
 export const deleteinvoice = (id: number) => {
-  const invoices = getinvoices().filter(inv => inv.id !== id);
+  const invoices = getinvoices().filter((inv) => inv.id !== id);
   saveinvoices(invoices);
 };
 
 export const getInvoices_by_ID = (id: number) => {
-  const invoices = getinvoices().filter(inv => inv.id === id);
+  const invoices = getinvoices().filter((inv) => inv.id === id);
   return invoices;
 };
 
 // this take consideration the invoice config
-export const getInvoices_by_company_id = (id: number, id_invoice_config : number) => {
+/*export const getInvoices_by_company_id = (id: number, id_invoice_config : number) => {
   const invoices = getinvoices().filter(inv => inv.formato_general.id_company === id
     && inv.id_invoice_config === id_invoice_config
   ).sort((a, b) => 
       b.formato_general.fecha_emision.getTime() - a.formato_general.fecha_emision.getTime() // Orden descendente
     );
   return invoices;
-};
+};*/
 
 export const getInvoices_by_company = (id: number) => {
   //console.log('Companya', id)
-  const invoices = getinvoices().filter(inv => inv.formato_general.id_company === id)
+  const invoices = getinvoices().filter(
+    (inv) => inv.formato_general.id_company === id
+  );
   return invoices;
 };
 
 export const get_last_invoice_by_company = (id_company: number) => {
+  const toMs = (d: unknown): number => {
+    const t = new Date(d as any).getTime(); // convierte Date, string o número
+    return Number.isFinite(t) ? t : 0;      // si es inválido, devuelve 0
+  };
+
   const invoices = getinvoices()
-    .filter(inv => inv.formato_general.id_company === id_company)
+    .filter(inv => inv?.formato_general?.id_company === id_company)
     .sort((a, b) => 
-      b.formato_general.fecha_emision.getTime() - a.formato_general.fecha_emision.getTime() // Orden descendente
+      toMs(b?.formato_general?.fecha_emision) - toMs(a?.formato_general?.fecha_emision)
     );
-  return invoices[0]; 
+
+  return invoices[0];
 };
 
 

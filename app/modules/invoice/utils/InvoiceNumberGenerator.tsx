@@ -26,9 +26,14 @@ export function formated_invoice_number(valor: rangos | undefined) {
     }
 }
 
+// this function is to generate the item of a invoice
 function Generate_Invoice_Item(company_: company): [invoice | string, boolean] {
+    // this is to get the last invoice config created
     const last: invoicesconfig | undefined = getCurrent_by_company_id(company_.id);
+
+    // this get the last invoice created
     const LastInvoice: invoice | undefined = get_last_invoice_by_company(company_.id);
+    
     let newlastnumber: rangos;
 
     if (!last) return ["ERROR", false];
@@ -50,6 +55,7 @@ function Generate_Invoice_Item(company_: company): [invoice | string, boolean] {
     const item: invoice = {
         id: Date.now(),
         id_invoice_config: last.id,
+
         formato_general: {
             RTN: company_.rtn,
             encabezado: last.encabezado,
@@ -65,6 +71,7 @@ function Generate_Invoice_Item(company_: company): [invoice | string, boolean] {
         id_impuesto: [],
         total: 0.0,
         subtotal: 0.0,
+        
         status: {
             draft: true,
             done: false,

@@ -16,7 +16,7 @@ const CreateLineInvoice = ({ addFacturaline, CleanLine, vAlue }: props) => {
         descuento: 0.0,
         detalle: '',
         precio: 0.0,
-        cantidad: 0
+        cantidad: 1
     });
 
     const _UpdateLine_ = (value: string | number, field: string) => {

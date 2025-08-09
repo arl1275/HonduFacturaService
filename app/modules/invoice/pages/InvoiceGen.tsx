@@ -101,7 +101,7 @@ const InvoiceGen = ({ route, navigation }: props) => {
         if (OnSelectTax) {
             let factor = OnSelectTax.porcentaje / 100
             let res: number = result.total - (result.total * factor);
-            return res.toString();
+            return res.toFixed(2).toString();
         } else {
             return '...waiting'
         }
@@ -111,7 +111,7 @@ const InvoiceGen = ({ route, navigation }: props) => {
         if (OnSelectTax) {
             let factor = OnSelectTax.porcentaje / 100
             let res: number = (result.total * factor);
-            return res.toString();
+            return res.toFixed(2).toString();
         } else {
             return '...waiting'
         }
@@ -214,6 +214,11 @@ const InvoiceGen = ({ route, navigation }: props) => {
     }
 
     const _on_save_invoice = () => {
+        if (!OnSelectTax) {
+            Alert.alert('Invoice generation', 'Add a TAX to generate a Invoice');
+            return;
+        }
+
         Alert.alert('Please select an option',
             `Every option of the next ones, case u are not sure select draft
             DRAFT   > Create a draft of the invoice, not a finished.
@@ -293,12 +298,14 @@ const InvoiceGen = ({ route, navigation }: props) => {
                 <View>
                     {
                         LineasFacutas.length > 0 &&
-                        <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between', width: '90%', margin: 0, alignSelf: 'center' }]}>
-                            <Text style={{ flex: 3 }}>Detail</Text>
-                            <Text style={{ flex: 2, textAlign: 'right' }}>Discount</Text>
-                            <Text style={{ flex: 2, textAlign: 'right' }}>Amount</Text>
-                            <Text style={{ flex: 2, textAlign: 'right' }}>Price</Text>
-                            <Text style={{ flex: 2, textAlign: 'right' }}></Text>
+                        <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between', width: '90%', margin: 0, alignSelf: 'center', alignItems : 'center' }]}>
+                            <Text style={[ styles.smallText, { flex: 3, textAlign: 'left', color : 'grey' }]}>Detail</Text>
+                            <Text style={[ styles.smallText,{ flex: 2, textAlign: 'right', color : 'grey' }]}>Discount</Text>
+                            <Text style={[ styles.smallText,{ flex: 2, textAlign: 'right', color : 'grey' }]}>Amount</Text>
+                            <Text style={[ styles.smallText,{ flex: 2, textAlign: 'right', color : 'grey' }]}>Price</Text>
+                            <Text style={[ styles.smallText,{ flex: 2, textAlign: 'right', color : 'grey', fontSize : 20 }]}>Dis. applied</Text>
+                            <Text style={[ styles.smallText,{ flex: 2, textAlign: 'right', color : 'grey' }]}>total</Text>
+                            <Text style={[ styles.smallText,{ flex: 2, textAlign: 'right', color : 'grey' }]}></Text>
                         </View>
                     }
 
@@ -325,7 +332,7 @@ const InvoiceGen = ({ route, navigation }: props) => {
                 <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between', marginTop: 0, marginBottom: 0 }]}>
 
                     <View>
-                        <Text style={[{ color: 'black', fontWeight: 'bold' }]}>Total</Text>
+                        <Text style={[{ color: 'black', fontWeight: 'bold' }]}>Total (LPS)</Text>
                         <Text>Sub total</Text>
                         <Text>Total en impuestos</Text>
                         <Text>Impuesto aplicado</Text>
