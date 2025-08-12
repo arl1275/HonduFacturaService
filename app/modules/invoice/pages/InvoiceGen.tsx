@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, Button, FlatList, Alert, Modal } from "react-native";
 import { invoice, lineafacturada } from "@/storage/invoice";
 import { addinvoice, saveinvoices } from "@/storage/invoices.storage";
+import PreparationInvoice from "../utils/invoice_preparation";
 
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from "../indexInvoice";
@@ -128,7 +129,7 @@ const InvoiceGen = ({ route, navigation }: props) => {
     const _On_SETComprador_ = () => { setRegisterComprador(!RegisterComprador) }
 
     //------- this is when u cancel an invoice---------------//
-    const oncancel = () => { navigation.navigate("HomeInvoice") };
+    const oncancel = () => { setInvoice(undefined), navigation.navigate("HomeInvoice") };
 
     //------- cancel comprador ---------------//
     const oncancel_Comprador = () => {
@@ -152,43 +153,14 @@ const InvoiceGen = ({ route, navigation }: props) => {
         );
     };
 
-    const save_invoice_inStorage = (isDraft: boolean) => {
-        if (typeof _invoice_ === "object" && typeof _invoice_ === 'object') {
-            // this part if to add the lines in the invoice object
-            setInvoice(prev => {
-                if (!prev) return prev;
-                return {
-                    ...prev,
-                    lineasfacturadas: LineasFacutas,
-                    formato_general: {
-                        ...prev.formato_general,
-                        comprador: Comprador.comprador,
-                        comprador_rtn: Comprador.comprador_rtn
-                    }
+    const save_invoice_inStorage = ( tipe : string) => {
+        if (typeof _invoice_ === "object" && typeof _invoice_ === 'object' && 
+            typeof OnSelectTax != "undefined") {
+            let ReadyInvoice : invoice;
 
-                };
-            })
+            ReadyInvoice = PreparationInvoice(tipe, _invoice_, LineasFacutas, OnSelectTax, Comprador, result);
 
-            if (isDraft) {
-                addinvoice(_invoice_);
-                Alert.alert("FINISH", "Invoice is well generated");
-            } else {
-                setInvoice(prev => {
-                    if (!prev) return prev;
-                    return {
-                        ...prev,
-                        status: {
-                            ...prev.status,
-                            draft: false,
-                            done: true,
-                            creditnote: {
-                                ...prev.status.creditnote
-                            }
-                        }
-                    };
-                });
-                addinvoice(_invoice_);
-            }
+            addinvoice(ReadyInvoice)
             oncancel();
         } else {
             Alert.alert("ERROR", "Invoice is not well generated");
@@ -226,11 +198,11 @@ const InvoiceGen = ({ route, navigation }: props) => {
             [
                 {
                     text: " INVOICE",
-                    onPress: () => { save_invoice_inStorage(false) },
+                    onPress: () => { save_invoice_inStorage("invoice") },
                     style: 'default'
                 }, {
                     text: "DRAFT",
-                    onPress: () => { save_invoice_inStorage(true) }
+                    onPress: () => { save_invoice_inStorage("draft") }
                 },
                 { text: "NO" }
             ],
@@ -303,7 +275,7 @@ const InvoiceGen = ({ route, navigation }: props) => {
                             <Text style={[ styles.smallText,{ flex: 2, textAlign: 'right', color : 'grey' }]}>Discount</Text>
                             <Text style={[ styles.smallText,{ flex: 2, textAlign: 'right', color : 'grey' }]}>Amount</Text>
                             <Text style={[ styles.smallText,{ flex: 2, textAlign: 'right', color : 'grey' }]}>Price</Text>
-                            <Text style={[ styles.smallText,{ flex: 2, textAlign: 'right', color : 'grey', fontSize : 20 }]}>Dis. applied</Text>
+                            <Text style={[ styles.smallText,{ flex: 2, textAlign: 'right', color : 'grey' }]}>Dis. applied</Text>
                             <Text style={[ styles.smallText,{ flex: 2, textAlign: 'right', color : 'grey' }]}>total</Text>
                             <Text style={[ styles.smallText,{ flex: 2, textAlign: 'right', color : 'grey' }]}></Text>
                         </View>
