@@ -38,6 +38,8 @@ export interface lineafacturada {
   detalle: string;
   descuento: number;
   precio: number;
+  total : number, 
+  subtotal : number;
 }
 
 //---------------------------- INVOICE ----------------------------//

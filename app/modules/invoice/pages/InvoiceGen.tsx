@@ -71,6 +71,8 @@ const InvoiceGen = ({ route, navigation }: props) => {
         detalle: "",
         descuento: 0,
         precio: 0,
+        total : 0,
+        subtotal : 0
     });
 
     //------ this is to clean the line to reset the object ----//
@@ -81,6 +83,8 @@ const InvoiceGen = ({ route, navigation }: props) => {
             detalle: "",
             descuento: 0,
             precio: 0,
+            total : 0,
+            subtotal : 0
         })
     };
 
@@ -158,7 +162,7 @@ const InvoiceGen = ({ route, navigation }: props) => {
             typeof OnSelectTax != "undefined") {
             let ReadyInvoice : invoice;
 
-            ReadyInvoice = PreparationInvoice(tipe, _invoice_, LineasFacutas, OnSelectTax, Comprador, result);
+            ReadyInvoice = PreparationInvoice(tipe, _invoice_, LineasFacutas, OnSelectTax, Comprador, result, item );
 
             addinvoice(ReadyInvoice)
             oncancel();

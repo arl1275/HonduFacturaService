@@ -10,13 +10,16 @@ type props = {
     vAlue: lineafacturada
 }
 
+
 const CreateLineInvoice = ({ addFacturaline, CleanLine, vAlue }: props) => {
     const [Linea, setValue] = useState<lineafacturada>({
         id: Date.now(),
         descuento: 0.0,
         detalle: '',
         precio: 0.0,
-        cantidad: 1
+        cantidad: 1,
+        total : 0,
+        subtotal : 0
     });
 
     const _UpdateLine_ = (value: string | number, field: string) => {
