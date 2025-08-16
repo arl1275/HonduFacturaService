@@ -55,9 +55,11 @@ const InvoiceGen = ({ route, navigation }: props) => {
 
     const UpdateResultValue = () => {
         let total: number = LineasFacutas.reduce((sum, item) => sum + item.cantidad * item.precio * (item.descuento === 0 ? 1 : (100 - item.descuento) / 100), 0);
+        let x = total.toFixed(2)
+        let _total_ = parseFloat(x);
         setResult(prev => ({
             ...prev,
-            total: total
+            total: _total_
         }));
     };
 

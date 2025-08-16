@@ -9,14 +9,16 @@ function PreparationInvoice(
     _impuesto_: impuesto,
     _comprador_: any,
     _result_: any,
-    _company_ : company,
-   // _invoice_config_ : invoicesconfig
+    _company_: company,
+    // _invoice_config_ : invoicesconfig
 ) {
-    let _invoice_config : invoicesconfig[] = getInvoicesconfig_by_id(_invoice_.id_invoice_config);
+    //console.log("invoice config id: ", _invoice_.id_invoice_config);
+
+    let _invoice_config: invoicesconfig[] = getInvoicesconfig_by_id(_invoice_.id_invoice_config);
     let Impuestos: impuesto[] = [];
     Impuestos.push(_impuesto_);
 
-
+    //console.log("invoice config: ", _invoice_config);
     let NewInvoice: invoice = {
         id: _invoice_.id,
         id_invoice_config: _invoice_.id_invoice_config,
@@ -40,7 +42,7 @@ function PreparationInvoice(
 
         status: {
             draft: _type_ === 'draft' ? true : false,
-            done:  _type_ === 'invoice' ? true : false,
+            done: _type_ === 'invoice' ? true : false,
             creditnote: {
                 done: false,
                 creditnote_id: 0
