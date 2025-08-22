@@ -2,13 +2,14 @@ import { StackScreenProps } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
 import { TouchableOpacity, View, Text, Button, FlatList } from "react-native";
 import { RootStackParamList } from "../indexInvoice";
-import { invoice, invoicesconfig } from "@/storage/invoice";
+import { invoice, invoicesconfig, lineafacturada } from "@/storage/invoice";
 import styles from "@/assets/styles/styles";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { formated_invoice_number } from "../utils/InvoiceNumberGenerator";
 import { getCompany_by_ID } from "@/storage/company.storage";
 import { getInvoicesconfig_by_id } from "@/storage/invoiceconfig.storage";
 import { company } from "@/storage/empresa";
+
 type props = StackScreenProps<RootStackParamList, "InvoiceShow">
 
 
@@ -16,11 +17,15 @@ const InvoiceShowPage = ({ route, navigation }: props) => {
     const { item } = route.params;
     const [_invoice_, setInvoice] = useState<invoice>();
     const [comp, setComp] = useState<company>()
-    const [invoc, setInvoiceConfig] = useState<invoicesconfig>()
+    const [invoc, setInvoiceConfig] = useState<invoicesconfig>();
+    const [invoiceLines, setInvoiceLines] = useState<lineafacturada[]>([])
+
 
     useEffect(() => {
         setInvoice(item);
-        
+        GetCompany(item.formato_general.id_company);
+        GetInvoiceConfig(item.id_invoice_config);
+        setInvoiceLines(item.lineasfacturadas);
     }, [item]);
 
     const GetCompany = (value: number) => {
@@ -28,7 +33,7 @@ const InvoiceShowPage = ({ route, navigation }: props) => {
         setComp(val);
     }
 
-    const GetInvoiceConfig = (value : number) =>{
+    const GetInvoiceConfig = (value: number) => {
         let val = getInvoicesconfig_by_id(value);
         setInvoiceConfig(val[0]);
     }
@@ -56,23 +61,34 @@ const InvoiceShowPage = ({ route, navigation }: props) => {
                             <Text>{comp ? comp.companyname : 'Waiting response'}</Text>
                             <Text>{_invoice_.formato_general.encabezado}</Text>
 
-                            <Text>{comp ? comp.direccion_company  : null}</Text>
-                            <Text>{comp ? comp.numero_telefono_compay  : null}</Text>
-                            <Text>{comp ? comp.rtn  : null }</Text>
-                            <Text>{ }</Text>
+                            <Text>{comp ? comp.direccion_company : null}</Text>
+                            <Text>{comp ? comp.numero_telefono_compay : null}</Text>
+                            <Text>{comp ? comp.rtn : null}</Text>
+                            <Text>{_invoice_.formato_general.fecha_emision.toString()}</Text>
+                            <Text>{invoc ? `Invoice ` : null}</Text>
 
 
                             <Text>{formated_invoice_number(_invoice_.formato_general.numero_de_factura)}</Text>
                             <Text>{_invoice_.formato_general.comprador}</Text>
                             <Text>{_invoice_.formato_general.comprador_rtn}</Text>
-                            <Text>{ }</Text>
-                            <Text>{ }</Text>
-                            <Text>{ }</Text>
-                            <Text>{ }</Text>
-                            <Text>{ }</Text>
-                            <Text>{ }</Text>
-                            <Text>{ }</Text>
-                            <Text>{ }</Text>
+
+                            <FlatList
+                                data={invoiceLines}
+                                keyExtractor={(item) => item.id.toString()}
+                                renderItem={({item}) => (
+                                    <View style={[styles.flexcomponentsRow, { borderBottomWidth: 1, borderBottomColor: 'grey' }]}>
+                                        <Text style={{ flex: 2, textAlign: 'right' }}>{item.detalle}</Text>
+                                        <Text style={{ flex: 2, textAlign: 'right' }}>{item.cantidad}</Text>
+                                        <Text style={{ flex: 2, textAlign: 'right' }}>{item.descuento}</Text>
+                                        <Text style={{ flex: 2, textAlign: 'right' }}>{item.precio}</Text>
+                                    </View>
+                                )}
+                            />
+
+
+                            <Text>Total {_invoice_.total}</Text>
+                            <Text>Subtotal {_invoice_.subtotal}</Text>
+                            <Text>{_invoice_.formato_general.piehoja}</Text>
                         </View>
                 }
 

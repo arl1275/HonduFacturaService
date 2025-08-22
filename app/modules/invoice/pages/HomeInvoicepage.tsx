@@ -25,7 +25,10 @@ const InvoiceHome = () => {
         if (typeof item === 'object') { setListInvoices(getInvoices_by_company(item.id)) }
     }
 
-    const ValidateRoute = () => { item != undefined ? navigation.navigate("InvoiceGen", { item }) : Alert.alert('Detail', 'Select a Company before create an invoice') }
+    const ValidateRoute = () => { item != undefined ? 
+        navigation.navigate("InvoiceGen", { item }) : 
+        Alert.alert('Detail', 'Select a Company before create an invoice') 
+    }
 
     useEffect(() => {
         UpdateList();
@@ -35,6 +38,13 @@ const InvoiceHome = () => {
         UpdateInvoices()
     }, [item]);
 
+    const OnSelectInvoice = (item : invoice, type : string) =>{
+        if(type === 'invoice'){
+            navigation.navigate("InvoiceShow", {item})
+        }else{
+            navigation.navigate("InvoiceDraft", {item});
+        }
+    }
 
     return (
         <View style={{ flex: 1 }}>
@@ -83,19 +93,20 @@ const InvoiceHome = () => {
                     </View>
                 }
 
-
                 <FlatList
                     data={ListInvoices}
                     style={{ marginTop: 0 }}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => (
-                        <View style={[styles.flexcomponentsRow,
-                        { marginLeft: 15, marginRight: 15, borderWidth: 1, padding: 10, borderColor: 'grey', borderRadius: 7, justifyContent: 'space-between', marginTop: 0 }]}>
-                            <Text style={{ flex: 3 }}>{formated_invoice_number(item.formato_general.numero_de_factura)}</Text>
-                            <Text style={{ flex: 2, textAlign: 'right' }}>{item.status.draft ? "DRAFT" : item.status.done ? "INVOICE" : item.status.creditnote.done ? "CREDIT NOTE" : 'UNDEFINED'}</Text>
-                            <Text style={{ flex: 2, textAlign: 'right' }}>{item.total}</Text>
-                            <Text style={{ flex: 2, textAlign: 'right' }}>{item.formato_general.comprador}</Text> 
-                        </View>
+                        <TouchableOpacity onPress={()=> OnSelectInvoice(item, item.status.draft ? "draft" : item.status.creditnote.done ? "credit-note" : "invoice")}>
+                            <View style={[styles.flexcomponentsRow,
+                            { marginLeft: 15, marginRight: 15, borderWidth: 1, padding: 10, borderColor: 'grey', borderRadius: 7, justifyContent: 'space-between', marginTop: 0 }]}>
+                                <Text style={{ flex: 3 }}>{formated_invoice_number(item.formato_general.numero_de_factura)}</Text>
+                                <Text style={{ flex: 2, textAlign: 'right' }}>{item.status.draft ? "DRAFT" : item.status.done ? "INVOICE" : item.status.creditnote.done ? "CREDIT NOTE" : 'UNDEFINED'}</Text>
+                                <Text style={{ flex: 2, textAlign: 'right' }}>{item.total}</Text>
+                                <Text style={{ flex: 2, textAlign: 'right' }}>{item.formato_general.comprador}</Text>
+                            </View>
+                        </TouchableOpacity>
                     )}
                     ListEmptyComponent={<Text>NONE DATA YET</Text>}
                 /></View>
