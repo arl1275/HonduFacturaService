@@ -11,7 +11,13 @@ export const getInvoicesconfigs = (): invoicesconfig[] => {
 };
 
 export const getInvoicesconfig_by_id = (id: number) => {
-  return getInvoicesconfigs().filter(c => c.id === id);
+  let result = getInvoicesconfigs().filter(c => c.id === id);
+  return result[0]
+};
+
+export const getInvoicesconfig_by_companyid = (id: number) => {
+  let result = getInvoicesconfigs().filter(c => c.id_company === id);
+  return result
 };
 
 

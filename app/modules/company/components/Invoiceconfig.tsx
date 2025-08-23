@@ -89,7 +89,7 @@ const InvoiceConfig = ({ parentprops, _onclose_, id_company }: ForEditParams) =>
         <View style={[styles.rectanglebutton,
         { alignSelf: 'center', justifyContent: 'space-between', alignItems: 'center', padding: 5, borderWidth: 0, aspectRatio: 'auto' }]}>
             <View style={[{ width: '90%' }]}>
-                <Text style={styles.smallText}>{form.id_company}
+                <Text style={styles.smallText}>
                     Registrar la configuracion de las facturas, esta configuracion se agregara en todas las facturas generadas para esta empresa.
                     Siempre y cuando la configuracion se mantenga activa</Text>
                 <View style={[{ borderBottomWidth: 1, borderBlockColor: '#e5e7e9', marginTop: 5, marginBottom: 5 }]} />

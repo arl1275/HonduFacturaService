@@ -40,6 +40,12 @@ const InvoiceShowPage = ({ route, navigation }: props) => {
 
     const oncancel = () => { setInvoice(undefined), navigation.navigate("HomeInvoice") };
 
+    const totalLine = ( item : lineafacturada) =>{
+        let factorDiscont = item.descuento === 0 ? 1 : ((100 - item.descuento) / 100)
+        let total = (item.cantidad * item.precio) * factorDiscont
+        return total.toFixed(2).toString();
+    }
+
     return (
         <View style={[{ flex: 1 }]}>
             <View style={[styles.flexcomponentsRow, { margin: 5 }]}>
@@ -54,37 +60,42 @@ const InvoiceShowPage = ({ route, navigation }: props) => {
                 <Button title="Share" color={'black'} />
             </View>
 
-            <View>
+            <View style={[{ margin: 10 }]}>
                 {
                     !_invoice_ ? null :
-                        <View style={[{ borderWidth: 1, borderColor: 'grey', borderRadius: 7 }]}>
-                            <Text>{comp ? comp.companyname : 'Waiting response'}</Text>
-                            <Text>{_invoice_.formato_general.encabezado}</Text>
-
-                            <Text>{comp ? comp.direccion_company : null}</Text>
-                            <Text>{comp ? comp.numero_telefono_compay : null}</Text>
-                            <Text>{comp ? comp.rtn : null}</Text>
-                            <Text>{_invoice_.formato_general.fecha_emision.toString()}</Text>
-                            <Text>{invoc ? `Invoice ` : null}</Text>
+                        <View style={[{ borderWidth: 1, borderColor: 'grey', borderRadius: 7, padding: 15 }]}>
+                            <Text style={[styles.paragraph, { color: 'black', margin: 0, fontWeight: 'bold' }]}>{comp ? comp.companyname : 'Waiting response'}</Text>
+                            {
+                                invoc?.encabezado ?
+                                    <Text style={[{color : 'black'}]}>{invoc.encabezado}</Text>
+                                    : null
+                            }
 
 
-                            <Text>{formated_invoice_number(_invoice_.formato_general.numero_de_factura)}</Text>
+                            <Text>Direccion: {comp ? comp.direccion_company : null}</Text>
+                            <Text>Telefono: {comp ? comp.numero_telefono_compay : null}</Text>
+                            <Text>RTN: {comp ? comp.rtn : null}</Text>
+                            <Text>CAI: {invoc ? invoc.cai.nombre : null}</Text>
+                            <Text>Fecha de emision {_invoice_.formato_general.fecha_emision.toString()}</Text>
+                            <Text>{invoc ? `Invoice ${formated_invoice_number(_invoice_.formato_general.numero_de_factura)}` : null}</Text>
+
                             <Text>{_invoice_.formato_general.comprador}</Text>
                             <Text>{_invoice_.formato_general.comprador_rtn}</Text>
 
-                            <FlatList
-                                data={invoiceLines}
-                                keyExtractor={(item) => item.id.toString()}
-                                renderItem={({item}) => (
-                                    <View style={[styles.flexcomponentsRow, { borderBottomWidth: 1, borderBottomColor: 'grey' }]}>
-                                        <Text style={{ flex: 2, textAlign: 'right' }}>{item.detalle}</Text>
-                                        <Text style={{ flex: 2, textAlign: 'right' }}>{item.cantidad}</Text>
-                                        <Text style={{ flex: 2, textAlign: 'right' }}>{item.descuento}</Text>
-                                        <Text style={{ flex: 2, textAlign: 'right' }}>{item.precio}</Text>
-                                    </View>
-                                )}
-                            />
-
+                            <View style={[{marginTop : 10, marginBottom : 10}]}>
+                                <FlatList
+                                    data={invoiceLines}
+                                    keyExtractor={(item) => item.id.toString()}
+                                    renderItem={({ item }) => (
+                                        <View style={[styles.flexcomponentsRow, { borderBottomWidth: 1, borderBottomColor: 'grey', marginTop: 0, marginBottom: 0 }]}>
+                                            <Text style={[{ flex: 2, textAlign: 'left' }]}>{item.detalle}</Text>
+                                            <Text style={[{ flex: 2, textAlign: 'left' }]}>{item.descuento}</Text>
+                                            <Text style={[{ flex: 2, textAlign: 'left' }]}>{item.cantidad}</Text>
+                                            <Text style={[{ flex: 2, textAlign: 'left' }]}>{totalLine(item)}</Text>
+                                        </View>
+                                    )}
+                                />
+                            </View>
 
                             <Text>Total {_invoice_.total}</Text>
                             <Text>Subtotal {_invoice_.subtotal}</Text>
