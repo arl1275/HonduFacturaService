@@ -20,9 +20,28 @@ function GenerateInvoiceNumber(LastInvoice: invoice) {
 
 export function formated_invoice_number(valor: rangos | undefined) {
     if (typeof valor === 'object') {
-        return `${valor.numero_uno}- ${valor.numero_dos} - ${valor.numero_tres} - ${valor.numero_cuatro}`
-    }else{
-        return 'ERROR, number cannot be formated'    
+        return `${valor.numero_uno} - ${valor.numero_dos} - ${valor.numero_tres} - ${valor.numero_cuatro}`
+    } else {
+        return 'ERROR, number cannot be formated'
+    }
+}
+
+export function formated_invoice_number_maximum(valor: rangos | undefined, maxnumber: number | undefined) {
+    if (typeof valor === 'object' && typeof maxnumber === 'number') {
+        return `${valor.numero_uno} - ${valor.numero_dos} - ${valor.numero_tres} - ${valor.numero_cuatro + maxnumber}`
+    } else {
+        return 'ERROR, number cannot be formated'
+    }
+}
+
+export function formated_date_(value: string | undefined) {
+    if (typeof value === 'string') {
+        let date_ = value.split("T");
+        let result = date_[0] + " " + date_[1].split(".")[0]
+        return result
+    }
+    else{
+        return 'error'
     }
 }
 
@@ -33,7 +52,7 @@ function Generate_Invoice_Item(company_: company): [invoice | string, boolean] {
 
     // this get the last invoice created
     const LastInvoice: invoice | undefined = get_last_invoice_by_company(company_.id);
-    
+
     let newlastnumber: rangos;
 
     if (!last) return ["ERROR", false];
@@ -71,7 +90,7 @@ function Generate_Invoice_Item(company_: company): [invoice | string, boolean] {
         id_impuesto: [],
         total: 0.0,
         subtotal: 0.0,
-        
+
         status: {
             draft: true,
             done: false,
