@@ -100,7 +100,7 @@ const InvoiceHome = () => {
                     renderItem={({ item }) => (
                         <TouchableOpacity onPress={()=> OnSelectInvoice(item, item.status.draft ? "draft" : item.status.creditnote.done ? "credit-note" : "invoice")}>
                             <View style={[styles.flexcomponentsRow,
-                            { marginLeft: 15, marginRight: 15, borderWidth: 1, padding: 10, borderColor: 'grey', borderRadius: 7, justifyContent: 'space-between', marginTop: 0 }]}>
+                            { marginLeft: 15, marginRight: 15, borderWidth: 1, padding: 10, borderColor: 'grey', borderRadius: 5, justifyContent: 'space-between', marginTop: 0 }]}>
                                 <Text style={{ flex: 3 }}>{formated_invoice_number(item.formato_general.numero_de_factura)}</Text>
                                 <Text style={{ flex: 2, textAlign: 'right' }}>{item.status.draft ? "DRAFT" : item.status.done ? "INVOICE" : item.status.creditnote.done ? "CREDIT NOTE" : 'UNDEFINED'}</Text>
                                 <Text style={{ flex: 2, textAlign: 'right' }}>{item.total}</Text>

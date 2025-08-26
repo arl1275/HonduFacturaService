@@ -24,7 +24,7 @@ type props = StackScreenProps<RootStackParamList, "InvoiceGen">
 
 
 const InvoiceGen = ({ route, navigation }: props) => {
-    const { item } = route.params;
+    const { item } = route.params; // this is a company item
     const [Comprador, setComprador] = useState({ comprador: 'Cliente Final', comprador_rtn: '0000-0000-00000' });
     const [RegisterComprador, setRegisterComprador] = useState<boolean>(false); // is is to save the buyer
     const [SelectedtoEdit, setSelectedtoEdit] = useState<lineafacturada | undefined>();
@@ -159,14 +159,14 @@ const InvoiceGen = ({ route, navigation }: props) => {
         );
     };
 
-    const save_invoice_inStorage = ( tipe : string) => {
+    const save_invoice_inStorage = ( tipe : string ) => {
         if (typeof _invoice_ === "object" && typeof _invoice_ === 'object' && 
             typeof OnSelectTax != "undefined") {
             let ReadyInvoice : invoice;
 
             ReadyInvoice = PreparationInvoice(tipe, _invoice_, LineasFacutas, OnSelectTax, Comprador, result, item );
 
-            addinvoice(ReadyInvoice)
+            addinvoice(ReadyInvoice);
             oncancel();
         } else {
             Alert.alert("ERROR", "Invoice is not well generated");

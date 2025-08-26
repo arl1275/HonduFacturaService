@@ -13,20 +13,21 @@ function PreparationInvoice(
     // _invoice_config_ : invoicesconfig
 ) {
     //console.log("invoice config id: ", _invoice_.id_invoice_config);
+    //console.log("valor", _invoice_);
 
-    let _invoice_config: invoicesconfig[] = getInvoicesconfig_by_id(_invoice_.id_invoice_config);
+    let _invoice_config: invoicesconfig = getInvoicesconfig_by_id(_invoice_.id_invoice_config);
     let Impuestos: impuesto[] = [];
     Impuestos.push(_impuesto_);
 
-    //console.log("invoice config: ", _invoice_config);
+    console.log("invoice config: ", _invoice_config);
     let NewInvoice: invoice = {
         id: _invoice_.id,
         id_invoice_config: _invoice_.id_invoice_config,
 
         formato_general: {
-            encabezado: _invoice_config[0].encabezado,
+            encabezado: _invoice_config.encabezado,
             RTN: _company_.rtn,
-            piehoja: _invoice_config[0].piedehoja,
+            piehoja: _invoice_config.piedehoja,
             fecha_emision: _invoice_.formato_general.fecha_emision,
             id_company: _invoice_.formato_general.id_company,
             numero_de_factura: _invoice_.formato_general.numero_de_factura, // register the id of rangos
