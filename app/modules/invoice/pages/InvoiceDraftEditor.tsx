@@ -18,6 +18,7 @@ const InvoiceSDrafrEditor = ({ route, navigation }: props) => {
     const [comp, setComp] = useState<company>();
     const [invoc, setInvoiceConfig] = useState<invoicesconfig>();
     const [invoiceLines, setInvoiceLines] = useState<lineafacturada[]>([]);
+    const [result, setResult] = useState({ total: 0, subtotal: 0 });
 
     useEffect(() => {
         setInvoice(item);
@@ -40,22 +41,26 @@ const InvoiceSDrafrEditor = ({ route, navigation }: props) => {
         setInvoice(undefined), navigation.navigate("HomeInvoice");
     };
 
-    const totalLine = (item: lineafacturada) => {
-        let factorDiscont = item.descuento === 0 ? 1 : (100 - item.descuento) / 100;
-        let total = item.cantidad * item.precio * factorDiscont;
-        return total.toFixed(2).toString();
+    const UpdateResultValue = () => {
+        let total: number = 
+        invoiceLines.reduce((sum, item) => sum + item.cantidad * item.precio * (item.descuento === 0 ? 1 : (100 - item.descuento) / 100), 0);
+        let x = total.toFixed(2)
+        let _total_ = parseFloat(x);
+        setResult(prev => ({
+            ...prev,
+            total: _total_
+        }));
     };
 
     const updateBuyer = (field: "comprador" | "comprador_rtn", value: string) => {
         setInvoice(prev =>
-            prev
-                ? {
-                    ...prev,
-                    formato_general: {
-                        ...prev.formato_general,
-                        [field]: value,
-                    },
-                }
+            prev ? {
+                ...prev,
+                formato_general: {
+                    ...prev.formato_general,
+                    [field]: value,
+                },
+            }
                 : prev
         );
     };
@@ -76,6 +81,14 @@ const InvoiceSDrafrEditor = ({ route, navigation }: props) => {
         setInvoice(prev => (prev ? { ...prev, lineasfacturadas: updated } : prev));
     };
 
+    useEffect(()=>{
+        UpdateResultValue()
+    }, [invoiceLines])
+
+    const _updating_draft_to_invoice_ = () =>{
+        
+    }
+
     return (
         <View style={[{ flex: 1 }]}>
             <View style={[styles.flexcomponentsRow, { margin: 5 }]}>
@@ -87,7 +100,7 @@ const InvoiceSDrafrEditor = ({ route, navigation }: props) => {
                 </Text>
             </View>
 
-            <View style={[styles.flexcomponentsRow, { justifyContent : 'space-between'}]}>
+            <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between' }]}>
                 <Button title="Print" color={"black"} />
                 <Button title="Share" color={"black"} />
                 <Button title="GEN INVOICE" color={"black"} />
@@ -139,7 +152,7 @@ const InvoiceSDrafrEditor = ({ route, navigation }: props) => {
                         <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 3 }}>
                             <Text>Comprador:</Text>
                             <TextInput
-                                style={{ borderBottomWidth: 0.5, minWidth: "50%", backgroundColor : '#E0E0E0' }}
+                                style={{ borderBottomWidth: 0.5, minWidth: "50%", backgroundColor: '#E0E0E0' }}
                                 value={_invoice_.formato_general.comprador}
                                 onChangeText={val => updateBuyer("comprador", val)}
                             />
@@ -148,7 +161,7 @@ const InvoiceSDrafrEditor = ({ route, navigation }: props) => {
                         <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 3 }}>
                             <Text>RTN Comprador:</Text>
                             <TextInput
-                                style={{ borderBottomWidth: 0.5, minWidth: "50%", backgroundColor : '#E0E0E0' }}
+                                style={{ borderBottomWidth: 0.5, minWidth: "50%", backgroundColor: '#E0E0E0' }}
                                 value={_invoice_.formato_general.comprador_rtn}
                                 onChangeText={val => updateBuyer("comprador_rtn", val)}
                             />
@@ -168,27 +181,27 @@ const InvoiceSDrafrEditor = ({ route, navigation }: props) => {
                                 renderItem={({ item }) => (
                                     <View style={[styles.flexcomponentsRow, { borderTopWidth: 1, borderTopColor: "grey", marginVertical: 2 }]}>
                                         <TextInput
-                                           style={[{ flex: 2, textAlign: 'left', backgroundColor : '#E0E0E0' }]}
+                                            style={[{ flex: 2, textAlign: 'left', backgroundColor: '#E0E0E0' }]}
                                             value={item.detalle}
                                             onChangeText={val => updateLine(item.id, "detalle", val)}
                                         />
 
                                         <TextInput
-                                            style={[{ flex: 2, textAlign: 'left', backgroundColor : '#E0E0E0' }]}
+                                            style={[{ flex: 2, textAlign: 'left', backgroundColor: '#E0E0E0' }]}
                                             value={item.descuento.toString()}
                                             keyboardType="numeric"
                                             onChangeText={val => updateLine(item.id, "descuento", val)}
                                         />
 
                                         <TextInput
-                                            style={[{ flex: 2, textAlign: 'left', backgroundColor : '#E0E0E0' }]}
+                                            style={[{ flex: 2, textAlign: 'left', backgroundColor: '#E0E0E0' }]}
                                             value={item.cantidad.toString()}
                                             keyboardType="numeric"
                                             onChangeText={val => updateLine(item.id, "cantidad", val)}
                                         />
 
                                         <TextInput
-                                            style={[{ flex: 2, textAlign: 'left', backgroundColor : '#E0E0E0' }]}
+                                            style={[{ flex: 2, textAlign: 'left', backgroundColor: '#E0E0E0' }]}
                                             value={item.precio.toString()}
                                             keyboardType="numeric"
                                             onChangeText={val => updateLine(item.id, "precio", val)}
@@ -200,12 +213,12 @@ const InvoiceSDrafrEditor = ({ route, navigation }: props) => {
 
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6, width: "25%" }}>
                             <Text style={{ fontWeight: 'bold' }}>Total</Text>
-                            <Text>{_invoice_.total.toFixed(2)}</Text>
+                            <Text>{result.total}</Text>
                         </View>
 
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6, width: "25%" }}>
                             <Text style={{ fontWeight: 'bold' }}>Subtotal</Text>
-                            <Text>{_invoice_.subtotal.toFixed(2)}</Text>
+                            <Text>{result.subtotal}</Text>
                         </View>
 
                         <Text>{_invoice_.formato_general.piehoja}</Text>
