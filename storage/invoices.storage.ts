@@ -9,6 +9,17 @@ export const getinvoices = (): invoice[] => {
   return data ? JSON.parse(data) : [];
 };
 
+export const updateInvoiceById = (id: number, updatedInvoice: invoice) => {
+  const invoices = getinvoices();
+
+  const updated = invoices.map(inv =>
+    inv.id === id ? { ...inv, ...updatedInvoice } : inv
+  );
+
+  storage.set(invoice_KEY, JSON.stringify(updated));
+  return [true, "UPDATED INVOICE"]
+};
+
 export const saveinvoices = (invoices: invoice[]) => {
   storage.set(invoice_KEY, JSON.stringify(invoices));
   //console.log(getinvoices())
