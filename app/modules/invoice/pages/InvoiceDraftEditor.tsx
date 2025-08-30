@@ -1,6 +1,6 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
-import { TouchableOpacity, View, Text, Button, FlatList, TextInput, Alert } from "react-native";
+import { TouchableOpacity, View, Text, Button, FlatList, TextInput, Alert, ScrollView } from "react-native";
 import { RootStackParamList } from "../indexInvoice";
 import { invoice, invoicesconfig, lineafacturada } from "@/storage/invoice";
 import styles from "@/assets/styles/styles";
@@ -8,8 +8,8 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { formated_invoice_number, formated_invoice_number_maximum, formated_date_ } from "../utils/InvoiceNumberGenerator";
 import { getCompany_by_ID } from "@/storage/company.storage";
 import { getInvoicesconfig_by_id } from "@/storage/invoiceconfig.storage";
-import { company, impuesto } from "@/storage/empresa";
-import { updateInvoiceById } from "@/storage/invoices.storage";
+import { company } from "@/storage/empresa";
+import { updateInvoiceById, DraftToInvoice } from "@/storage/invoices.storage";
 
 type props = StackScreenProps<RootStackParamList, "InvoiceDraft">;
 
@@ -94,21 +94,28 @@ const InvoiceSDrafrEditor = ({ route, navigation }: props) => {
         UpdateResultValue()
     }, [invoiceLines]);
 
-    const updateInvoiceDRAFT = () => {
-        setInvoice(prev => 
+    const updateInvoiceDRAFT = (type: string) => {
+        setInvoice(prev =>
         (prev ? {
             ...prev,
-            total : result.total,
-            subtotal : result.subtotal
+            total: result.total,
+            subtotal: result.subtotal
         } : prev)
         )
 
         // this is to save 
-        if (_invoice_) {
+        if (_invoice_ && type === "draftupdate") {
             updateInvoiceById(_invoice_?.id, _invoice_)
+        } else if (_invoice_ && type === "toinvoice") {
+            DraftToInvoice(_invoice_.id);
         }
         oncancel();
-        Alert.alert('DRAFT UPDATED', "The draft has been updated, look it up again, if you want to make an invoice from a draft")
+        if (type === 'draftupdate') {
+            Alert.alert('DRAFT UPDATED', "The draft has been updated, look it up again, if you want to make an invoice from a draft")
+        } else {
+            Alert.alert('INVOICE CREATED', "The draft has been set as invoice")
+        }
+
     }
 
     return (
@@ -122,18 +129,18 @@ const InvoiceSDrafrEditor = ({ route, navigation }: props) => {
                 </Text>
             </View>
 
-            <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between' }]}>
+            <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between', marginTop: 0 }]}>
                 <Button title="Print" color={"black"} />
                 <Button title="Share" color={"black"} />
-                <Button title="GEN INVOICE" color={"black"} />
-                <Button title="CANCEL" color={"red"} />
+                <Button title="GEN INVOICE" color={"black"} onPress={() => updateInvoiceDRAFT("toinvoice")} />
+                <Button title="CANCEL" color={"red"} onPress={() => oncancel()} />
             </View>
 
-            <Text style={[styles.smallText, styles.textalingleft, { color: "black", width : '90%' }]}>
+            <Text style={[styles.smallText, styles.textalingleft, { color: "black", width: '90%' }]}>
                 This view is to modify the lines previusly added in the generation of the invoice, there is not posible to add new lines.
             </Text>
 
-            <View style={[{ margin: 10 }]}>
+            <ScrollView style={[{ margin: 10, flex: 1 }]}>
                 {!_invoice_ ? null : (
                     <View style={[{ borderWidth: 1, borderColor: "grey", borderRadius: 7, padding: 15 }]}>
                         <View style={[styles.flexcomponentsRow, { width: '100%', justifyContent: 'space-between', margin: 0, padding: 0, marginBottom: 5 }]}>
@@ -141,7 +148,7 @@ const InvoiceSDrafrEditor = ({ route, navigation }: props) => {
                                 {comp ? comp.companyname : "Waiting response"}
                             </Text>
 
-                            <TouchableOpacity onPress={() => updateInvoiceDRAFT()} style={[styles.flexcomponentsRow, { margin: 0, padding: 5, borderRadius: 7, backgroundColor: 'black' }]}>
+                            <TouchableOpacity onPress={() => updateInvoiceDRAFT("draftupdate")} style={[styles.flexcomponentsRow, { margin: 0, padding: 5, borderRadius: 7, backgroundColor: 'black' }]}>
                                 <Text style={[styles.smallText, { textAlignVertical: 'center', marginRight: 10, color: 'white' }]}>PRESS HERE TO SABE CHANGES</Text>
                                 <Ionicons name="save-outline" size={25} color="white" />
                             </TouchableOpacity>
@@ -202,7 +209,7 @@ const InvoiceSDrafrEditor = ({ route, navigation }: props) => {
 
                         <View style={[{ marginTop: 10, marginBottom: 10, borderTopWidth: 1, borderTopColor: 'black', borderBottomColor: 'black', borderBottomWidth: 1 }]}>
                             <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between', width: '100%', margin: 0 }]}>
-                                <Text style={[styles.smallText, { flex: 2, textAlign: 'left', color: 'black', fontWeight: 'bold' }]}>Detail</Text>
+                                <Text style={[styles.smallText, { flex: 6, textAlign: 'left', color: 'black', fontWeight: 'bold' }]}>Detail</Text>
                                 <Text style={[styles.smallText, { flex: 2, textAlign: 'left', color: 'black', fontWeight: 'bold' }]}>Discount</Text>
                                 <Text style={[styles.smallText, { flex: 2, textAlign: 'left', color: 'black', fontWeight: 'bold' }]}>Amount</Text>
                                 <Text style={[styles.smallText, { flex: 2, textAlign: 'left', color: 'black', fontWeight: 'bold' }]}>Price</Text>
@@ -211,10 +218,11 @@ const InvoiceSDrafrEditor = ({ route, navigation }: props) => {
                             <FlatList
                                 data={invoiceLines}
                                 keyExtractor={item => item.id.toString()}
+                                nestedScrollEnabled={true}
                                 renderItem={({ item }) => (
                                     <View style={[styles.flexcomponentsRow, { borderTopWidth: 1, borderTopColor: "grey", marginVertical: 2 }]}>
                                         <TextInput
-                                            style={[{ flex: 2, textAlign: 'left', backgroundColor: '#E0E0E0' }]}
+                                            style={[{ flex: 6, textAlign: 'left', backgroundColor: '#E0E0E0' }]}
                                             value={item.detalle}
                                             onChangeText={val => updateLine(item.id, "detalle", val)}
                                         />
@@ -268,7 +276,7 @@ const InvoiceSDrafrEditor = ({ route, navigation }: props) => {
 
                     </View>
                 )}
-            </View>
+            </ScrollView>
         </View>
     );
 };

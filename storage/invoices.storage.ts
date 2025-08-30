@@ -9,15 +9,26 @@ export const getinvoices = (): invoice[] => {
   return data ? JSON.parse(data) : [];
 };
 
+// this update the draft
 export const updateInvoiceById = (id: number, updatedInvoice: invoice) => {
   const invoices = getinvoices();
 
-  const updated = invoices.map(inv =>
+  const updated = invoices.map((inv) =>
     inv.id === id ? { ...inv, ...updatedInvoice } : inv
   );
 
   storage.set(invoice_KEY, JSON.stringify(updated));
-  return [true, "UPDATED INVOICE"]
+  return [true, "UPDATED INVOICE"];
+};
+
+export const DraftToInvoice = (id: number) => {
+  const invoices = getinvoices();
+
+  const updated = invoices.map((inv) =>
+    inv.id === id ? { ...inv, status: {...inv.status, done : true, draft : false} } : inv
+  );
+
+  storage.set(invoice_KEY, JSON.stringify(updated));
 };
 
 export const saveinvoices = (invoices: invoice[]) => {
@@ -62,18 +73,19 @@ export const getInvoices_by_company = (id: number) => {
 export const get_last_invoice_by_company = (id_company: number) => {
   const toMs = (d: unknown): number => {
     const t = new Date(d as any).getTime(); // convierte Date, string o número
-    return Number.isFinite(t) ? t : 0;      // si es inválido, devuelve 0
+    return Number.isFinite(t) ? t : 0; // si es inválido, devuelve 0
   };
 
   const invoices = getinvoices()
-    .filter(inv => inv?.formato_general?.id_company === id_company)
-    .sort((a, b) => 
-      toMs(b?.formato_general?.fecha_emision) - toMs(a?.formato_general?.fecha_emision)
+    .filter((inv) => inv?.formato_general?.id_company === id_company)
+    .sort(
+      (a, b) =>
+        toMs(b?.formato_general?.fecha_emision) -
+        toMs(a?.formato_general?.fecha_emision)
     );
 
   return invoices[0];
 };
-
 
 export const clearinvoices = () => {
   storage.delete(invoice_KEY);
