@@ -19,7 +19,7 @@ function PreparationInvoice(
     let Impuestos: impuesto[] = [];
     Impuestos.push(_impuesto_);
 
-    console.log("invoice config: ", _invoice_config);
+    //console.log("invoice config: ", _invoice_config);
     let NewInvoice: invoice = {
         id: _invoice_.id,
         id_invoice_config: _invoice_.id_invoice_config,

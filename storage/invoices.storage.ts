@@ -21,15 +21,27 @@ export const updateInvoiceById = (id: number, updatedInvoice: invoice) => {
   return [true, "UPDATED INVOICE"];
 };
 
-export const DraftToInvoice = (id: number) => {
+export const DraftToInvoice = (id: number, _invoice_: Partial<invoice>) => {
   const invoices = getinvoices();
 
   const updated = invoices.map((inv) =>
-    inv.id === id ? { ...inv, status: {...inv.status, done : true, draft : false} } : inv
+    inv.id === id
+      ? {
+          ...inv,
+          ..._invoice_,
+          status: {
+            ...inv.status,
+            ...(_invoice_.status ?? {}), // por si viene status en _invoice_
+            draft: false,
+            done: true,
+          },
+        }
+      : inv
   );
 
   storage.set(invoice_KEY, JSON.stringify(updated));
 };
+
 
 export const saveinvoices = (invoices: invoice[]) => {
   storage.set(invoice_KEY, JSON.stringify(invoices));

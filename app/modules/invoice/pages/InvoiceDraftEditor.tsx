@@ -95,28 +95,36 @@ const InvoiceSDrafrEditor = ({ route, navigation }: props) => {
     }, [invoiceLines]);
 
     const updateInvoiceDRAFT = (type: string) => {
-        setInvoice(prev =>
-        (prev ? {
-            ...prev,
+        console.log("OBJECT TOTAL::: ", result.total, "||    OBJECT SUBTOTAL::: ", result.subtotal);
+
+        if (!_invoice_) return;
+        const updatedInvoice: invoice = {
+            ..._invoice_,
+            lineasfacturadas: invoiceLines,
             total: result.total,
-            subtotal: result.subtotal
-        } : prev)
-        )
+            subtotal: result.subtotal,
+        };
+        setInvoice(updatedInvoice);
 
-        // this is to save 
-        if (_invoice_ && type === "draftupdate") {
-            updateInvoiceById(_invoice_?.id, _invoice_)
-        } else if (_invoice_ && type === "toinvoice") {
-            DraftToInvoice(_invoice_.id);
+        if (type === "draftupdate") {
+            console.log("TOTAL::: ", updatedInvoice.total, "||    SUBTOTAL::: ", updatedInvoice.subtotal);
+            updateInvoiceById(updatedInvoice.id, updatedInvoice);
+        } else if (type === "toinvoice") {
+            DraftToInvoice(updatedInvoice.id, updatedInvoice);
         }
+
         oncancel();
-        if (type === 'draftupdate') {
-            Alert.alert('DRAFT UPDATED', "The draft has been updated, look it up again, if you want to make an invoice from a draft")
-        } else {
-            Alert.alert('INVOICE CREATED', "The draft has been set as invoice")
-        }
 
-    }
+        if (type === "draftupdate") {
+            Alert.alert(
+                "DRAFT UPDATED",
+                "The draft has been updated, look it up again, if you want to make an invoice from a draft"
+            );
+        } else {
+            Alert.alert("INVOICE CREATED", "The draft has been set as invoice");
+        }
+    };
+
 
     return (
         <View style={[{ flex: 1 }]}>
