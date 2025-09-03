@@ -40,7 +40,7 @@ export function formated_date_(value: string | undefined) {
         let result = date_[0] + " " + date_[1].split(".")[0]
         return result
     }
-    else{
+    else {
         return 'error'
     }
 }
@@ -52,6 +52,13 @@ function Generate_Invoice_Item(company_: company): [invoice | string, boolean] {
 
     // this get the last invoice created
     const LastInvoice: invoice | undefined = get_last_invoice_by_company(company_.id);
+
+    //this is to validate the date
+    let limitDate = last.fechalimite
+    if (limitDate.getTime() <= Date.now()) {
+        return ["Over Date", false];
+    }
+
 
     let newlastnumber: rangos;
 

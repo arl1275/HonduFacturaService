@@ -27,6 +27,7 @@ export interface invoicesconfig {
   cai: cais;
   rangodefacturas: number;
   numero_maximo: number;
+  referencia_bruta : string,
   referencia_facturas: rangos;
   piedehoja: string;
   active: boolean;

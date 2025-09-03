@@ -6,6 +6,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import styles from "@/assets/styles/styles";
 import { cais } from "@/storage/empresa";
 import { useState, useEffect } from "react";
+import { formated_invoice_number } from "../../invoice/utils/InvoiceNumberGenerator";
 
 type ForEditParams = {
     id_company: number | undefined;
@@ -43,6 +44,7 @@ const InvoiceConfig = ({ parentprops, _onclose_, id_company }: ForEditParams) =>
         rangodefacturas: 0,
         numero_maximo: 0,
         piedehoja: "",
+        referencia_bruta : '',
         referencia_facturas: rango,
         active: false,
     });
@@ -63,6 +65,7 @@ const InvoiceConfig = ({ parentprops, _onclose_, id_company }: ForEditParams) =>
     const handleSave = () => {
         const finalForm: invoicesconfig = {
             ...form,
+            referencia_bruta : formated_invoice_number(rango),
             referencia_facturas: rango,
             cai: cais_
         };
