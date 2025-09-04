@@ -10,16 +10,12 @@ function PreparationInvoice(
     _comprador_: any,
     _result_: any,
     _company_: company,
-    // _invoice_config_ : invoicesconfig
 ) {
-    //console.log("invoice config id: ", _invoice_.id_invoice_config);
-    //console.log("valor", _invoice_);
 
     let _invoice_config: invoicesconfig = getInvoicesconfig_by_id(_invoice_.id_invoice_config);
     let Impuestos: impuesto[] = [];
     Impuestos.push(_impuesto_);
-
-    //console.log("invoice config: ", _invoice_config);
+    
     let NewInvoice: invoice = {
         id: _invoice_.id,
         id_invoice_config: _invoice_.id_invoice_config,

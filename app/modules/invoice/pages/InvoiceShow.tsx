@@ -1,6 +1,6 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
-import { TouchableOpacity, View, Text, Button, FlatList } from "react-native";
+import { TouchableOpacity, View, Text, Button, FlatList, Alert } from "react-native";
 import { RootStackParamList } from "../indexInvoice";
 import { invoice, invoicesconfig, lineafacturada } from "@/storage/invoice";
 import styles from "@/assets/styles/styles";
@@ -9,6 +9,8 @@ import { formated_invoice_number, formated_invoice_number_maximum, formated_date
 import { getCompany_by_ID } from "@/storage/company.storage";
 import { getInvoicesconfig_by_id } from "@/storage/invoiceconfig.storage";
 import { company } from "@/storage/empresa";
+import { updateInvoiceById } from "@/storage/invoices.storage";
+import Preparation_CREDIT_NOTE from "../utils/Credit_Note_Generator"; // this function is to create a credit note
 
 type props = StackScreenProps<RootStackParamList, "InvoiceShow">
 
@@ -46,6 +48,25 @@ const InvoiceShowPage = ({ route, navigation }: props) => {
         return total.toFixed(2).toString();
     }
 
+    const UpdatetheInvoice = () => {
+        if (_invoice_) {
+            updateInvoiceById(_invoice_?.id, _invoice_)
+        }
+
+    }
+
+    const CreateCreditNote = () => {
+        Alert.alert("CREDIT NOTE", "Are u sure you want to create a credit note?", [{
+            text: 'YES',
+            onPress: () => { }
+        }, {
+            text: 'NO',
+        }
+        ])
+    }
+
+
+
     return (
         <View style={[{ flex: 1 }]}>
             <View style={[styles.flexcomponentsRow, { margin: 5 }]}>
@@ -55,9 +76,10 @@ const InvoiceShowPage = ({ route, navigation }: props) => {
                 <Text style={[styles.paragraph, styles.textalingleft, { color: 'black' }]}>Invoice Number ( {_invoice_ ? formated_invoice_number(_invoice_.formato_general.numero_de_factura) : 'N/A'} )</Text>
             </View>
 
-            <View style={[styles.flexcomponentsRow, {}]}>
+            <View style={[styles.flexcomponentsRow, { width: '100%', justifyContent: 'space-between' }]}>
                 <Button title="Print" color={'black'} />
                 <Button title="Share" color={'black'} />
+                <Button title="GEN CREDIT NOTE" color={'RED'} />
             </View>
 
             <View style={[{ margin: 10 }]}>
@@ -65,10 +87,10 @@ const InvoiceShowPage = ({ route, navigation }: props) => {
                     !_invoice_ ? null :
                         <View style={[{ borderWidth: 1, borderColor: 'grey', borderRadius: 7, padding: 15 }]}>
                             <Text style={[styles.paragraph, { color: 'black', margin: 0, fontWeight: 'bold' }]}>{comp ? comp.companyname : 'Waiting response'}</Text>
-                            
-                            { invoc?.encabezado ? <Text style={[{ color: 'black', fontStyle : 'italic', fontSize : 17, marginBottom : 5 }]}>{invoc.encabezado}</Text> : null }
-                            
-                            <Text style={[{ fontWeight: 'bold', marginBottom : 5 }]}>{invoc ?`Invoice ${formated_invoice_number(_invoice_.formato_general.numero_de_factura)}` : null}</Text>
+
+                            {invoc?.encabezado ? <Text style={[{ color: 'black', fontStyle: 'italic', fontSize: 17, marginBottom: 5 }]}>{invoc.encabezado}</Text> : null}
+
+                            <Text style={[{ fontWeight: 'bold', marginBottom: 5 }]}>{invoc ? `Invoice ${formated_invoice_number(_invoice_.formato_general.numero_de_factura)}` : null}</Text>
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 3 }}>
                                 <Text>Dirección:</Text>
@@ -106,13 +128,13 @@ const InvoiceShowPage = ({ route, navigation }: props) => {
                             </View>
 
 
-                            <View style={[{ marginTop: 10, marginBottom: 10, borderTopWidth : 1, borderTopColor : 'black', borderBottomColor : 'black', borderBottomWidth : 1}]}>
+                            <View style={[{ marginTop: 10, marginBottom: 10, borderTopWidth: 1, borderTopColor: 'black', borderBottomColor: 'black', borderBottomWidth: 1 }]}>
 
                                 <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between', width: '100%', margin: 0 }]}>
-                                    <Text style={[styles.smallText, { flex: 2, textAlign: 'left', color : 'black', fontWeight : 'bold' }]}>Detail</Text>
-                                    <Text style={[styles.smallText, { flex: 2, textAlign: 'left', color : 'black', fontWeight : 'bold' }]}>Discount</Text>
-                                    <Text style={[styles.smallText, { flex: 2, textAlign: 'left', color : 'black', fontWeight : 'bold' }]}>Amount</Text>
-                                    <Text style={[styles.smallText, { flex: 2, textAlign: 'left', color : 'black', fontWeight : 'bold' }]}>Price</Text>
+                                    <Text style={[styles.smallText, { flex: 2, textAlign: 'left', color: 'black', fontWeight: 'bold' }]}>Detail</Text>
+                                    <Text style={[styles.smallText, { flex: 2, textAlign: 'left', color: 'black', fontWeight: 'bold' }]}>Discount</Text>
+                                    <Text style={[styles.smallText, { flex: 2, textAlign: 'left', color: 'black', fontWeight: 'bold' }]}>Amount</Text>
+                                    <Text style={[styles.smallText, { flex: 2, textAlign: 'left', color: 'black', fontWeight: 'bold' }]}>Price</Text>
                                 </View>
 
                                 <FlatList
