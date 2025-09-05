@@ -9,7 +9,7 @@ import { formated_invoice_number, formated_invoice_number_maximum, formated_date
 import { getCompany_by_ID } from "@/storage/company.storage";
 import { getInvoicesconfig_by_id } from "@/storage/invoiceconfig.storage";
 import { company } from "@/storage/empresa";
-import { updateInvoiceById } from "@/storage/invoices.storage";
+import { updateInvoiceById, addinvoice } from "@/storage/invoices.storage";
 import Preparation_CREDIT_NOTE from "../utils/Credit_Note_Generator"; // this function is to create a credit note
 
 type props = StackScreenProps<RootStackParamList, "InvoiceShow">
@@ -50,15 +50,38 @@ const InvoiceShowPage = ({ route, navigation }: props) => {
 
     const UpdatetheInvoice = () => {
         if (_invoice_) {
-            updateInvoiceById(_invoice_?.id, _invoice_)
-        }
+            let Result = Preparation_CREDIT_NOTE(_invoice_);
 
-    }
+            if (Result[1] === false) {
+                Alert.alert("ERROR", "A mistake ocurres while generate the credit note");
+                return;
+            } else if(typeof Result[0] === "object"){
+                const Creditnote : invoice = Result[0];
+
+                const updatedInvoice: invoice = {
+                    ..._invoice_,
+                    status: {
+                        ..._invoice_.status,
+                        creditnote: {
+                            done: true,
+                            creditnote_id: Creditnote.id,
+                        },
+                    },
+                };
+
+                setInvoice(updatedInvoice);
+                updateInvoiceById(updatedInvoice.id, updatedInvoice);
+                addinvoice(Creditnote);
+
+            }
+        }
+    };
+
 
     const CreateCreditNote = () => {
         Alert.alert("CREDIT NOTE", "Are u sure you want to create a credit note?", [{
             text: 'YES',
-            onPress: () => { }
+            onPress: () => {UpdatetheInvoice()}
         }, {
             text: 'NO',
         }
@@ -73,13 +96,17 @@ const InvoiceShowPage = ({ route, navigation }: props) => {
                 <TouchableOpacity onPress={() => oncancel()}>
                     <Ionicons name="chevron-back" size={30} color="black" />
                 </TouchableOpacity>
-                <Text style={[styles.paragraph, styles.textalingleft, { color: 'black' }]}>Invoice Number ( {_invoice_ ? formated_invoice_number(_invoice_.formato_general.numero_de_factura) : 'N/A'} )</Text>
+                <Text style={[styles.paragraph, styles.textalingleft, { color: 'black' }]}>
+                    {!_invoice_?.status.creditnote.done ? "Invoice number" : "Credit note number"} ( {_invoice_ ? formated_invoice_number(_invoice_.formato_general.numero_de_factura) : 'N/A'} )</Text>
             </View>
 
-            <View style={[styles.flexcomponentsRow, { width: '100%', justifyContent: 'space-between' }]}>
+            <View style={[styles.flexcomponentsRow, { width: '95%', justifyContent: 'space-between' }]}>
                 <Button title="Print" color={'black'} />
                 <Button title="Share" color={'black'} />
-                <Button title="GEN CREDIT NOTE" color={'RED'} />
+                {
+                    !_invoice_?.status.creditnote.done && <Button title="CREDIT NOTE" color={'red'} onPress={CreateCreditNote}/>
+                }
+                
             </View>
 
             <View style={[{ margin: 10 }]}>
@@ -165,13 +192,18 @@ const InvoiceShowPage = ({ route, navigation }: props) => {
 
                             <View style={[styles.flexcomponentsRow, { margin: 0, padding: 0, justifyContent: "space-between" }]}>
                                 <Text>Rango de emision: </Text>
-                                <Text>{formated_invoice_number(invoc?.referencia_facturas)} hasta {formated_invoice_number_maximum(invoc?.referencia_facturas, invoc?.numero_maximo)}</Text>
+                                <Text>{invoc?.referencia_bruta} hasta {formated_invoice_number_maximum(invoc?.referencia_facturas, invoc?.numero_maximo)}</Text>
                             </View>
 
                             <View style={[styles.flexcomponentsRow, { margin: 0, padding: 0, justifyContent: "space-between" }]}>
                                 <Text>Fecha de emision maxima:</Text>
                                 <Text style={[{ textAlign: 'right' }]}>{formated_date_(invoc?.fechalimite.toString())}</Text>
                             </View>
+                            
+                            {
+                                _invoice_.status.creditnote.done &&
+                                <Text style={[ styles.smallText, {color : 'black'}]}>NOTA DE CREDITO: {_invoice_.status.creditnote.creditnote_id}</Text>
+                            }
 
                         </View>
                 }

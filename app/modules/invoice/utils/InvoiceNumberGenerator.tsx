@@ -54,7 +54,8 @@ function Generate_Invoice_Item(company_: company): [invoice | string, boolean] {
     const LastInvoice: invoice | undefined = get_last_invoice_by_company(company_.id);
 
     //this is to validate the date
-    let limitDate = last.fechalimite
+    const limitDate = new Date(last.fechalimite);
+
     if (limitDate.getTime() <= Date.now()) {
         return ["Over Date", false];
     }

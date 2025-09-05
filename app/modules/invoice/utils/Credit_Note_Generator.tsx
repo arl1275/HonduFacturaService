@@ -5,10 +5,12 @@ import { get_last_invoice_by_company } from "@/storage/invoices.storage";
 function Preparation_CREDIT_NOTE(_invoice_: invoice,) {
     const last: invoicesconfig | undefined = getCurrent_by_company_id(_invoice_.formato_general.id_company);
     const LastInvoice: invoice | undefined = get_last_invoice_by_company(_invoice_.formato_general.id_company);
-
+    console.log("las: ", typeof last, " || Lastinvoie: ",LastInvoice.id  );
+    
     if (typeof last != 'undefined' && typeof LastInvoice != 'undefined') {
 
-        let limitDate = last.fechalimite
+        const limitDate = new Date(last.fechalimite);
+
         if (limitDate.getTime() <= Date.now()) {
             return ["Over Date", false];
         }
@@ -48,7 +50,7 @@ function Preparation_CREDIT_NOTE(_invoice_: invoice,) {
 
             status: {
                 draft: false,
-                done: true,
+                done: false,
                 creditnote: {
                     done: true,
                     creditnote_id: _invoice_.id
@@ -56,7 +58,7 @@ function Preparation_CREDIT_NOTE(_invoice_: invoice,) {
             }
         }
 
-        return [NewInvoice,  true];
+        return [NewInvoice, true];
     } else {
         return ["An ERROR OCURR", false];
     }
