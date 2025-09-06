@@ -15,8 +15,8 @@ export default function HomeCompany() {
   const navigation = useNavigation<HomeCompanyNavigationProp>();
   const [Companies, setCompanies] = useState<company[]>([]);
 
-  const getallcompanies = async () => {
-    const companies = await getCompanies(); // Si getCompanies es async
+  const getallcompanies =  () => {
+    const companies =  getCompanies(); // Si getCompanies es async
     setCompanies(companies);
   };
 
@@ -28,7 +28,7 @@ export default function HomeCompany() {
     <View>
       <Text style={[styles.title, styles.textalingleft, { color: 'black', fontFamily: 'sans-serif' }]}>Company</Text>
       <View>
-        <Text style={[styles.paragraph, styles.textalingleft, { color: 'black', fontFamily: 'sans-serif' }]}>
+        <Text style={[styles.smallText, styles.textalingleft, { color: 'black', fontFamily: 'sans-serif' }]}>
           This page is to manage and companies in this app, important.
           You can only delete a company when it does not have an invoice indexed
         </Text>

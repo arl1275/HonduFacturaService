@@ -128,7 +128,7 @@ const InvoiceSDrafrEditor = ({ route, navigation }: props) => {
 
     return (
         <View style={[{ flex: 1 }]}>
-            <View style={[styles.flexcomponentsRow, { margin: 5 }]}>
+            <View style={[styles.flexcomponentsRow, { margin: 5, alignItems : 'center' }]}>
                 <TouchableOpacity onPress={() => oncancel()}>
                     <Ionicons name="chevron-back" size={30} color="black" />
                 </TouchableOpacity>

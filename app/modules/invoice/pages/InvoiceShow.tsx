@@ -62,21 +62,19 @@ const InvoiceShowPage = ({ route, navigation }: props) => {
                     ..._invoice_,
                     status: {
                         ..._invoice_.status,
+                        done : false,
                         creditnote: {
                             done: true,
                             creditnote_id: Creditnote.id,
                         },
                     },
                 };
-
                 setInvoice(updatedInvoice);
                 updateInvoiceById(updatedInvoice.id, updatedInvoice);
                 addinvoice(Creditnote);
-
             }
         }
     };
-
 
     const CreateCreditNote = () => {
         Alert.alert("CREDIT NOTE", "Are u sure you want to create a credit note?", [{
@@ -88,25 +86,21 @@ const InvoiceShowPage = ({ route, navigation }: props) => {
         ])
     }
 
-
-
     return (
         <View style={[{ flex: 1 }]}>
-            <View style={[styles.flexcomponentsRow, { margin: 5 }]}>
+            <View style={[styles.flexcomponentsRow, { alignItems : 'center'}]}>
                 <TouchableOpacity onPress={() => oncancel()}>
-                    <Ionicons name="chevron-back" size={30} color="black" />
+                    <Ionicons name="chevron-back" size={25} color="black" />
                 </TouchableOpacity>
-                <Text style={[styles.paragraph, styles.textalingleft, { color: 'black' }]}>
-                    {!_invoice_?.status.creditnote.done ? "Invoice number" : "Credit note number"} ( {_invoice_ ? formated_invoice_number(_invoice_.formato_general.numero_de_factura) : 'N/A'} )</Text>
+                <Text style={[styles.paragraph, { color: 'black' }]}>
+                    {!_invoice_?.status.creditnote.done ? "Invoice number" : "Credit note number"}
+                    ({_invoice_ ? formated_invoice_number(_invoice_.formato_general.numero_de_factura) : 'N/A'})</Text>
             </View>
 
             <View style={[styles.flexcomponentsRow, { width: '95%', justifyContent: 'space-between' }]}>
                 <Button title="Print" color={'black'} />
                 <Button title="Share" color={'black'} />
-                {
-                    !_invoice_?.status.creditnote.done && <Button title="CREDIT NOTE" color={'red'} onPress={CreateCreditNote}/>
-                }
-                
+                {!_invoice_?.status.creditnote.done && <Button title="CREDIT NOTE" color={'red'} onPress={()=>CreateCreditNote()}/>}
             </View>
 
             <View style={[{ margin: 10 }]}>

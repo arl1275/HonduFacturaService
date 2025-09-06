@@ -135,11 +135,11 @@ export default function EditCompanyPage({ route, navigation }: Props) {
 
       {/*-------------------THIS ARE THE MODALs-------------------*/}
 
-      <View style={[styles.flexcomponentsRow, { margin: 5 }]}>
+      <View style={[styles.flexcomponentsRow, { margin: 5, alignItems : 'center' }]}>
         <TouchableOpacity onPress={() => oncancel()}>
           <Ionicons name="chevron-back" size={30} color="black" />
         </TouchableOpacity>
-        <Text style={[styles.paragraph, styles.textalingleft, { color: 'black' }]}>Edit Company Page</Text>
+        <Text style={[styles.paragraph, styles.textalingleft, { color: 'black' }]}>Edit Company</Text>
 
       </View>
 

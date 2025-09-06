@@ -1,6 +1,7 @@
 import { invoice, invoicesconfig, lineafacturada, rangos } from "@/storage/invoice";
 import { getCurrent_by_company_id } from "@/storage/invoiceconfig.storage";
 import { get_last_invoice_by_company } from "@/storage/invoices.storage";
+import { formated_invoice_number } from "./InvoiceNumberGenerator";
 
 function Preparation_CREDIT_NOTE(_invoice_: invoice,) {
     const last: invoicesconfig | undefined = getCurrent_by_company_id(_invoice_.formato_general.id_company);
@@ -26,7 +27,7 @@ function Preparation_CREDIT_NOTE(_invoice_: invoice,) {
         };
 
 
-
+        console.log("Nuevo numero", formated_invoice_number(newlastnumber));
         let NewInvoice: invoice = {
             id: _invoice_.id + 1,
             id_invoice_config: _invoice_.id_invoice_config,

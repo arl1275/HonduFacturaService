@@ -53,7 +53,7 @@ export default function RegisterCompany() {
       id: Date.now(),
       image,  // Aquí ya va el base64
       companyname,
-      impuestos : [],
+      impuestos: [],
       rtn,
       direccion_company: direccion,
       direccion_correo: correo,
@@ -73,13 +73,13 @@ export default function RegisterCompany() {
   const oncancel = () => { navigation.goBack() }
 
   return (
-    <ScrollView contentContainerStyle={[styles.fixedbox, { elevation: 0 }]}>
-      <TouchableOpacity onPress={oncancel}>
+    <ScrollView contentContainerStyle={[{ margin: 10 }]}>
+      <TouchableOpacity onPress={oncancel} style={[styles.flexcomponentsRow, { alignItems: 'center' }]}>
         <Ionicons name="chevron-back" size={30} color="black" />
+        <Text style={[styles.paragraph, { fontWeight: 'bold', marginLeft: 10, color: 'black' }]}>CREAR EMPRESA</Text>
       </TouchableOpacity>
 
-
-      <Text style={[{ fontSize: 15, fontWeight: 'bold', margin: 10 }]}>CREAR EMPRESA</Text>
+      <Text style={[styles.smallText, { color: 'black', textAlign: 'left', margin: 10 }]}>Please full fill the whole fields to create a company. Do not let any field black, that could generate errors.</Text>
 
       <View style={[styles.textinput, { padding: 10 }]}>
         <TextInput value={companyname} onChangeText={setCompanyname} placeholder='Nombre de la Empresa' />
@@ -101,10 +101,8 @@ export default function RegisterCompany() {
         <TextInput placeholder="Teléfono" value={telefono} onChangeText={setTelefono} keyboardType="phone-pad" />
       </View>
 
-      {/* Botón para seleccionar imagen */}
-      <Button title="Seleccionar Logo" onPress={pickImage} color={'blue'} />
 
-      {/* Si hay imagen seleccionada, mostrar vista previa */}
+
       {image !== '' && (
         <Image
           source={{ uri: `data:image/jpeg;base64,${image}` }}
@@ -112,7 +110,11 @@ export default function RegisterCompany() {
         />
       )}
 
-      <Button title="Guardar Compañía" onPress={handleSave} color={'green'} />
+      <View style={[styles.flexcomponentsRow, {justifyContent : 'space-between'}]}>
+        <Button title="Seleccionar Logo" onPress={pickImage} color={'blue'} />
+        <Button title="Guardar Compañía" onPress={handleSave} color={'green'} />
+      </View>
+
     </ScrollView>
   );
 }
