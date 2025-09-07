@@ -14,7 +14,8 @@ function GenerateInvoiceNumber(LastInvoice: invoice) {
         numero_cuatro: LastInvoice.formato_general.numero_de_factura.numero_cuatro + 1,
         active: false
     }
-
+    console.log("PREVIUS: ", LastInvoice.formato_general.numero_de_factura);
+    console.log("NEW NUMBER OF FACTURA: ", _new_rango_)
     return _new_rango_;
 }
 
@@ -66,7 +67,7 @@ function Generate_Invoice_Item(company_: company): [invoice | string, boolean] {
     if (!last) return ["ERROR", false];
     if (!company_) return ["ERROR2", false];
 
-    if (!LastInvoice) {
+    if (!LastInvoice ) {
         newlastnumber = {
             id: Date.now(),
             numero_uno: last.referencia_facturas.numero_uno,

@@ -6,9 +6,9 @@ import { formated_invoice_number } from "./InvoiceNumberGenerator";
 function Preparation_CREDIT_NOTE(_invoice_: invoice,) {
     const last: invoicesconfig | undefined = getCurrent_by_company_id(_invoice_.formato_general.id_company);
     const LastInvoice: invoice | undefined = get_last_invoice_by_company(_invoice_.formato_general.id_company);
-    console.log("las: ", typeof last, " || Lastinvoie: ",LastInvoice.id  );
+    //console.log("las: ", last );
     
-    if (typeof last != 'undefined' && typeof LastInvoice != 'undefined') {
+    if (typeof last != 'undefined'  && typeof LastInvoice != 'undefined') {
 
         const limitDate = new Date(last.fechalimite);
 
@@ -22,12 +22,12 @@ function Preparation_CREDIT_NOTE(_invoice_: invoice,) {
             numero_uno: last.referencia_facturas.numero_uno,
             numero_dos: last.referencia_facturas.numero_dos,
             numero_tres: last.referencia_facturas.numero_tres,
-            numero_cuatro: last.referencia_facturas.numero_cuatro + 1,
+            numero_cuatro: LastInvoice.formato_general.numero_de_factura.numero_cuatro + 1,
             active: false
         };
 
 
-        console.log("Nuevo numero", formated_invoice_number(newlastnumber));
+        //console.log("Nuevo numero", formated_invoice_number(newlastnumber));
         let NewInvoice: invoice = {
             id: _invoice_.id + 1,
             id_invoice_config: _invoice_.id_invoice_config,

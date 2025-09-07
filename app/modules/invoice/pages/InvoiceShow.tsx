@@ -17,13 +17,14 @@ type props = StackScreenProps<RootStackParamList, "InvoiceShow">
 
 const InvoiceShowPage = ({ route, navigation }: props) => {
     const { item } = route.params;
-    const [_invoice_, setInvoice] = useState<invoice>();
+    const [_invoice_, setInvoice] = useState<invoice | null>();
     const [comp, setComp] = useState<company>()
     const [invoc, setInvoiceConfig] = useState<invoicesconfig>();
     const [invoiceLines, setInvoiceLines] = useState<lineafacturada[]>([])
 
 
     useEffect(() => {
+        setInvoice(null)
         setInvoice(item);
         GetCompany(item.formato_general.id_company);
         GetInvoiceConfig(item.id_invoice_config);
@@ -40,7 +41,7 @@ const InvoiceShowPage = ({ route, navigation }: props) => {
         setInvoiceConfig(val);
     }
 
-    const oncancel = () => { setInvoice(undefined), navigation.navigate("HomeInvoice") };
+    const oncancel = () => { setInvoice(null), navigation.navigate("HomeInvoice") };
 
     const totalLine = (item: lineafacturada) => {
         let factorDiscont = item.descuento === 0 ? 1 : ((100 - item.descuento) / 100)

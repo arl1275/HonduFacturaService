@@ -64,16 +64,6 @@ export const getInvoices_by_ID = (id: number) => {
   return invoices;
 };
 
-// this take consideration the invoice config
-/*export const getInvoices_by_company_id = (id: number, id_invoice_config : number) => {
-  const invoices = getinvoices().filter(inv => inv.formato_general.id_company === id
-    && inv.id_invoice_config === id_invoice_config
-  ).sort((a, b) => 
-      b.formato_general.fecha_emision.getTime() - a.formato_general.fecha_emision.getTime() // Orden descendente
-    );
-  return invoices;
-};*/
-
 export const getInvoices_by_company = (id: number) => {
   //console.log('Companya', id)
   const invoices = getinvoices().filter(
@@ -83,20 +73,25 @@ export const getInvoices_by_company = (id: number) => {
 };
 
 export const get_last_invoice_by_company = (id_company: number) => {
-  const toMs = (d: unknown): number => {
-    const t = new Date(d as any).getTime(); // convierte Date, string o número
-    return Number.isFinite(t) ? t : 0; // si es inválido, devuelve 0
-  };
-
   const invoices = getinvoices()
-    .filter((inv) => inv?.formato_general?.id_company === id_company)
+    .filter(inv => inv?.formato_general?.id_company === id_company)
+    .map(inv => ({
+      ...inv,
+      formato_general: {
+        ...inv.formato_general,
+        fecha_emision: new Date(inv.formato_general.fecha_emision), 
+      }
+    }))
     .sort(
       (a, b) =>
-        toMs(b?.formato_general?.fecha_emision) -
-        toMs(a?.formato_general?.fecha_emision)
+        a.formato_general.fecha_emision.getTime() -
+        b.formato_general.fecha_emision.getTime()
     );
-
-  return invoices[0];
+  console.log("VALORESSSS : ", invoices);
+  console.log("---------------------------------------------");
+  
+  
+  return invoices[0]; 
 };
 
 export const clearinvoices = () => {

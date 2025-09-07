@@ -54,12 +54,15 @@ const InvoiceGen = ({ route, navigation }: props) => {
     };
 
     const UpdateResultValue = () => {
+        // this is to set the total
         let total: number = LineasFacutas.reduce((sum, item) => sum + item.cantidad * item.precio * (item.descuento === 0 ? 1 : (100 - item.descuento) / 100), 0);
         let x = total.toFixed(2)
         let _total_ = parseFloat(x);
+        let sub_total_ = CalculateSubTax();
         setResult(prev => ({
             ...prev,
-            total: _total_
+            total: _total_,
+            subtotal : typeof sub_total_ === 'string' ? 0 : sub_total_
         }));
     };
 

@@ -50,14 +50,15 @@ export const clearInvoicesconfigs = () => {
 //---------------------------------------------------------//
 //functions of invoiceconfigs
 
-export const getCurrent_by_company_id = ( id : number) => {
+export const getCurrent_by_company_id = (id: number) => {
   const configs = getInvoicesconfigs();
 
-    if(configs.length === 1) return configs[0];
-    
-    else
-    configs.filter(c => c.active === true && c.id_company === id)
+  if (configs.length === 1) return configs[0];
+
+  const filtered = configs
+    .filter(c => c.active === true && c.id_company === id)
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-    
-  return configs[0]; // Devuelve solo la más reciente y activa
-}
+
+  return filtered[0]; // ahora sí devuelve el más reciente y activo
+};
+
