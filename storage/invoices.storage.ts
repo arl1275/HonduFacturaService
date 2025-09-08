@@ -87,13 +87,43 @@ export const get_last_invoice_by_company = (id_company: number) => {
         a.formato_general.fecha_emision.getTime() -
         b.formato_general.fecha_emision.getTime()
     );
-  console.log("VALORESSSS : ", invoices);
-  console.log("---------------------------------------------");
-  
-  
-  return invoices[0]; 
+  //console.log(invoices);
+  //console.log("ULTIMO VALOR: ", invoices[0])
+  return invoices[invoices.length - 1]; 
 };
 
 export const clearinvoices = () => {
   storage.delete(invoice_KEY);
 };
+
+export const getInvoices_by_InvoiceConfig = (id : number) =>{
+  const invoices = getinvoices()
+    .filter(inv => inv?.id_invoice_config === id)
+    .map(inv => ({
+      ...inv,
+      formato_general: {
+        ...inv.formato_general,
+        fecha_emision: new Date(inv.formato_general.fecha_emision), 
+      }
+    }))
+    .sort(
+      (a, b) =>
+        a.formato_general.numero_de_factura.numero_cuatro -
+        b.formato_general.numero_de_factura.numero_cuatro
+    );
+    //console.log(invoices);
+    
+  return invoices[invoices.length - 1]
+}
+
+export const getInvoices_by_InvoiceConfig_ID = (id : number) =>{
+  const invoices = getinvoices()
+    .filter(inv => inv?.id_invoice_config === id).sort(
+      (a, b) =>
+        a.formato_general.numero_de_factura.numero_cuatro -
+        b.formato_general.numero_de_factura.numero_cuatro
+    );
+    //console.log(invoices);
+    
+  return invoices;
+}

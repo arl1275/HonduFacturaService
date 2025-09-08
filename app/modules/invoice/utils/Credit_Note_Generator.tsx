@@ -1,20 +1,18 @@
 import { invoice, invoicesconfig, lineafacturada, rangos } from "@/storage/invoice";
 import { getCurrent_by_company_id } from "@/storage/invoiceconfig.storage";
-import { get_last_invoice_by_company } from "@/storage/invoices.storage";
-import { formated_invoice_number } from "./InvoiceNumberGenerator";
+import { get_last_invoice_by_company, getInvoices_by_InvoiceConfig } from "@/storage/invoices.storage";
+//import { formated_invoice_number } from "./InvoiceNumberGenerator";
 
 function Preparation_CREDIT_NOTE(_invoice_: invoice,) {
     const last: invoicesconfig | undefined = getCurrent_by_company_id(_invoice_.formato_general.id_company);
-    const LastInvoice: invoice | undefined = get_last_invoice_by_company(_invoice_.formato_general.id_company);
+    const LastInvoice: invoice | undefined = getInvoices_by_InvoiceConfig(last.id);
     //console.log("las: ", last );
     
     if (typeof last != 'undefined'  && typeof LastInvoice != 'undefined') {
 
         const limitDate = new Date(last.fechalimite);
 
-        if (limitDate.getTime() <= Date.now()) {
-            return ["Over Date", false];
-        }
+        if (limitDate.getTime() <= Date.now()) {return ["Over Date", false]}
 
 
         let newlastnumber: rangos = {

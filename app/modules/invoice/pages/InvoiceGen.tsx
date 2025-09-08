@@ -9,7 +9,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import styles from "@/assets/styles/styles";
 import { useEffect, useState } from "react";
 import EditConsumer from "../components/ConsumerComponent";
-import Generate_Invoice_Item from "../utils/InvoiceNumberGenerator";
+import Generate_Invoice_Item, { formated_date_ } from "../utils/InvoiceNumberGenerator";
 
 import EditlineFacturada from "../modals/editline";
 import CreateLineInvoice from "../components/CreateLineComponent";
@@ -62,7 +62,7 @@ const InvoiceGen = ({ route, navigation }: props) => {
         setResult(prev => ({
             ...prev,
             total: _total_,
-            subtotal : typeof sub_total_ === 'string' ? 0 : sub_total_
+            subtotal : typeof sub_total_ === 'string' ? 0 : parseFloat(sub_total_)
         }));
     };
 
@@ -245,7 +245,7 @@ const InvoiceGen = ({ route, navigation }: props) => {
             </View>
 
             <View style={{ marginLeft: 20, marginRight: 20 }}>
-                <Text style={[styles.smallText, styles.textalingleft]}>{formated_invoice_number(_invoice_?.formato_general.numero_de_factura)}</Text>
+                <Text style={[styles.paragraph, styles.textalingleft, {color : 'black'}]}>{formated_invoice_number(_invoice_?.formato_general.numero_de_factura)}</Text>
             </View>
 
             <View>
@@ -270,6 +270,7 @@ const InvoiceGen = ({ route, navigation }: props) => {
 
                 <View style={{ marginLeft: 20, marginRight: 20 }}>
                     <Text style={[styles.smallText, styles.textalingleft]}>Register one invoice line, then it will be show in the list</Text>
+                    <Text style={[styles.smallText, styles.textalingleft]}>{_invoice_ ? _invoice_.formato_general.fecha_emision.toString() : 'N/A'}</Text>
                 </View>
 
                 <View>

@@ -6,6 +6,23 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 // IMPORTS OF SCREENS
 import IndexInvoice from './modules/invoice/indexInvoice';
 import IndexCompany from './modules/company/indexcompany';
+import { getFocusedRouteNameFromRoute, RouteProp } from "@react-navigation/native";
+import type { ViewStyle } from "react-native";
+
+export const hideTabBarOnSubRoutes = (
+  route: RouteProp<Record<string, object | undefined>, string>,
+  homeRoute: string,
+  hiddenRoutes: string[]
+) => {
+  const routeName = getFocusedRouteNameFromRoute(route) ?? homeRoute;
+
+  if (hiddenRoutes.includes(routeName)) {
+    return { tabBarStyle: { display: "none" } as ViewStyle };
+  }
+
+  return {};
+};
+
 
 const Tab = createBottomTabNavigator();
 
@@ -14,6 +31,7 @@ const HomeScreen = () => {
     <Text>Hola</Text>
   )
 }
+
 
 export default function App() {
   const visibleRoutes = ['Inicio', 'Invoices', 'Company'];
@@ -49,8 +67,8 @@ export default function App() {
       })}
     >
       <Tab.Screen name="Inicio" component={HomeScreen} />
-      <Tab.Screen name="Invoices" component={IndexInvoice} />
-      <Tab.Screen name="Company" component={IndexCompany} />
+      <Tab.Screen name="Invoices" component={IndexInvoice} options={({ route }) => hideTabBarOnSubRoutes(route, "HomeInvoice", ["InvoiceGen", "InvoiceShow", "InvoiceDraft"])}  />
+      <Tab.Screen name="Company" component={IndexCompany} options={({ route }) => hideTabBarOnSubRoutes(route, "HomeCompany", ["Settings", "Editpage"])} />
 
     </Tab.Navigator>
   );

@@ -5,12 +5,13 @@ import { getCompanies } from "@/storage/company.storage";
 import { company } from "@/storage/empresa";
 import React, { useEffect, useState } from "react";
 import { invoice } from "@/storage/invoice";
-import { getInvoices_by_company } from "@/storage/invoices.storage";
+import { getInvoices_by_company, getInvoices_by_InvoiceConfig } from "@/storage/invoices.storage";
 import { formated_invoice_number } from "../utils/InvoiceNumberGenerator";
 // router imports 
 import { RootStackParamList } from "../indexInvoice";
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
+import { getCurrent_by_company_id} from "@/storage/invoiceconfig.storage";
 
 type InvoiceNavigator = StackNavigationProp<RootStackParamList, "HomeInvoice">
 
@@ -31,7 +32,9 @@ const InvoiceHome = () => {
 
     const UpdateInvoices = () => {
         if (typeof item === 'object') {
-            setListInvoices(getInvoices_by_company(item.id))
+            let value = getCurrent_by_company_id(item.id);
+            let result = getInvoices_by_company(item.id)
+            setListInvoices(result.filter((e) => e.id_invoice_config === value.id))
         }
     }
 
@@ -87,6 +90,7 @@ const InvoiceHome = () => {
                 onValueChange={(itemValue) => {
                     if (itemValue === "Select a Company") {
                         setSelectedValue(undefined);
+                        setListInvoices([])
                     } else {
                         const selectedCompany = SelectedList.find(company => company.rtn === itemValue);
                         setSelectedValue(selectedCompany);

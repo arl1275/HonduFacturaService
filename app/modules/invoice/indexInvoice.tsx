@@ -22,7 +22,7 @@ const IndexInvoice = () => {
         <Stack.Navigator 
         initialRouteName="HomeInvoice" 
         screenOptions={{ 
-            headerShown: false
+            headerShown: false,
             }}>
             <Stack.Screen name="HomeInvoice" component={InvoiceHome}/>
             <Stack.Screen name="InvoiceGen" component={InvoiceGen}/>

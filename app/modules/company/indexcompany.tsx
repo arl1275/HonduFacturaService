@@ -19,8 +19,8 @@ export type RootStackParamList = {
 
 const IndexCompany = () => {
     return (
-        <Stack.Navigator initialRouteName="HomeCompany" screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="HomeCompany" component={HomeCompany} />
+        <Stack.Navigator initialRouteName="HomeCompany" screenOptions={{ headerShown: false, }}>
+            <Stack.Screen name="HomeCompany" component={HomeCompany}/>
             <Stack.Screen name="Settings" component={RegisterCompany} />
             <Stack.Screen name="Editpage" component={EditCompanyPage} />
         </Stack.Navigator>

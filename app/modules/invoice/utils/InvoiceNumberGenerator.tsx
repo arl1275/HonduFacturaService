@@ -1,9 +1,26 @@
 import { invoice, rangos } from "@/storage/invoice";
 import { invoicesconfig } from "@/storage/invoice";
 import { getCurrent_by_company_id } from "@/storage/invoiceconfig.storage";
-import { getCompany_by_ID } from "@/storage/company.storage";
+//import { getCompany_by_ID } from "@/storage/company.storage";
 import { company } from "@/storage/empresa";
-import { get_last_invoice_by_company } from "@/storage/invoices.storage";
+import { get_last_invoice_by_company, getInvoices_by_InvoiceConfig } from "@/storage/invoices.storage";
+
+//----------------------------------------------------------------------------------------------------//
+// GENERATE THE INVOICE NUMBERS
+// This functions are for generate numbers of invoices. 
+//----------------------------------------------------------------------------------------------------//
+
+function GenerateInvoiceNumber_Plane(last: invoicesconfig) {
+    const newlastnumber = {
+        id: Date.now(),
+        numero_uno: last.referencia_facturas.numero_uno,
+        numero_dos: last.referencia_facturas.numero_dos,
+        numero_tres: last.referencia_facturas.numero_tres,
+        numero_cuatro: last.referencia_facturas.numero_cuatro + 1, // revisa esto según negocio
+        active: false
+    };
+    return newlastnumber;
+}
 
 function GenerateInvoiceNumber(LastInvoice: invoice) {
     let _new_rango_: rangos = {
@@ -14,10 +31,13 @@ function GenerateInvoiceNumber(LastInvoice: invoice) {
         numero_cuatro: LastInvoice.formato_general.numero_de_factura.numero_cuatro + 1,
         active: false
     }
-    console.log("PREVIUS: ", LastInvoice.formato_general.numero_de_factura);
-    console.log("NEW NUMBER OF FACTURA: ", _new_rango_)
     return _new_rango_;
 }
+
+//----------------------------------------------------------------------------------------------------//
+// GENERATE THE FORMATS
+// this funcion is called when u want to formate invoices numbers or dates. 
+//----------------------------------------------------------------------------------------------------//
 
 export function formated_invoice_number(valor: rangos | undefined) {
     if (typeof valor === 'object') {
@@ -46,52 +66,44 @@ export function formated_date_(value: string | undefined) {
     }
 }
 
-// this function is to generate the item of a invoice
+//----------------------------------------------------------------------------------------------------//
+// GENERATE THE INVOICE ITEM, WITH THE MINIMUM VALUES FOR A ITEM
+// this funcion is called when u entrer into the generation invoice, or the InvoiceGen.tsx file. 
+//----------------------------------------------------------------------------------------------------//
+
 function Generate_Invoice_Item(company_: company): [invoice | string, boolean] {
-    // this is to get the last invoice config created
-    const last: invoicesconfig | undefined = getCurrent_by_company_id(company_.id);
+    // this is to get the last invoice config created und active
+    const LastInvoConfig: invoicesconfig | undefined = getCurrent_by_company_id(company_.id);
 
     // this get the last invoice created
-    const LastInvoice: invoice | undefined = get_last_invoice_by_company(company_.id);
-
-    //this is to validate the date
-    const limitDate = new Date(last.fechalimite);
-
-    if (limitDate.getTime() <= Date.now()) {
-        return ["Over Date", false];
-    }
-
-
+    const LastInvoice: invoice | undefined = getInvoices_by_InvoiceConfig(LastInvoConfig.id);
     let newlastnumber: rangos;
 
-    if (!last) return ["ERROR", false];
-    if (!company_) return ["ERROR2", false];
+    if (!LastInvoConfig || !company_) { return ["ERROR", false] }
+    //this is to validate the date
+    const limitDate = new Date(LastInvoConfig.fechalimite);
+    if (limitDate.getTime() <= Date.now()) { return ["Over Date", false]; }
 
-    if (!LastInvoice ) {
-        newlastnumber = {
-            id: Date.now(),
-            numero_uno: last.referencia_facturas.numero_uno,
-            numero_dos: last.referencia_facturas.numero_dos,
-            numero_tres: last.referencia_facturas.numero_tres,
-            numero_cuatro: last.referencia_facturas.numero_cuatro + 1, // revisa esto según negocio
-            active: false
-        };
+
+    //console.log(LastInvoice)
+    if (!LastInvoice) {
+        newlastnumber = GenerateInvoiceNumber_Plane(LastInvoConfig);
     } else {
-        newlastnumber = GenerateInvoiceNumber(LastInvoice);
+        newlastnumber = GenerateInvoiceNumber(LastInvoice)
     }
 
     const item: invoice = {
         id: Date.now(),
-        id_invoice_config: last.id,
+        id_invoice_config: LastInvoConfig.id,
 
         formato_general: {
             RTN: company_.rtn,
-            encabezado: last.encabezado,
-            piehoja: last.piedehoja,
-            fecha_emision: new Date(),
-            id_company: last.id_company,
+            encabezado: LastInvoConfig.encabezado,
+            piehoja: LastInvoConfig.piedehoja,
+            fecha_emision: new Date(), // here is the error
+            id_company: LastInvoConfig.id_company,
             numero_de_factura: newlastnumber,
-            cai: last.cai.nombre,
+            cai: LastInvoConfig.cai.nombre,
             comprador: "Cliente Final",
             comprador_rtn: "0000-0000-00000"
         },
