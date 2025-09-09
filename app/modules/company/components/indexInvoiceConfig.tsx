@@ -7,9 +7,7 @@ import styles from "@/assets/styles/styles";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { company } from "@/storage/empresa";
 
-type companyparams = {
-    companyprops: company | undefined;
-}
+type companyparams = { companyprops: company | undefined; }
 
 const Index_invoice_company = ({ companyprops }: companyparams) => {
     const [CompanyParam, setCompanyParam] = useState<company>();
@@ -79,14 +77,14 @@ const Index_invoice_company = ({ companyprops }: companyparams) => {
                             <Text style={[styles.smallText, styles.textalingleft, { color: 'black', marginVertical: 0, fontWeight: 'bold' }]}>CAI : {item.cai.nombre}</Text>
                             <Text style={[styles.smallText, styles.textalingleft, { color: 'black', marginVertical: 0 }]}>Fecha Maxima : <Text style={[styles.smallText, styles.textalingleft, { color: 'black', marginVertical: 0, fontWeight: 'bold' }]}>{item.fechalimite.toString()}</Text></Text>
                             <Text style={[styles.smallText, styles.textalingleft, { color: 'black', marginVertical: 0 }]}>Rango Maximo : {item.numero_maximo}</Text>
-                            <Text style={[styles.smallText, styles.textalingleft, { color: 'black', marginVertical: 0 }]}>Rango inicial : {formatrefenciafactura(item.referencia_facturas)}</Text>
+                            <Text style={[styles.smallText, styles.textalingleft, { color: 'black', marginVertical: 0 }]}>Rango inicial : {item.referencia_bruta}</Text>
                             <Text style={[styles.smallText, styles.textalingleft, { color: item.active ? "green" : 'red', marginVertical: 0 }]}>{item.active ? "ACTIVO" : 'DESACTIVADO'}</Text>
                         </View>
                         <View style={{ alignContent: 'center' }}>
                             {
                                 SendtoEdit?.id === item.id && isCreating === true ?
-                                <Text style={[ styles.paragraph , {color : 'red', fontWeight : 'bold'}]}>ON EDIT</Text>
-                                :
+                                    <Text style={[styles.paragraph, { color: 'red', fontWeight: 'bold' }]}>ON EDIT</Text>
+                                    :
                                     <TouchableOpacity onPress={() => { setSendtoEdit(item), creating() }}>
                                         <Ionicons name={"create-outline"} size={30} color={"black"} />
                                     </TouchableOpacity>

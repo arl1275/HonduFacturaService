@@ -16,6 +16,8 @@ function EditlineFacturada({ _onCancel_, _onSave_, value }: props) {
         detalle: "",
         descuento: 0,
         precio: 0,
+        total : 0,
+        subtotal : 0,
     });
 
     const handleChange = (key: keyof lineafacturada, value: string) => {

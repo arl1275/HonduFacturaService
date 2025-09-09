@@ -17,6 +17,7 @@ type ForEditParams = {
 const InvoiceConfig = ({ parentprops, _onclose_, id_company }: ForEditParams) => {
     const [show, setShow] = useState(false);
     const [cais_, setcais] = useState<cais>({ id: Date.now(), nombre: "", active: true })
+    const [BruteNumber, setBruteNumber] = useState<string[]>(["", "", "", ""])
     const [rango, setRangos] = useState<rangos>({
         id: Date.now(),
         numero_uno: 0,
@@ -36,7 +37,7 @@ const InvoiceConfig = ({ parentprops, _onclose_, id_company }: ForEditParams) =>
 
     const [form, setForm] = useState<invoicesconfig>({
         id: Date.now(),
-        created_at : new Date(),
+        created_at: new Date(),
         id_company: id_company ? id_company : 0,
         encabezado: "",
         cai: cais_,
@@ -44,7 +45,7 @@ const InvoiceConfig = ({ parentprops, _onclose_, id_company }: ForEditParams) =>
         rangodefacturas: 0,
         numero_maximo: 0,
         piedehoja: "",
-        referencia_bruta : '',
+        referencia_bruta: '',
         referencia_facturas: rango,
         active: false,
     });
@@ -52,6 +53,15 @@ const InvoiceConfig = ({ parentprops, _onclose_, id_company }: ForEditParams) =>
     const handleInputChange = (field: string, value: string | number | boolean | rangos | cais) => {
         setForm({ ...form, [field]: value });
     };
+
+    const InsertBrute = (numberIndex: number, valor: string) => {
+        setBruteNumber(prev => {
+            const updated = [...prev];   // clonamos el array
+            updated[numberIndex] = valor; // reemplazamos el valor en la posición
+            return updated;             
+        });
+    };
+
 
     const handleFacturaRannge = (field: string, value: any) => {
         const num = parseInt(value);
@@ -65,12 +75,12 @@ const InvoiceConfig = ({ parentprops, _onclose_, id_company }: ForEditParams) =>
     const handleSave = () => {
         const finalForm: invoicesconfig = {
             ...form,
-            referencia_bruta : formated_invoice_number(rango),
+            referencia_bruta: BruteNumber[0] + "-" + BruteNumber[1] + "-" + BruteNumber[2] + "-" + BruteNumber[3],
             referencia_facturas: rango,
             cai: cais_
         };
 
-        if(finalForm.fechalimite < new Date()){ alert("Date seleccted not alowed"); return;}
+        if (finalForm.fechalimite < new Date()) { alert("Date seleccted not alowed"); return; }
 
         if (finalForm.cai.nombre != "" && finalForm.referencia_facturas.numero_cuatro != 0) {
             if (parentprops) {
@@ -125,7 +135,7 @@ const InvoiceConfig = ({ parentprops, _onclose_, id_company }: ForEditParams) =>
                 <View style={[{ borderBottomWidth: 1, borderBlockColor: '#e5e7e9', marginTop: 5, marginBottom: 5 }]} />
 
                 <TextInput
-                    value={parentprops && cais_.nombre }
+                    value={parentprops && cais_.nombre}
                     placeholder={parentprops ? form.cai.nombre : "Ingrese CAI"} style={[styles.textinput]}
                     multiline={true}
                     onChangeText={(val) => setcais(prev => ({ ...prev, nombre: val.toString() }))}
@@ -139,44 +149,47 @@ const InvoiceConfig = ({ parentprops, _onclose_, id_company }: ForEditParams) =>
                         value={parentprops && rango.numero_uno.toString()}
                         placeholder={parentprops ? form.referencia_facturas.numero_uno.toString() : "Numero 1"}
                         keyboardType="numeric" style={[styles.textinput, { margin: 0, width: '23%' }]}
-                        onChangeText={(val) => handleFacturaRannge("numero_uno", val)}
+                        onChangeText={(val) => {
+                            handleFacturaRannge("numero_uno", val)
+                            InsertBrute(0, val);
+                        }}
                     />
 
                     <TextInput
                         value={parentprops && rango.numero_dos.toString()}
                         placeholder={parentprops ? form.referencia_facturas.numero_dos.toString() : "Numero 2"}
                         keyboardType="numeric" style={[styles.textinput, { margin: 0, width: '23%' }]}
-                        onChangeText={(val) => handleFacturaRannge("numero_dos", val)}
+                        onChangeText={(val) =>{ handleFacturaRannge("numero_dos", val); InsertBrute(1, val);}}
                     />
 
                     <TextInput
                         value={parentprops && rango.numero_tres.toString()}
                         placeholder={parentprops ? form.referencia_facturas.numero_tres.toString() : "Numero 3"}
                         keyboardType="numeric" style={[styles.textinput, { margin: 0, width: '23%' }]}
-                        onChangeText={(val) => handleFacturaRannge("numero_tres", val)}
+                        onChangeText={(val) =>{ handleFacturaRannge("numero_tres", val); InsertBrute(2, val);}}
                     />
 
                     <TextInput
                         value={parentprops && rango.numero_cuatro.toString()}
                         placeholder={parentprops ? form.referencia_facturas.numero_cuatro.toString() : "Numero 4"}
                         keyboardType="numeric" style={[styles.textinput, { margin: 0, width: '23%' }]}
-                        onChangeText={(val) => handleFacturaRannge("numero_cuatro", val)}
+                        onChangeText={(val) =>{ handleFacturaRannge("numero_cuatro", val); InsertBrute(3, val);}}
                     />
 
                 </View>
 
 
                 <View style={[{ borderBottomWidth: 1, borderBlockColor: '#e5e7e9', marginTop: 5, marginBottom: 5 }]} />
-                <TextInput 
-                    placeholder={parentprops ? form.numero_maximo.toString() : "Cantidad maxima de factura"} 
-                    keyboardType="numeric" style={styles.textinput} 
-                    onChangeText={(val: string) => handleInputChange("numero_maximo", parseInt(val))} 
+                <TextInput
+                    placeholder={parentprops ? form.numero_maximo.toString() : "Cantidad maxima de factura"}
+                    keyboardType="numeric" style={styles.textinput}
+                    onChangeText={(val: string) => handleInputChange("numero_maximo", parseInt(val))}
                 />
 
-                <TextInput 
-                    placeholder={parentprops ? parentprops.piedehoja : 'Ingrese pie de la factura'} 
-                    style={styles.textinput} 
-                    onChangeText={(val) => handleInputChange("piedehoja", val)} 
+                <TextInput
+                    placeholder={parentprops ? parentprops.piedehoja : 'Ingrese pie de la factura'}
+                    style={styles.textinput}
+                    onChangeText={(val) => handleInputChange("piedehoja", val)}
                 />
 
                 <View style={[{ borderBottomWidth: 1, borderBlockColor: '#e5e7e9', marginTop: 5 }]} />
