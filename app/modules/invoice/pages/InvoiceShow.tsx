@@ -11,6 +11,7 @@ import { getInvoicesconfig_by_id } from "@/storage/invoiceconfig.storage";
 import { company } from "@/storage/empresa";
 import { updateInvoiceById, addinvoice } from "@/storage/invoices.storage";
 import Preparation_CREDIT_NOTE from "../utils/Credit_Note_Generator"; // this function is to create a credit note
+import formaterInvoiceNumberView from "../utils/invoiceNumberFormatterView";
 
 type props = StackScreenProps<RootStackParamList, "InvoiceShow">
 
@@ -95,7 +96,7 @@ const InvoiceShowPage = ({ route, navigation }: props) => {
                 </TouchableOpacity>
                 <Text style={[styles.paragraph, { color: 'black' }]}>
                     {!_invoice_?.status.creditnote.done ? "Invoice number" : "Credit note number"}
-                    ({_invoice_ ? formated_invoice_number(_invoice_.formato_general.numero_de_factura) : 'N/A'})</Text>
+                    ({_invoice_ ? formaterInvoiceNumberView(_invoice_) : 'N/A'})</Text>
             </View>
 
             <View style={[styles.flexcomponentsRow, { width: '95%', justifyContent: 'space-between' }]}>

@@ -12,6 +12,7 @@ import { RootStackParamList } from "../indexInvoice";
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { getCurrent_by_company_id} from "@/storage/invoiceconfig.storage";
+import formaterInvoiceNumberView from "../utils/invoiceNumberFormatterView";
 
 type InvoiceNavigator = StackNavigationProp<RootStackParamList, "HomeInvoice">
 
@@ -169,7 +170,7 @@ const InvoiceHome = () => {
                                 backgroundColor: onSelectedInvoice ? (onSelectedInvoice.id === item.id ? "#57534D" : "white") : "white"
                             }]}>
                                 {/* <Text style={{ color : onSelectedInvoice ? (onSelectedInvoice.id === item.id ? "white" : "none") : "none", flex: 2, textAlign: 'right' }}>{item.id} // </Text> */}
-                                <Text style={{ color : onSelectedInvoice ? (onSelectedInvoice.id === item.id ? "white" : "none") : "none", flex: 3 }}>{formated_invoice_number(item.formato_general.numero_de_factura)}</Text>
+                                <Text style={{ color : onSelectedInvoice ? (onSelectedInvoice.id === item.id ? "white" : "none") : "none", flex: 3 }}>{formaterInvoiceNumberView(item)}</Text>
                                 <Text style={{ color : onSelectedInvoice ? (onSelectedInvoice.id === item.id ? "white" : "none") : "none", flex: 2, textAlign: 'right' }}>{item.status.draft ? "DRAFT" : item.status.creditnote.done ? "CREDIT NOTE" : 'INVOICE'}</Text>
                                 <Text style={{ color : onSelectedInvoice ? (onSelectedInvoice.id === item.id ? "white" : "none") : "none", flex: 2, textAlign: 'right' }}>{item.total}</Text>
                                 <Text style={{ color : onSelectedInvoice ? (onSelectedInvoice.id === item.id ? "white" : "none") : "none", flex: 2, textAlign: 'right' }}>{item.formato_general.comprador}</Text>

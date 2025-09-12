@@ -3,7 +3,7 @@ import { invoicesconfig } from "@/storage/invoice";
 import { getCurrent_by_company_id } from "@/storage/invoiceconfig.storage";
 //import { getCompany_by_ID } from "@/storage/company.storage";
 import { company } from "@/storage/empresa";
-import { get_last_invoice_by_company, getInvoices_by_InvoiceConfig } from "@/storage/invoices.storage";
+import { getInvoices_by_InvoiceConfig } from "@/storage/invoices.storage";
 
 //----------------------------------------------------------------------------------------------------//
 // GENERATE THE INVOICE NUMBERS

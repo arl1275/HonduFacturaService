@@ -20,7 +20,8 @@ function formaterInvoiceNumberView(invo : invoice){
     ];
 
     for(let i = 0; i < ResultSplitted.length; i++ ){
-        Result.push(formaterNumberbyNumber(ResultSplitted[i], ValoresInvoice[i].toString()));
+        let lineExtra = i === 3 ? "" : "—" 
+        Result.push(formaterNumberbyNumber(ResultSplitted[i], ValoresInvoice[i].toString()) + lineExtra);
     }
 
     return Result;

@@ -19,6 +19,7 @@ import { formated_invoice_number } from "../utils/InvoiceNumberGenerator";
 import { impuesto } from "@/storage/empresa";
 
 import PickerTaxInvoice from "../modals/defTaxModal";
+import formaterInvoiceNumberView from "../utils/invoiceNumberFormatterView";
 
 type props = StackScreenProps<RootStackParamList, "InvoiceGen">
 
@@ -245,7 +246,7 @@ const InvoiceGen = ({ route, navigation }: props) => {
             </View>
 
             <View style={{ marginLeft: 20, marginRight: 20 }}>
-                <Text style={[styles.paragraph, styles.textalingleft, {color : 'black'}]}>{formated_invoice_number(_invoice_?.formato_general.numero_de_factura)}</Text>
+                <Text style={[styles.paragraph, styles.textalingleft, {color : 'black'}]}>{_invoice_ ? formaterInvoiceNumberView(_invoice_) : "non formater"}</Text>
             </View>
 
             <View>

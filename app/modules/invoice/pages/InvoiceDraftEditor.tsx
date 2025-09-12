@@ -10,6 +10,7 @@ import { getCompany_by_ID } from "@/storage/company.storage";
 import { getInvoicesconfig_by_id } from "@/storage/invoiceconfig.storage";
 import { company } from "@/storage/empresa";
 import { updateInvoiceById, DraftToInvoice } from "@/storage/invoices.storage";
+import formaterInvoiceNumberView from "../utils/invoiceNumberFormatterView";
 
 type props = StackScreenProps<RootStackParamList, "InvoiceDraft">;
 
@@ -95,7 +96,7 @@ const InvoiceSDrafrEditor = ({ route, navigation }: props) => {
     }, [invoiceLines]);
 
     const updateInvoiceDRAFT = (type: string) => {
-        console.log("OBJECT TOTAL::: ", result.total, "||    OBJECT SUBTOTAL::: ", result.subtotal);
+        //console.log("OBJECT TOTAL::: ", result.total, "||    OBJECT SUBTOTAL::: ", result.subtotal);
 
         if (!_invoice_) return;
         const updatedInvoice: invoice = {
@@ -133,7 +134,7 @@ const InvoiceSDrafrEditor = ({ route, navigation }: props) => {
                     <Ionicons name="chevron-back" size={30} color="black" />
                 </TouchableOpacity>
                 <Text style={[styles.paragraph, styles.textalingleft, { color: "black" }]}>
-                    Invoice Number DRAFT ( {_invoice_ ? formated_invoice_number(_invoice_.formato_general.numero_de_factura) : "N/A"} )
+                    Invoice Number DRAFT ( {_invoice_ ? formaterInvoiceNumberView(_invoice_) : "N/A"} )
                 </Text>
             </View>
 
@@ -274,7 +275,7 @@ const InvoiceSDrafrEditor = ({ route, navigation }: props) => {
 
                         <View style={[styles.flexcomponentsRow, { margin: 0, padding: 0, justifyContent: "space-between" }]}>
                             <Text>Rango de emision: </Text>
-                            <Text>{formated_invoice_number(invoc?.referencia_facturas)} hasta {formated_invoice_number_maximum(invoc?.referencia_facturas, invoc?.numero_maximo)}</Text>
+                            <Text>{_invoice_ ? formaterInvoiceNumberView(_invoice_) : 'non formated'} hasta {formated_invoice_number_maximum(invoc?.referencia_facturas, invoc?.numero_maximo)}</Text>
                         </View>
 
                         <View style={[styles.flexcomponentsRow, { margin: 0, padding: 0, justifyContent: "space-between" }]}>
