@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Button, FlatList, Alert, Modal } from "react-native";
-import { invoice, lineafacturada } from "@/storage/invoice";
+import { invoice, lineafacturada } from "@/storage/modals/invoice";
 import { addinvoice, saveinvoices } from "@/storage/invoices.storage";
 import PreparationInvoice from "../utils/invoice_preparation";
 
@@ -16,7 +16,7 @@ import CreateLineInvoice from "../components/CreateLineComponent";
 import LineFlatlist from "../components/flatlist_line_component";
 
 import { formated_invoice_number } from "../utils/InvoiceNumberGenerator";
-import { impuesto } from "@/storage/empresa";
+import { impuesto } from "@/storage/modals/empresa";
 
 import PickerTaxInvoice from "../modals/defTaxModal";
 import formaterInvoiceNumberView from "../utils/invoiceNumberFormatterView";

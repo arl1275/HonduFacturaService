@@ -1,6 +1,6 @@
 // storage/invoicesconfigStorage.ts
 import { MMKV } from 'react-native-mmkv';
-import { invoicesconfig } from './invoice';
+import { invoicesconfig } from './modals/invoice';
 
 const storage = new MMKV();
 const STORAGE_KEY = 'invoices_config';

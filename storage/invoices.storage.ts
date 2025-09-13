@@ -1,5 +1,5 @@
 import { MMKV } from "react-native-mmkv";
-import { invoice } from "./invoice";
+import { invoice } from "./modals/invoice";
 
 const storage = new MMKV();
 const invoice_KEY = "invoices";

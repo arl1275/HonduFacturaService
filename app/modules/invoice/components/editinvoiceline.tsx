@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { lineafacturada } from "@/storage/invoice";
+import { lineafacturada } from "@/storage/modals/invoice";
 import { View } from "react-native";
 
 type props = {

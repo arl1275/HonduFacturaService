@@ -1,8 +1,8 @@
-import { invoice, rangos } from "@/storage/invoice";
-import { invoicesconfig } from "@/storage/invoice";
+import { invoice, rangos } from "@/storage/modals/invoice";
+import { invoicesconfig } from "@/storage/modals/invoice";
 import { getCurrent_by_company_id } from "@/storage/invoiceconfig.storage";
 //import { getCompany_by_ID } from "@/storage/company.storage";
-import { company } from "@/storage/empresa";
+import { company } from "@/storage/modals/empresa";
 import { getInvoices_by_InvoiceConfig } from "@/storage/invoices.storage";
 
 //----------------------------------------------------------------------------------------------------//

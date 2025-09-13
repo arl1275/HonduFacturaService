@@ -2,9 +2,9 @@ import { View, Text, Button, FlatList, TouchableOpacity, Alert, TextInput } from
 import styles from "@/assets/styles/styles";
 import { Picker } from '@react-native-picker/picker';
 import { getCompanies } from "@/storage/company.storage";
-import { company } from "@/storage/empresa";
+import { company } from "@/storage/modals/empresa";
 import React, { useEffect, useState } from "react";
-import { invoice } from "@/storage/invoice";
+import { invoice } from "@/storage/modals/invoice";
 import { getInvoices_by_company, getInvoices_by_InvoiceConfig } from "@/storage/invoices.storage";
 import { formated_invoice_number } from "../utils/InvoiceNumberGenerator";
 // router imports 

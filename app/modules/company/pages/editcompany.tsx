@@ -8,7 +8,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { updatecompany } from '@/storage/company.storage';
 import Index_invoice_company from '../components/indexInvoiceConfig';
 
-import { company, impuesto } from '@/storage/empresa';
+import { company, impuesto } from '@/storage/modals/empresa';
 import ModalCreateImpuesto from '../modals/CrearImpuesto';
 import ModalEditImpuesto from '../modals/EditImpuesto';
 
@@ -78,7 +78,7 @@ export default function EditCompanyPage({ route, navigation }: Props) {
         {
           text: "YEX",
           onPress: () => {
-            const UpdateArrayTax: impuesto[] = item.impuestos.filter(imp => imp.id != DeleteTax.id);
+            const UpdateArrayTax: impuesto[] = item.impuestos.filter((imp: { id: number; }) => imp.id != DeleteTax.id);
             valuesEditing("impuestos", UpdateArrayTax);
             //onSaveTAxes('The value has been deleted.')
           }

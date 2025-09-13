@@ -1,5 +1,5 @@
 import { View, Text, Button, Animated, FlatList, TouchableOpacity, Alert } from "react-native";
-import { invoicesconfig } from "@/storage/invoice";
+import { invoicesconfig } from "@/storage/modals/invoice";
 import { getInvoicesconfig_by_companyid } from "@/storage/invoiceconfig.storage";
 import { useEffect, useState, useRef } from "react";
 import InvoiceConfig from "./Invoiceconfig";

@@ -1,9 +1,9 @@
 import { TouchableOpacity, Text } from "react-native";
 import { createStackNavigator } from '@react-navigation/stack';
-import { company } from "@/storage/empresa";
+import { company } from "@/storage/modals/empresa";
 import InvoiceHome from "./pages/HomeInvoicepage";
 import InvoiceGen from "./pages/InvoiceGen";
-import { invoice, invoicesconfig } from "@/storage/invoice";
+import { invoice, invoicesconfig } from "@/storage/modals/invoice";
 import InvoiceDraftEditorPage from "./pages/InvoiceDraftEditor";
 import InvoiceShowPage from "./pages/InvoiceShow";
 

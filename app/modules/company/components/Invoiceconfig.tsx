@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, TextInput, Switch, Button, Platform } from "react-native";
 import React from "react";
-import { invoicesconfig, rangos } from "@/storage/invoice";
+import { invoicesconfig, rangos } from "@/storage/modals/invoice";
 import { addInvoiceconfig, updateInvoicesconfig } from "@/storage/invoiceconfig.storage";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import styles from "@/assets/styles/styles";

@@ -1,4 +1,4 @@
-import { invoicesconfig, invoice } from "@/storage/invoice";
+import { invoicesconfig, invoice } from "@/storage/modals/invoice";
 import { getInvoicesconfig_by_id } from "@/storage/invoiceconfig.storage";
 
 function formaterNumberbyNumber(bruto :string, valor : string){

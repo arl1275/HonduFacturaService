@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { impuesto } from "@/storage/empresa";
+import { impuesto } from "@/storage/modals/empresa";
 import { View, Text, FlatList, TouchableOpacity } from "react-native";
 import styles from "@/assets/styles/styles";
 

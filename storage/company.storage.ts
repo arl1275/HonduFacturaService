@@ -1,5 +1,5 @@
 import { MMKV } from 'react-native-mmkv';
-import { company } from './empresa';
+import { company } from './modals/empresa';
 
 const storage = new MMKV();
 const STORAGE_KEY = 'companies';

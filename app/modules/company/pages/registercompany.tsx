@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TextInput, Button, Text, ScrollView, View, Image, Alert, TouchableOpacity } from 'react-native';
-import { company } from '@/storage/empresa';
+import { company } from '@/storage/modals/empresa';
 import styles from "@/assets/styles/styles";
 import { addcompany } from '@/storage/company.storage';
 import * as ImagePicker from 'expo-image-picker';

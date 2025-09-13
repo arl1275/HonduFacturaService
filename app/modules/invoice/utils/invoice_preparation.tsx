@@ -1,5 +1,5 @@
-import { company, impuesto } from "@/storage/empresa";
-import { invoice, invoicesconfig, lineafacturada } from "@/storage/invoice";
+import { company, impuesto } from "@/storage/modals/empresa";
+import { invoice, invoicesconfig, lineafacturada } from "@/storage/modals/invoice";
 import { getInvoicesconfig_by_id } from "@/storage/invoiceconfig.storage";
 
 function PreparationInvoice(

@@ -1,6 +1,6 @@
-import { invoice, invoicesconfig, lineafacturada, rangos } from "@/storage/invoice";
+import { invoice, invoicesconfig, rangos } from "@/storage/modals/invoice";
 import { getCurrent_by_company_id } from "@/storage/invoiceconfig.storage";
-import { get_last_invoice_by_company, getInvoices_by_InvoiceConfig } from "@/storage/invoices.storage";
+import { getInvoices_by_InvoiceConfig } from "@/storage/invoices.storage";
 //import { formated_invoice_number } from "./InvoiceNumberGenerator";
 
 function Preparation_CREDIT_NOTE(_invoice_: invoice,) {

@@ -2,13 +2,13 @@ import { StackScreenProps } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
 import { TouchableOpacity, View, Text, Button, FlatList, Alert } from "react-native";
 import { RootStackParamList } from "../indexInvoice";
-import { invoice, invoicesconfig, lineafacturada } from "@/storage/invoice";
+import { invoice, invoicesconfig, lineafacturada } from "@/storage/modals/invoice";
 import styles from "@/assets/styles/styles";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { formated_invoice_number, formated_invoice_number_maximum, formated_date_ } from "../utils/InvoiceNumberGenerator";
 import { getCompany_by_ID } from "@/storage/company.storage";
 import { getInvoicesconfig_by_id } from "@/storage/invoiceconfig.storage";
-import { company } from "@/storage/empresa";
+import { company } from "@/storage/modals/empresa";
 import { updateInvoiceById, addinvoice } from "@/storage/invoices.storage";
 import Preparation_CREDIT_NOTE from "../utils/Credit_Note_Generator"; // this function is to create a credit note
 import formaterInvoiceNumberView from "../utils/invoiceNumberFormatterView";

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal, View, TextInput, Text, Button } from "react-native";
-import { lineafacturada } from "@/storage/invoice";
+import { lineafacturada } from "@/storage/modals/invoice";
 import styles from "@/assets/styles/styles";
 
 type props = {

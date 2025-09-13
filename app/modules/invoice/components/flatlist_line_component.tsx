@@ -1,5 +1,5 @@
 import styles from "@/assets/styles/styles";
-import { lineafacturada } from "@/storage/invoice";
+import { lineafacturada } from "@/storage/modals/invoice";
 import React from "react";
 import { View, Text, TouchableOpacity} from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";

@@ -7,7 +7,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import styles from "@/assets/styles/styles";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useEffect, useState } from "react";
-import { company } from "@/storage/empresa";
+import { company } from "@/storage/modals/empresa";
 
 type HomeCompanyNavigationProp = StackNavigationProp<RootStackParamList, 'HomeCompany'>;
 

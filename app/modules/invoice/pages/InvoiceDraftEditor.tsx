@@ -2,13 +2,13 @@ import { StackScreenProps } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
 import { TouchableOpacity, View, Text, Button, FlatList, TextInput, Alert, ScrollView } from "react-native";
 import { RootStackParamList } from "../indexInvoice";
-import { invoice, invoicesconfig, lineafacturada } from "@/storage/invoice";
+import { invoice, invoicesconfig, lineafacturada } from "@/storage/modals/invoice";
 import styles from "@/assets/styles/styles";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { formated_invoice_number, formated_invoice_number_maximum, formated_date_ } from "../utils/InvoiceNumberGenerator";
 import { getCompany_by_ID } from "@/storage/company.storage";
 import { getInvoicesconfig_by_id } from "@/storage/invoiceconfig.storage";
-import { company } from "@/storage/empresa";
+import { company } from "@/storage/modals/empresa";
 import { updateInvoiceById, DraftToInvoice } from "@/storage/invoices.storage";
 import formaterInvoiceNumberView from "../utils/invoiceNumberFormatterView";
 
@@ -96,8 +96,6 @@ const InvoiceSDrafrEditor = ({ route, navigation }: props) => {
     }, [invoiceLines]);
 
     const updateInvoiceDRAFT = (type: string) => {
-        //console.log("OBJECT TOTAL::: ", result.total, "||    OBJECT SUBTOTAL::: ", result.subtotal);
-
         if (!_invoice_) return;
         const updatedInvoice: invoice = {
             ..._invoice_,
@@ -129,7 +127,7 @@ const InvoiceSDrafrEditor = ({ route, navigation }: props) => {
 
     return (
         <View style={[{ flex: 1 }]}>
-            <View style={[styles.flexcomponentsRow, { margin: 5, alignItems : 'center' }]}>
+            <View style={[styles.flexcomponentsRow, { margin: 5, alignItems: 'center' }]}>
                 <TouchableOpacity onPress={() => oncancel()}>
                     <Ionicons name="chevron-back" size={30} color="black" />
                 </TouchableOpacity>
