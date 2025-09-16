@@ -1,13 +1,10 @@
-import { TouchableOpacity, Text } from "react-native";
-//import ModuleSubbutton from "@/components/SubModuleButton"
 import { createStackNavigator } from '@react-navigation/stack';
-//import { NavigationContainer } from '@react-navigation/native';
 
 // pages 
 import RegisterCompany from "./pages/registercompany";
 import HomeCompany from "./pages/home";
 import EditCompanyPage from "./pages/editcompany";
-import { company } from "@/storage/empresa";
+import { company } from "@/storage/modals/empresa";
 
 const Stack = createStackNavigator<RootStackParamList>();
 
