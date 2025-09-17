@@ -1,19 +1,18 @@
 import { createStackNavigator } from '@react-navigation/stack';
+import InvoiceHome from '../invoice/pages/HomeInvoicepage';
 
-const Stack = createStackNavigator<RootStackParamList>();
-
-export type RootStackParamList = {
-    HomeInventory: undefined;
-    SettingsInventory: undefined;
-    Inventory: undefined;
+export type StackParamList = {
+  HomeInventory: undefined;
 };
 
-const IndexInventory = () => {
-    return (
-        <Stack.Navigator initialRouteName="HomeInventory" screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="HomeInventory" component={}/>
-        </Stack.Navigator>
+const InventoryStack = createStackNavigator<StackParamList>();
 
-    )
-}
+const IndexInventory = () => {
+  return (
+    <InventoryStack.Navigator initialRouteName="HomeInventory" screenOptions={{ headerShown: false }}>
+      <InventoryStack.Screen name="HomeInventory" component={InvoiceHome}/>
+    </InventoryStack.Navigator>
+  );
+};
+
 export default IndexInventory;
