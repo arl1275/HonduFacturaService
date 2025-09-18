@@ -1,4 +1,4 @@
-export type product={
+export interface product{
     id: number,
     created_at : Date,
     name : string, 
@@ -20,7 +20,7 @@ export type product={
     block_edit : boolean
 }
 
-export type inventoryWH={
+export interface inventoryWH{
     id : number,
     created_at : Date,
     active : boolean,

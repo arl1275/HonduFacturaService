@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import InvoButton from "../components/buttons";
 
-const Homeinvoice = () =>{
+const HomeInventory = () =>{
     
     return(
         <View style={[{flex : 1, margin : 10}]}>
@@ -13,4 +13,4 @@ const Homeinvoice = () =>{
     )
 }
 
-export default Homeinvoice;
+export default HomeInventory;

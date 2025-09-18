@@ -1,5 +1,5 @@
 import { createStackNavigator } from '@react-navigation/stack';
-import InvoiceHome from '../invoice/pages/HomeInvoicepage';
+import HomeInventory from './pages/homeinventory';
 
 export type StackParamList = {
   HomeInventory: undefined;
@@ -10,7 +10,7 @@ const InventoryStack = createStackNavigator<StackParamList>();
 const IndexInventory = () => {
   return (
     <InventoryStack.Navigator initialRouteName="HomeInventory" screenOptions={{ headerShown: false }}>
-      <InventoryStack.Screen name="HomeInventory" component={InvoiceHome}/>
+      <InventoryStack.Screen name="HomeInventory" component={HomeInventory}/>
     </InventoryStack.Navigator>
   );
 };
