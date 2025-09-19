@@ -22,6 +22,7 @@ export interface product{
 
 export interface inventoryWH{
     id : number,
+    id_company : number,
     created_at : Date,
     active : boolean,
     name : string, 

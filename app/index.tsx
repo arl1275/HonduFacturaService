@@ -69,7 +69,6 @@ export default function App() {
       <Tab.Screen name="Inicio" component={HomeScreen} />
       <Tab.Screen name="Invoices" component={IndexInvoice} options={({ route }) => hideTabBarOnSubRoutes(route, "HomeInvoice", ["InvoiceGen", "InvoiceShow", "InvoiceDraft"])}  />
       <Tab.Screen name="Company" component={IndexCompany} options={({ route }) => hideTabBarOnSubRoutes(route, "HomeCompany", ["Settings", "Editpage"])} />
-
     </Tab.Navigator>
   );
 }
