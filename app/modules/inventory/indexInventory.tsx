@@ -1,5 +1,6 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeInventory from './pages/homeinventory';
+import HomePage from '@/app/_layoutHome';
 
 export type StackParamList = {
   HomeInventory: undefined;

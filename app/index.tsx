@@ -1,7 +1,8 @@
-import { NavigationContainer } from '@react-navigation/native';
+//import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Text, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import HomePage from './_layoutHome';
 
 // IMPORTS OF SCREENS
 import IndexInvoice from './modules/invoice/indexInvoice';
@@ -28,7 +29,7 @@ const Tab = createBottomTabNavigator();
 
 const HomeScreen = () => {
   return (
-    <Text>Hola</Text>
+    <HomePage />
   )
 }
 

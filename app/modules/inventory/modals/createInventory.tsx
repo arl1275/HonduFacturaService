@@ -1,10 +1,12 @@
 import { View, Modal, TextInput, Text, TouchableOpacity, Alert } from "react-native";
 import styles from "@/assets/styles/styles";
 import { inventoryWH } from "@/storage/modals/inventory";
-import { useState } from "react";
-import { Icon } from "react-native-vector-icons/Icon";
+import { useState, useEffect } from "react";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import { Switch } from "react-native";
 import { Picker } from '@react-native-picker/picker';
+import { company } from "@/storage/modals/empresa";
+import { getCompanies } from "@/storage/company.storage";
 
 type props = {
     OpenModal: () => boolean;
@@ -12,6 +14,8 @@ type props = {
 }
 
 const ModalCreateInvoiceWH = ({ OpenModal, OnDelete }: props) => {
+    const [item, setSelectedValue] = useState<company | undefined>();
+    const [SelectedList, setSelectedList] = useState<company[]>([]);
     const [NewInventory, setNewInventory] = useState<inventoryWH>({
         id: Date.now(),
         id_company: 0,
@@ -26,6 +30,8 @@ const ModalCreateInvoiceWH = ({ OpenModal, OnDelete }: props) => {
         ubication: "",
         block_edit: false
     });
+
+    const UpdateList = () => { setSelectedList(getCompanies()) }
 
     const updateInventory = (value: string, valueitem: string | number | boolean) => {
         setNewInventory((prev) => ({ ...prev, [value]: valueitem }));
@@ -51,6 +57,10 @@ const ModalCreateInvoiceWH = ({ OpenModal, OnDelete }: props) => {
         }
     }
 
+    useEffect(() => {
+        UpdateList();
+    }, [SelectedList])
+
     const _onSave_ = () => {
         if (NewInventory.name != "", NewInventory.code != "", NewInventory.ubication != "") {
             //
@@ -65,16 +75,15 @@ const ModalCreateInvoiceWH = ({ OpenModal, OnDelete }: props) => {
                 <View style={[styles.flexcomponentsRow, {}]}>
                     <Text style={[styles.paragraph, { color: 'black', fontWeight: 'bold' }]}>Create new Inventory</Text>
                     <View style={[{ margin: 10, marginLeft: 20 }]}>
-                        <Icon name={"delete"} size={40} color="white" onPress={OnDelete} />
+                        <Ionicons name="chevron-back" size={30} color="black" onPress={OnDelete} />
                     </View>
                 </View>
 
-                {/* <Picker
+                <Picker
                     selectedValue={item?.rtn ?? "Select a Company"}
                     onValueChange={(itemValue) => {
                         if (itemValue === "Select a Company") {
                             setSelectedValue(undefined);
-                            setListInvoices([])
                         } else {
                             const selectedCompany = SelectedList.find(company => company.rtn === itemValue);
                             setSelectedValue(selectedCompany);
@@ -88,7 +97,7 @@ const ModalCreateInvoiceWH = ({ OpenModal, OnDelete }: props) => {
                             <Picker.Item label={company.companyname} value={company.rtn} key={company.rtn} />
                         ))
                     }
-                </Picker> */}
+                </Picker>
 
                 <TextInput placeholder="Insert Name" onChangeText={(e) => updateInventory("name", e)} />
                 <TextInput placeholder="Insert Ubication" onChangeText={(e) => updateInventory("ubication", e)} />
