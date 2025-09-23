@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, TextInput, Text, TouchableOpacity, Switch, Alert } from "react-native";
-import { impuesto } from "@/storage/empresa";
+import { impuesto } from "@/storage/modals/empresa";
 import styles from "@/assets/styles/styles";
 import { Button } from "@react-navigation/elements";
 import Ionicons from "react-native-vector-icons/Ionicons";

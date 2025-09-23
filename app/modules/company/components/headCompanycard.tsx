@@ -1,14 +1,16 @@
 import { View, Text } from "react-native";
 import { FC, useState } from "react";
-import { company } from "@/storage/empresa";
+import { company } from "@/storage/modals/empresa";
 import { updatecompany } from "@/storage/company.storage";
 import styles from "@/assets/styles/styles";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import CircularImage from "./image";
 
-type Props = {
-    value: company,
-}
+//-----------------------------------------------------------------------------------------------------//
+//  THIS FILE IS THE HOMEPAGE
+//-----------------------------------------------------------------------------------------------------//
+
+type Props = { value: company}
 
 const Homecardcompany: FC<Props> = (props) => {
     return (

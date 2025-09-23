@@ -27,25 +27,14 @@ export const hideTabBarOnSubRoutes = (
 
 const Tab = createBottomTabNavigator();
 
-const HomeScreen = () => {
-  return (
-    <HomePage />
-  )
-}
-
-
 export default function App() {
   const visibleRoutes = ['Inicio', 'Invoices', 'Company'];
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-
+        
         tabBarStyle: visibleRoutes.includes(route.name)
-          ? {
-            margin: 10,
-            borderRadius: 50,
-            elevation: 10,
-          }
+          ? { margin: 0, borderRadius: 5, elevation: 0}
           : { display: 'none' },
 
         headerShown: false,
@@ -61,13 +50,17 @@ export default function App() {
             iconName = focused ? 'settings-sharp' : 'settings-sharp';
           }
 
-          return <Ionicons name={iconName} size={size} color={color} />;
+          return(
+            <View>
+              <Ionicons name={iconName} size={size} color={color} />
+            </View>
+          ) ;
         },
         tabBarActiveTintColor: 'black',
-        tabBarInactiveTintColor: 'gray',
+        tabBarInactiveTintColor: 'gray',    
       })}
     >
-      <Tab.Screen name="Inicio" component={HomeScreen} />
+      <Tab.Screen name="Inicio" component={HomePage} />
       <Tab.Screen name="Invoices" component={IndexInvoice} options={({ route }) => hideTabBarOnSubRoutes(route, "HomeInvoice", ["InvoiceGen", "InvoiceShow", "InvoiceDraft"])}  />
       <Tab.Screen name="Company" component={IndexCompany} options={({ route }) => hideTabBarOnSubRoutes(route, "HomeCompany", ["Settings", "Editpage"])} />
     </Tab.Navigator>

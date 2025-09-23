@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { View, TextInput, Text, TouchableOpacity, Switch, Alert } from "react-native";
-import { impuesto } from "@/storage/empresa";
+import { impuesto } from "@/storage/modals/empresa";
 import styles from "@/assets/styles/styles";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { Button } from "@react-navigation/elements";
+//import { Button } from "@react-navigation/elements";
 
 type props = {
     item: impuesto | undefined,

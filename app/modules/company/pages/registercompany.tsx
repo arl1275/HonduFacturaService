@@ -11,6 +11,9 @@ import { useNavigation } from '@react-navigation/native';
 
 type HomeCompanyNavigationProp = StackNavigationProp<RootStackParamList, 'HomeCompany'>;
 
+//-----------------------------------------------------------------------------------------------------//
+//  THIS FILE IS TO CREATE A COMPANY
+//-----------------------------------------------------------------------------------------------------//
 
 export default function RegisterCompany() {
   const navigation = useNavigation<HomeCompanyNavigationProp>();

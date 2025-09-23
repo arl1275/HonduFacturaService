@@ -18,6 +18,7 @@ const PickerTaxInvoice = ({ taxes, SendSelected, On_Close }: props) => {
 
     return (
         <View style={[{borderRadius : 7, width : '100%', backgroundColor : 'white'}]}>
+            
             <Text style={[styles.paragraph, {color : 'black', fontWeight : 'bold', margin : 10}]}>SELECT A TAX TO APPLY</Text>
             <View>
                 <FlatList

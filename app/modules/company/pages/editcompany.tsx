@@ -14,6 +14,10 @@ import ModalEditImpuesto from '../modals/EditImpuesto';
 
 type Props = StackScreenProps<RootStackParamList, 'Editpage'>;
 
+//-----------------------------------------------------------------------------------------------------//
+//  THIS FILE IS TO EDIT A COMPANY
+//-----------------------------------------------------------------------------------------------------//
+
 export default function EditCompanyPage({ route, navigation }: Props) {
   const { item } = route.params;
   const [isEditing, setIsEditing] = useState<boolean>(false);

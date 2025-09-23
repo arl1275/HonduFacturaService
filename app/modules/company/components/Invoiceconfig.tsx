@@ -4,9 +4,12 @@ import { invoicesconfig, rangos } from "@/storage/modals/invoice";
 import { addInvoiceconfig, updateInvoicesconfig } from "@/storage/invoiceconfig.storage";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import styles from "@/assets/styles/styles";
-import { cais } from "@/storage/empresa";
+import { cais } from "@/storage/modals/empresa";
 import { useState, useEffect } from "react";
-import { formated_invoice_number } from "../../invoice/utils/InvoiceNumberGenerator";
+
+//-----------------------------------------------------------------------------------------------------//
+//  THIS FILE IS TO EDIT AN INVOICE CONFIG
+//-----------------------------------------------------------------------------------------------------//
 
 type ForEditParams = {
     id_company: number | undefined;
@@ -64,7 +67,7 @@ const InvoiceConfig = ({ parentprops, _onclose_, id_company }: ForEditParams) =>
 
 
     const handleFacturaRannge = (field: string, value: any) => {
-        const num = parseInt(value);
+        const num = field === '' ? 0 : parseInt(value);
         setRangos(prev => ({
             ...prev,
             [field]: num,
@@ -109,7 +112,7 @@ const InvoiceConfig = ({ parentprops, _onclose_, id_company }: ForEditParams) =>
 
                 <TextInput
                     placeholder={parentprops ? form.encabezado : "Encabezado de la factura"}
-                    style={styles.textinput} multiline={true}
+                    style={[styles.textinput, {padding : 5 }]} multiline={true}
                     onChangeText={(val) => handleInputChange("encabezado", val)}
                 />
 
@@ -136,7 +139,7 @@ const InvoiceConfig = ({ parentprops, _onclose_, id_company }: ForEditParams) =>
 
                 <TextInput
                     value={parentprops && cais_.nombre}
-                    placeholder={parentprops ? form.cai.nombre : "Ingrese CAI"} style={[styles.textinput]}
+                    placeholder={parentprops ? form.cai.nombre : "Ingrese CAI"} style={[styles.textinput, {padding : 5 }]}
                     multiline={true}
                     onChangeText={(val) => setcais(prev => ({ ...prev, nombre: val.toString() }))}
                 />
@@ -148,7 +151,7 @@ const InvoiceConfig = ({ parentprops, _onclose_, id_company }: ForEditParams) =>
                     <TextInput
                         value={parentprops && rango.numero_uno.toString()}
                         placeholder={parentprops ? form.referencia_facturas.numero_uno.toString() : "Numero 1"}
-                        keyboardType="numeric" style={[styles.textinput, { margin: 0, width: '23%' }]}
+                        keyboardType="numeric" style={[styles.textinput, { margin: 0, width: '23%',}]}
                         onChangeText={(val) => {
                             handleFacturaRannge("numero_uno", val)
                             InsertBrute(0, val);
@@ -158,21 +161,21 @@ const InvoiceConfig = ({ parentprops, _onclose_, id_company }: ForEditParams) =>
                     <TextInput
                         value={parentprops && rango.numero_dos.toString()}
                         placeholder={parentprops ? form.referencia_facturas.numero_dos.toString() : "Numero 2"}
-                        keyboardType="numeric" style={[styles.textinput, { margin: 0, width: '23%' }]}
+                        keyboardType="numeric" style={[styles.textinput, { margin: 0, width: '23%',}]}
                         onChangeText={(val) =>{ handleFacturaRannge("numero_dos", val); InsertBrute(1, val);}}
                     />
 
                     <TextInput
                         value={parentprops && rango.numero_tres.toString()}
                         placeholder={parentprops ? form.referencia_facturas.numero_tres.toString() : "Numero 3"}
-                        keyboardType="numeric" style={[styles.textinput, { margin: 0, width: '23%' }]}
+                        keyboardType="numeric" style={[styles.textinput, { margin: 0, width: '23%',  }]}
                         onChangeText={(val) =>{ handleFacturaRannge("numero_tres", val); InsertBrute(2, val);}}
                     />
 
                     <TextInput
                         value={parentprops && rango.numero_cuatro.toString()}
                         placeholder={parentprops ? form.referencia_facturas.numero_cuatro.toString() : "Numero 4"}
-                        keyboardType="numeric" style={[styles.textinput, { margin: 0, width: '23%' }]}
+                        keyboardType="numeric" style={[styles.textinput, { margin: 0, width: '23%', }]}
                         onChangeText={(val) =>{ handleFacturaRannge("numero_cuatro", val); InsertBrute(3, val);}}
                     />
 
@@ -182,13 +185,13 @@ const InvoiceConfig = ({ parentprops, _onclose_, id_company }: ForEditParams) =>
                 <View style={[{ borderBottomWidth: 1, borderBlockColor: '#e5e7e9', marginTop: 5, marginBottom: 5 }]} />
                 <TextInput
                     placeholder={parentprops ? form.numero_maximo.toString() : "Cantidad maxima de factura"}
-                    keyboardType="numeric" style={styles.textinput}
+                    keyboardType="numeric" style={[styles.textinput, {padding : 5 }]}
                     onChangeText={(val: string) => handleInputChange("numero_maximo", parseInt(val))}
                 />
 
                 <TextInput
                     placeholder={parentprops ? parentprops.piedehoja : 'Ingrese pie de la factura'}
-                    style={styles.textinput}
+                    style={[styles.textinput, {padding : 5 }]}
                     onChangeText={(val) => handleInputChange("piedehoja", val)}
                 />
 

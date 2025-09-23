@@ -5,7 +5,7 @@ import { useEffect, useState, useRef } from "react";
 import InvoiceConfig from "./Invoiceconfig";
 import styles from "@/assets/styles/styles";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { company } from "@/storage/empresa";
+import { company } from "@/storage/modals/empresa";
 
 type companyparams = { companyprops: company | undefined; }
 
