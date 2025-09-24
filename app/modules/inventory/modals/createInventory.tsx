@@ -9,11 +9,11 @@ import { company } from "@/storage/modals/empresa";
 import { getCompanies } from "@/storage/company.storage";
 
 type props = {
-    OpenModal: () => boolean;
+    //OpenModal: () => boolean;
     OnDelete: () => void;
 }
 
-const ModalCreateInvoiceWH = ({ OpenModal, OnDelete }: props) => {
+const ModalCreateInvoiceWH = ({ OnDelete }: props) => {
     const [item, setSelectedValue] = useState<company | undefined>();
     const [SelectedList, setSelectedList] = useState<company[]>([]);
     const [NewInventory, setNewInventory] = useState<inventoryWH>({
@@ -59,7 +59,7 @@ const ModalCreateInvoiceWH = ({ OpenModal, OnDelete }: props) => {
 
     useEffect(() => {
         UpdateList();
-    }, [SelectedList])
+    }, [])
 
     const _onSave_ = () => {
         if (NewInventory.name != "", NewInventory.code != "", NewInventory.ubication != "") {
@@ -70,12 +70,12 @@ const ModalCreateInvoiceWH = ({ OpenModal, OnDelete }: props) => {
     }
 
     return (
-        <Modal visible={OpenModal()}>
+        <View style={[{backgroundColor : 'white', padding : 10, borderRadius : 5}]}>
             <View>
-                <View style={[styles.flexcomponentsRow, {}]}>
+                <View style={[styles.flexcomponentsRow, {alignItems : 'center', justifyContent : 'space-between', marginTop : 0}]}>
                     <Text style={[styles.paragraph, { color: 'black', fontWeight: 'bold' }]}>Create new Inventory</Text>
-                    <View style={[{ margin: 10, marginLeft: 20 }]}>
-                        <Ionicons name="chevron-back" size={30} color="black" onPress={OnDelete} />
+                    <View style={[{ marginLeft: 20 }]}>
+                        <Ionicons name="close-circle" size={30} color="red" onPress={OnDelete} />
                     </View>
                 </View>
 
@@ -89,9 +89,9 @@ const ModalCreateInvoiceWH = ({ OpenModal, OnDelete }: props) => {
                             setSelectedValue(selectedCompany);
                         }
                     }}
-                    style={[styles.rectanglebutton, { alignSelf: 'center', height: 50, aspectRatio: 7.0, marginTop: 10 }]}
+                    style={[styles.rectanglebutton, { alignSelf: 'center',  height : 'auto' }]}
                 >
-                    <Picker.Item label={"Select a Company"} value={"Select a Company"} key={"000000"} />
+                    <Picker.Item label={"Select a Company"} value={"Select a Company"} key={"000000"}/>
                     {
                         SelectedList && SelectedList.map((company: company) => (
                             <Picker.Item label={company.companyname} value={company.rtn} key={company.rtn} />
@@ -99,9 +99,9 @@ const ModalCreateInvoiceWH = ({ OpenModal, OnDelete }: props) => {
                     }
                 </Picker>
 
-                <TextInput placeholder="Insert Name" onChangeText={(e) => updateInventory("name", e)} />
-                <TextInput placeholder="Insert Ubication" onChangeText={(e) => updateInventory("ubication", e)} />
-                <TextInput placeholder="Insert Warehouse Code" onChangeText={(e) => updateInventory("code", e)} />
+                <TextInput placeholder="Insert Name" onChangeText={(e) => updateInventory("name", e)} style={[styles.textinput, {padding : 5, margin : 5}]}/>
+                <TextInput placeholder="Insert Ubication" onChangeText={(e) => updateInventory("ubication", e)} style={[styles.textinput, {padding : 5, margin : 5}]}/>
+                <TextInput placeholder="Insert Warehouse Code" onChangeText={(e) => updateInventory("code", e)} style={[styles.textinput, {padding : 5, margin : 5}]}/>
 
                 <View>
                     <View style={{ flexDirection: "row", alignItems: "center", margin: 10 }}>
@@ -129,7 +129,7 @@ const ModalCreateInvoiceWH = ({ OpenModal, OnDelete }: props) => {
                     <Text>CREATE INVENTORY</Text>
                 </TouchableOpacity>
             </View>
-        </Modal>
+        </View>
     )
 }
 

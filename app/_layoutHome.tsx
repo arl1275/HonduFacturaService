@@ -2,12 +2,13 @@ import React from "react";
 //import { useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomepageAPP from "./Homepage";
+import IndexInventory from "./modules/inventory/indexInventory";
 
 const StackHome = createStackNavigator<HomeRoutingLinks>();
 
 export type HomeRoutingLinks = {
     Homepage: undefined,
-    //InventoryIndex : undefined
+    InventoryIndex : undefined
 }
 
 const HomePage = () => {
@@ -18,6 +19,7 @@ const HomePage = () => {
                 headerShown: false,
             }}>
             <StackHome.Screen name="Homepage" component={HomepageAPP} />
+            <StackHome.Screen name="InventoryIndex" component={IndexInventory} />
         </StackHome.Navigator>
     )
 }
