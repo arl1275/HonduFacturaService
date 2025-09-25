@@ -74,7 +74,7 @@ const ModalCreateInvoiceWH = ({ OnDelete }: props) => {
             <View>
                 <View style={[styles.flexcomponentsRow, {alignItems : 'center', justifyContent : 'space-between', marginTop : 0}]}>
                     <Text style={[styles.paragraph, { color: 'black', fontWeight: 'bold' }]}>Create new Inventory</Text>
-                    <View style={[{ marginLeft: 20 }]}>
+                    <View style={[{ marginLeft: 10 }]}>
                         <Ionicons name="close-circle" size={30} color="red" onPress={OnDelete} />
                     </View>
                 </View>
@@ -125,7 +125,7 @@ const ModalCreateInvoiceWH = ({ OnDelete }: props) => {
                     </View>
                 </View>
 
-                <TouchableOpacity onPress={_onSave_}>
+                <TouchableOpacity onPress={_onSave_} style={[styles.squarebutton]}>
                     <Text>CREATE INVENTORY</Text>
                 </TouchableOpacity>
             </View>

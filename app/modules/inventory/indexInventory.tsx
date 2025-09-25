@@ -1,9 +1,10 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeInventory from './pages/homeinventory';
-import HomePage from '@/app/_layoutHome';
+import { inventoryWH } from '@/storage/modals/inventory';
 
 export type StackParamList = {
   HomeInventory: undefined;
+  Inventorydetail : {invo : inventoryWH}
 };
 
 const InventoryStack = createStackNavigator<StackParamList>();
