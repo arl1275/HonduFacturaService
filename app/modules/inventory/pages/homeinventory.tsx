@@ -12,6 +12,8 @@ import {
 import InvoButton from "../components/buttons";
 import ModalCreateInvoiceWH from "../modals/createInventory";
 import styles from "@/assets/styles/styles";
+import PickerCompany from "../components/selectCompany";
+import { company } from "@/storage/modals/empresa";
 
 // Habilitar LayoutAnimation en Android
 if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
@@ -21,7 +23,9 @@ if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental
 const HomeInventory = () => {
   const [openmodal, setOpenmodal] = useState<boolean>(false);
   const [openFunctions, setOpenFunctions] = useState<boolean>(false);
+  const [SelectedCompany, setSelectedCompany] = useState<company | undefined>();
 
+  const SetCOMPANY = ( value : company | undefined) =>{setSelectedCompany(value)};
   const toggleModal = () => setOpenmodal(v => !v);
 
   const toggleFunctions = () => {
@@ -31,16 +35,11 @@ const HomeInventory = () => {
 
   return (
     <View style={{ flex: 1, margin: 10 }}>
-      {/* Modal controlado desde aquí */}
       <Modal visible={openmodal} transparent animationType="fade" onRequestClose={toggleModal}>
-        <Pressable
-          style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.5)", justifyContent: "center", alignItems: "center" }}
-          onPress={toggleModal} // cerrar al tocar fuera
-        >
+        <Pressable style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.5)", justifyContent: "center", alignItems: "center" }} onPress={toggleModal}>
           <Pressable
             style={{ width: "90%", maxWidth: 520, backgroundColor: "white", borderRadius: 12, padding: 16 }}
-            onPress={() => {}} // evitar que se cierre al tocar dentro
-          >
+            onPress={() => {}}>
             <ModalCreateInvoiceWH OnDelete={toggleModal} />
           </Pressable>
         </Pressable>
@@ -53,7 +52,7 @@ const HomeInventory = () => {
           padding: 6,
           alignItems: "center",
           alignSelf: "stretch",
-          width: openFunctions ? "100%" : "14%", // animado con LayoutAnimation
+          width: openFunctions ? "100%" : "14%",
         }}
       >
         <TouchableOpacity onPress={toggleFunctions} style={{ paddingVertical: 2 }}>
@@ -70,6 +69,8 @@ const HomeInventory = () => {
           </View>
         )}
       </View>
+
+      <PickerCompany ToSelect={SetCOMPANY}/>
     </View>
   );
 };
