@@ -23,11 +23,16 @@ import formaterInvoiceNumberView from "../utils/invoiceNumberFormatterView";
 
 type props = StackScreenProps<RootStackParamList, "InvoiceGen">
 
+//--------------------------------------------------------------------------------------------------------------------//
+//
+//  This component is to generate an invoice manually, this should be no so use normally
+//
+//--------------------------------------------------------------------------------------------------------------------//
 
 const InvoiceGen = ({ route, navigation }: props) => {
     const { item } = route.params; // this is a company item
     const [Comprador, setComprador] = useState({ comprador: 'Cliente Final', comprador_rtn: '0000-0000-00000' });
-    const [RegisterComprador, setRegisterComprador] = useState<boolean>(false); // is is to save the buyer
+    const [RegisterComprador, setRegisterComprador] = useState<boolean>(false);
     const [SelectedtoEdit, setSelectedtoEdit] = useState<lineafacturada | undefined>();
     const [ViewModal, setViewModal] = useState<boolean>(false);
     const [LineasFacutas, setLineasFacturas] = useState<lineafacturada[]>([]);
@@ -40,8 +45,8 @@ const InvoiceGen = ({ route, navigation }: props) => {
 
     useEffect(() => {
         const Result: [invoice | string | undefined, boolean] = Generate_Invoice_Item(item);
-        if (Result[0] === "ERROR") {
-            alert('NO SE OBTUVO EL INVOICE CONFIG');
+        if (Result[0] === "ERROR" && Result[1] === false) {
+            Alert.alert("There is an ERROR", 'Invoice Config is not created or it is not active', [{ text : "GO BACK", onPress :()=> navigation.navigate('HomeInvoice')}]);
         } else if (Result[0] === "ERROR2") {
             alert('NO SE OBTUVO la COMPANY');
         } else if (typeof Result[0] === "object") {

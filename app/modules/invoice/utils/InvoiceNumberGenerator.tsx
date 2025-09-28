@@ -72,57 +72,61 @@ export function formated_date_(value: string | undefined) {
 //----------------------------------------------------------------------------------------------------//
 
 function Generate_Invoice_Item(company_: company): [invoice | string, boolean] {
-    // this is to get the last invoice config created und active
-    const LastInvoConfig: invoicesconfig | undefined = getCurrent_by_company_id(company_.id);
+    try {
+        // this is to get the last invoice config created und active
+        const LastInvoConfig: invoicesconfig | undefined = getCurrent_by_company_id(company_.id);
 
-    // this get the last invoice created
-    const LastInvoice: invoice | undefined = getInvoices_by_InvoiceConfig(LastInvoConfig.id);
-    let newlastnumber: rangos;
+        // this get the last invoice created
+        const LastInvoice: invoice | undefined = getInvoices_by_InvoiceConfig(LastInvoConfig.id);
+        let newlastnumber: rangos;
 
-    if (!LastInvoConfig || !company_) { return ["ERROR", false] }
-    //this is to validate the date
-    const limitDate = new Date(LastInvoConfig.fechalimite);
-    if (limitDate.getTime() <= Date.now()) { return ["Over Date", false]; }
+        if (!LastInvoConfig || !company_) { return ["ERROR", false] }
+        //this is to validate the date
+        const limitDate = new Date(LastInvoConfig.fechalimite);
+        if (limitDate.getTime() <= Date.now()) { return ["Over Date", false]; }
 
 
-    //console.log(LastInvoice)
-    if (!LastInvoice) {
-        newlastnumber = GenerateInvoiceNumber_Plane(LastInvoConfig);
-    } else {
-        newlastnumber = GenerateInvoiceNumber(LastInvoice)
-    }
-
-    const item: invoice = {
-        id: Date.now(),
-        id_invoice_config: LastInvoConfig.id,
-
-        formato_general: {
-            RTN: company_.rtn,
-            encabezado: LastInvoConfig.encabezado,
-            piehoja: LastInvoConfig.piedehoja,
-            fecha_emision: new Date(), // here is the error
-            id_company: LastInvoConfig.id_company,
-            numero_de_factura: newlastnumber,
-            cai: LastInvoConfig.cai.nombre,
-            comprador: "Cliente Final",
-            comprador_rtn: "0000-0000-00000"
-        },
-        lineasfacturadas: [],
-        id_impuesto: [],
-        total: 0.0,
-        subtotal: 0.0,
-
-        status: {
-            draft: true,
-            done: false,
-            creditnote: {
-                done: false,
-                creditnote_id: 0
-            }
+        //console.log(LastInvoice)
+        if (!LastInvoice) {
+            newlastnumber = GenerateInvoiceNumber_Plane(LastInvoConfig);
+        } else {
+            newlastnumber = GenerateInvoiceNumber(LastInvoice)
         }
-    };
 
-    return [item, true];
+        const item: invoice = {
+            id: Date.now(),
+            id_invoice_config: LastInvoConfig.id,
+
+            formato_general: {
+                RTN: company_.rtn,
+                encabezado: LastInvoConfig.encabezado,
+                piehoja: LastInvoConfig.piedehoja,
+                fecha_emision: new Date(), // here is the error
+                id_company: LastInvoConfig.id_company,
+                numero_de_factura: newlastnumber,
+                cai: LastInvoConfig.cai.nombre,
+                comprador: "Cliente Final",
+                comprador_rtn: "0000-0000-00000"
+            },
+            lineasfacturadas: [],
+            id_impuesto: [],
+            total: 0.0,
+            subtotal: 0.0,
+
+            status: {
+                draft: true,
+                done: false,
+                creditnote: {
+                    done: false,
+                    creditnote_id: 0
+                }
+            }
+        };
+
+        return [item, true];
+    } catch (error) {
+        return ["ERROR", false]
+    }
 }
 
 

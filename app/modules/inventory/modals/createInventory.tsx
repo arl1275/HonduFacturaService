@@ -65,6 +65,7 @@ const ModalCreateInvoiceWH = ({ OnDelete }: props) => {
     const _onSave_ = () => {
         if (NewInventory.name != "", NewInventory.code != "", NewInventory.ubication != "") {
             addWarehouse(NewInventory);
+            OnDelete();
         } else {
             Alert.alert("INCOMPLETE", "Please, fill all the fields before create an inventory.")
         }

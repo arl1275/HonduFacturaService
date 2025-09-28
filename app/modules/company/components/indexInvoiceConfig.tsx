@@ -54,14 +54,16 @@ const Index_invoice_company = ({ companyprops }: companyparams) => {
     return (
         <View style={{ flex: 1 }}>
             <View style={{ width: '90%', alignSelf: 'center', marginBottom: 10 }}>
-                <Button title={!isCreating ? 'CREATE INVOICE CONFIG' : 'CANCELAR'} color={!isCreating ? 'black' : '#c0392b'}
+                <Button title={!isCreating ? 'CREATE INVOICE CONFIG' : 'CANCEL'} color={!isCreating ? 'black' : '#c0392b'}
                     onPress={() => {
                         if (!isCreating) setSendtoEdit(undefined)
                         creating()
                     }} />
             </View>
 
-            {isCreating && (
+            {
+            //THIS IS THE PART WHERE THE COMPONENT TO EDIR OR CREATE IS SHOWN
+            isCreating && (
                 <Animated.View style={{ opacity: fadeAnim }}>
                     <InvoiceConfig _onclose_={creating} parentprops={SendtoEdit} id_company={CompanyParam?.id} />
                 </Animated.View>
@@ -71,11 +73,14 @@ const Index_invoice_company = ({ companyprops }: companyparams) => {
                 data={configlist}
                 keyExtractor={item => item.id.toString()}
                 renderItem={({ item }) => (
-                    <View style={[styles.rectanglebutton, styles.flexcomponentsRow, { height: 'auto', alignSelf: 'center', justifyContent: 'space-between', margin: 5, padding: 5, borderWidth: 1, borderColor: '#e5e8e8' }]}>
+                    <View style={
+                        [styles.rectanglebutton, styles.flexcomponentsRow, 
+                        { height: 'auto', alignSelf: 'center', justifyContent: 'space-between', margin: 5, padding: 5, borderWidth: 1, borderColor: '#e5e8e8' }]}>
 
                         <View style={[{ alignSelf: 'flex-start' }]}>
                             <Text style={[styles.smallText, styles.textalingleft, { color: 'black', marginVertical: 0, fontWeight: 'bold' }]}>CAI : {item.cai.nombre}</Text>
-                            <Text style={[styles.smallText, styles.textalingleft, { color: 'black', marginVertical: 0 }]}>Fecha Maxima : <Text style={[styles.smallText, styles.textalingleft, { color: 'black', marginVertical: 0, fontWeight: 'bold' }]}>{item.fechalimite.toString()}</Text></Text>
+                            <Text style={[styles.smallText, styles.textalingleft, { color: 'black', marginVertical: 0 }]}>Fecha Maxima : 
+                            <Text style={[styles.smallText, styles.textalingleft, { color: 'black', marginVertical: 0, fontWeight: 'bold' }]}>{item.fechalimite.toString()}</Text></Text>
                             <Text style={[styles.smallText, styles.textalingleft, { color: 'black', marginVertical: 0 }]}>Rango Maximo : {item.numero_maximo}</Text>
                             <Text style={[styles.smallText, styles.textalingleft, { color: 'black', marginVertical: 0 }]}>Rango inicial : {item.referencia_bruta}</Text>
                             <Text style={[styles.smallText, styles.textalingleft, { color: item.active ? "green" : 'red', marginVertical: 0 }]}>{item.active ? "ACTIVO" : 'DESACTIVADO'}</Text>

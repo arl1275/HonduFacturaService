@@ -30,7 +30,7 @@ const PickerCompany = ({ ToSelect }: props) => {
                         selectedCompany === undefined ? null : ToSelect(selectedCompany);
                     }
                 }}
-                style={[styles.rectanglebutton, { alignSelf: 'center', height: 'auto', marginTop: 10, marginBottom: 5 }]}
+                style={[styles.rectanglebutton, { alignSelf: 'center', height: 'auto', marginTop: 10, marginBottom: 5, width: '70%'}]}
             >
                 <Picker.Item label={"Select a Company"} value={"Select a Company"} key={"000000"} />
                 {
