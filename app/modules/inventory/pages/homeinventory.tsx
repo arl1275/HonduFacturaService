@@ -1,18 +1,28 @@
-import React, { useState } from "react";
-import { View, TouchableOpacity, Modal, Pressable} from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, TouchableOpacity, Modal, Pressable, FlatList } from "react-native";
 import InvoButton from "../components/buttons";
 import ModalCreateInvoiceWH from "../modals/createInventory";
 import styles from "@/assets/styles/styles";
 import PickerCompany from "../components/selectCompany";
 import { company } from "@/storage/modals/empresa";
+import { getWareHouses_by_id } from "@/storage/inventoryWH.storage";
+
+// this are navite componentes from this module
+import InventoryCard from "../components/InventoryCard";
+import { inventoryWH } from "@/storage/modals/inventory";
 
 
 const HomeInventory = () => {
   const [openmodal, setOpenmodal] = useState<boolean>(false);
   const [SelectedCompany, setSelectedCompany] = useState<company | undefined>();
+  const [inventories, setInventories] = useState<inventoryWH[]>([])
 
   const SetCOMPANY = (value: company | undefined) => { setSelectedCompany(value) };
   const toggleModal = () => setOpenmodal(v => !v);
+
+  useEffect(() => {
+    SelectedCompany != undefined && setInventories(getWareHouses_by_id(SelectedCompany?.id))
+  }, [SelectedCompany])
 
   return (
     <View style={{ flex: 1, margin: 10 }}>
@@ -28,18 +38,33 @@ const HomeInventory = () => {
       </Modal>
 
       {/*/---THIS IS THE HEAD SIDE OF THE VIEW---/*/}
-      <View style={[styles.flexcomponentsRow, { width: 'auto', borderWidth : 0.5, borderColor : 'grey', borderRadius : 5}]}>
-        <View style={[{ width : '50%'}]}>
+      <View style={[styles.flexcomponentsRow, { width: 'auto', borderWidth: 0.5, borderColor: 'grey', borderRadius: 5 }]}>
+        <View style={[{ width: '50%' }]}>
           <TouchableOpacity style={{ width: "auto" }} onPress={toggleModal}>
             <InvoButton title="Generate Inventory" color="black" iconname="archive" />
           </TouchableOpacity>
         </View>
 
-        <View style={[{width : '50%'}]}>
+        <View style={[{ width: '50%' }]}>
           <PickerCompany ToSelect={SetCOMPANY} />
         </View>
 
       </View>
+
+     <View>
+          {
+            inventories &&
+            <FlatList
+              data={inventories}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={({ item }) => (
+                <InventoryCard inv={item} />
+              )}
+              />
+          }
+        </View>
+
+
     </View>
   );
 };

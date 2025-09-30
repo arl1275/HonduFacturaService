@@ -9,6 +9,11 @@ export const getAllWareHouse= (): inventoryWH[] => {
   return json ? JSON.parse(json) : [];
 };
 
+export const getWareHouses_by_id = (id : number) => {
+  const Result = getAllWareHouse().filter(c => c.id_company === id);
+  return Result
+};
+
 export const saveWareHouse = (saveWarehouse: inventoryWH[]) => {
   storage.set(STORAGE_KEY, JSON.stringify(saveWarehouse));
 };

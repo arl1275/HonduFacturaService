@@ -64,13 +64,7 @@ export const getInvoices_by_ID = (id: number) => {
   return invoices;
 };
 
-export const getInvoices_by_company = (id: number) => {
-  //console.log('Companya', id)
-  const invoices = getinvoices().filter(
-    (inv) => inv.formato_general.id_company === id
-  );
-  return invoices;
-};
+
 
 export const get_last_invoice_by_company = (id_company: number) => {
   const invoices = getinvoices()

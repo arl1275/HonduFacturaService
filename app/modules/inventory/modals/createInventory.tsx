@@ -8,13 +8,14 @@ import { Picker } from '@react-native-picker/picker';
 import { company } from "@/storage/modals/empresa";
 import { getCompanies } from "@/storage/company.storage";
 import { addWarehouse } from "@/storage/inventoryWH.storage";
+import { isNewWebImplementationEnabled } from "react-native-gesture-handler/lib/typescript/EnableNewWebImplementation";
 
 type props = {
     //OpenModal: () => boolean;
     OnDelete: () => void;
 }
 
-const ModalCreateInvoiceWH = ({ OnDelete }: props) => {
+const ModalCreateInvoiceWH = ({OnDelete }: props) => {
     const [item, setSelectedValue] = useState<company | undefined>();
     const [SelectedList, setSelectedList] = useState<company[]>([]);
     const [NewInventory, setNewInventory] = useState<inventoryWH>({
@@ -36,6 +37,10 @@ const ModalCreateInvoiceWH = ({ OnDelete }: props) => {
 
     const updateInventory = (value: string, valueitem: string | number | boolean) => {
         setNewInventory((prev) => ({ ...prev, [value]: valueitem }));
+    }
+
+    const UpdateID_company = ( comSEC : undefined | company) =>{
+        comSEC != undefined && updateInventory("id_company", comSEC.id);
     }
 
     const UpdateTypeINv = (nameType: string) => {
@@ -63,7 +68,7 @@ const ModalCreateInvoiceWH = ({ OnDelete }: props) => {
     }, [])
 
     const _onSave_ = () => {
-        if (NewInventory.name != "", NewInventory.code != "", NewInventory.ubication != "") {
+        if (NewInventory.name != "", NewInventory.code != "", NewInventory.ubication != "", NewInventory.id_company != 0) {
             addWarehouse(NewInventory);
             OnDelete();
         } else {
@@ -94,7 +99,7 @@ const ModalCreateInvoiceWH = ({ OnDelete }: props) => {
                             setSelectedValue(undefined);
                         } else {
                             const selectedCompany = SelectedList.find(company => company.rtn === itemValue);
-                            setSelectedValue(selectedCompany);
+                            UpdateID_company(selectedCompany);
                         }
                     }}
                     style={[styles.rectanglebutton, { alignSelf: 'center', height: 'auto', marginTop: 10, marginBottom: 5 }]}
