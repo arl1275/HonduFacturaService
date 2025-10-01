@@ -59,6 +59,11 @@ export const deleteinvoice = (id: number) => {
   saveinvoices(invoices);
 };
 
+export const  getInvoices_by_company = (id: number) => {
+  const invoices = getinvoices().filter((inv) => inv.formato_general.id_company !== id);
+  return invoices
+};
+
 export const getInvoices_by_ID = (id: number) => {
   const invoices = getinvoices().filter((inv) => inv.id === id);
   return invoices;

@@ -84,6 +84,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#ccc', // Color de fondo por si tarda en cargar
     justifyContent: 'center',
     alignItems: 'center',
+  }, 
+  cardborder: {
+    borderRadius : 5,
+    borderWidth :1,
+    borderColor : "#C8C5C1",
+    padding : 10
   }
 
 })

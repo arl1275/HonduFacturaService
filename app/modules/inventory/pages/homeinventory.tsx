@@ -6,23 +6,30 @@ import styles from "@/assets/styles/styles";
 import PickerCompany from "../components/selectCompany";
 import { company } from "@/storage/modals/empresa";
 import { getWareHouses_by_id } from "@/storage/inventoryWH.storage";
+import { useNavigation } from '@react-navigation/native';
 
 // this are navite componentes from this module
 import InventoryCard from "../components/InventoryCard";
 import { inventoryWH } from "@/storage/modals/inventory";
+import { StackScreenProps } from "@react-navigation/stack";
+import { StackParamList } from "../indexInventory";
 
+// this is to navigatge
+type props = StackScreenProps<StackParamList, "HomeInventory">;
 
-const HomeInventory = () => {
+const HomeInventory = ({navigation} : props) => {
   const [openmodal, setOpenmodal] = useState<boolean>(false);
   const [SelectedCompany, setSelectedCompany] = useState<company | undefined>();
-  const [inventories, setInventories] = useState<inventoryWH[]>([])
+  const [inventories, setInventories] = useState<inventoryWH[]>([]);
+   const navigation_ = useNavigation<props>();
 
   const SetCOMPANY = (value: company | undefined) => { setSelectedCompany(value) };
   const toggleModal = () => setOpenmodal(v => !v);
+  const navigateInventory = (inventory : inventoryWH) =>{ navigation.navigate("Inventorydetail", {invo : inventory})};
 
   useEffect(() => {
     SelectedCompany != undefined && setInventories(getWareHouses_by_id(SelectedCompany?.id))
-  }, [SelectedCompany])
+  }, [SelectedCompany]);
 
   return (
     <View style={{ flex: 1, margin: 10 }}>
@@ -51,18 +58,20 @@ const HomeInventory = () => {
 
       </View>
 
-     <View>
-          {
-            inventories &&
-            <FlatList
-              data={inventories}
-              keyExtractor={(item) => item.id.toString()}
-              renderItem={({ item }) => (
-                <InventoryCard inv={item} />
-              )}
-              />
-          }
-        </View>
+      <View>
+        {
+          inventories &&
+          <FlatList
+            data={inventories}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <TouchableOpacity onPress={()=>{navigateInventory(item)}}>
+                <InventoryCard inv={item}/>
+              </TouchableOpacity>
+            )}
+          />
+        }
+      </View>
 
 
     </View>
