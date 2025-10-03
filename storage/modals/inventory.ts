@@ -11,8 +11,8 @@ export interface product{
     type : {
         consumible : boolean,
         discret :boolean,
-    }
-    expiration_date : Date,
+    },
+    expiration_date : Date | null,
     id_inventory : number,
     active : boolean,
     active_POS : boolean,
