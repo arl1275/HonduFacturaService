@@ -16,7 +16,8 @@ const ModalEditImpuesto = ({ item, saveUpdate, onclose }: props) => {
         id: Date.now(),
         nombre: '',
         porcentaje: 0.0,
-        active: false
+        active: false,
+        defaultTax: false
     });
     const [placeholders, setPlaceholders] = useState({ procentajeItem: '', nombreitem: '' })
 
@@ -69,9 +70,17 @@ const ModalEditImpuesto = ({ item, saveUpdate, onclose }: props) => {
                 />
             </View>
 
+            <View style={[styles.flexcomponentsRow, { alignSelf: 'flex-end', margin: 0 }]}>
+                <Text style={[styles.smallText]}>TAX default</Text>
+                <Switch
+                    value={NewImpuesto.defaultTax}
+                    onValueChange={(val: boolean) => OnUpdateValue(val, "defaultTax")}
+                />
+            </View>
+
             <View>
-                <TouchableOpacity onPress={() => AddImpuestoToCompany()} style={[{ padding : 10, backgroundColor : 'black', borderRadius : 50}]}>
-                    <Text style={[{color : 'white', alignSelf : 'center'}]}>UPDATE TAX</Text>
+                <TouchableOpacity onPress={() => AddImpuestoToCompany()} style={[{ padding: 10, backgroundColor: 'black', borderRadius: 50 }]}>
+                    <Text style={[{ color: 'white', alignSelf: 'center' }]}>UPDATE TAX</Text>
                 </TouchableOpacity>
             </View>
         </View>

@@ -3,7 +3,8 @@ export interface impuesto{
     id: number,
     nombre: string,
     porcentaje: number,
-    active: boolean
+    active: boolean,
+    defaultTax : boolean,
 }
 
 export interface cais{

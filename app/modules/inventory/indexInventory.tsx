@@ -4,10 +4,11 @@ import { inventoryWH } from '@/storage/modals/inventory';
 // pages
 import HomeInventory from './pages/homeinventory';
 import InventoryDetail from './pages/inventoryDetail';
+import { company } from '@/storage/modals/empresa';
 
 export type StackParamList = {
   HomeInventory: undefined;
-  Inventorydetail : {invo : inventoryWH}
+  Inventorydetail : {invo : inventoryWH, comp : company | undefined}
 };
 
 const InventoryStack = createStackNavigator<StackParamList>();

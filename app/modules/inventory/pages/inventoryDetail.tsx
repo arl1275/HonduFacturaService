@@ -22,7 +22,7 @@ const InventoryDetail = ({ route, navigation }: props) => {
             <Modal visible={ShowModal} transparent={true} animationType="fade" >
                 <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)', justifyContent: 'center', alignItems: 'center' }}>
                     <View style={[{ width: '70%' }]}>
-                        <ProductMagane id_invo={inventory.id} _product_={undefined} onCancel={OpenMaganeProduct}/>
+                        <ProductMagane id_invo={inventory.id} _product_={undefined} onCancel={OpenMaganeProduct} _comp_={route.params.comp}/>
                     </View>
                 </View>
             </Modal>

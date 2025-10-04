@@ -15,7 +15,8 @@ const ModalCreateImpuesto = ({ addImpuesto, onclose }: props) => {
         id: Date.now(),
         nombre: '',
         porcentaje: 0.0,
-        active: false
+        active: false,
+        defaultTax : false,
     });
 
     const OnUpdateValue = (e: string | number | boolean, field: string) => {
@@ -55,6 +56,14 @@ const ModalCreateImpuesto = ({ addImpuesto, onclose }: props) => {
                 <Switch
                     value={NewImpuesto.active}
                     onValueChange={(val: boolean) => OnUpdateValue(val, "active")}
+                />
+            </View>
+
+            <View style={[styles.flexcomponentsRow, { alignSelf: 'flex-end', margin: 0 }]}>
+                <Text style={[styles.smallText]}>Is this the default TAx</Text>
+                <Switch
+                    value={NewImpuesto.defaultTax}
+                    onValueChange={(val: boolean) => OnUpdateValue(val, "defaultTax")}
                 />
             </View>
 

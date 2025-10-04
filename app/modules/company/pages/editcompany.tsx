@@ -139,7 +139,7 @@ export default function EditCompanyPage({ route, navigation }: Props) {
 
       {/*-------------------THIS ARE THE MODALs-------------------*/}
 
-      <View style={[styles.flexcomponentsRow, { margin: 5, alignItems : 'center' }]}>
+      <View style={[styles.flexcomponentsRow, { margin: 5, alignItems: 'center' }]}>
         <TouchableOpacity onPress={() => oncancel()}>
           <Ionicons name="chevron-back" size={30} color="black" />
         </TouchableOpacity>
@@ -202,7 +202,8 @@ export default function EditCompanyPage({ route, navigation }: Props) {
                 data={EditCompany.impuestos}
                 keyExtractor={(_item_) => _item_.id.toString()}
                 renderItem={({ item }) => (
-                  <View style={[styles.flexcomponentsRow, { borderBottomWidth: 0.5, borderBottomColor: 'grey', width: '95%', justifyContent: 'space-between', alignItems: 'center', margin: 0 }]}>
+                  <View style={[styles.flexcomponentsRow,
+                  { borderBottomWidth: 0.5, borderBottomColor: 'grey', width: '95%', justifyContent: 'space-between', alignItems: 'center', margin: 0 }]}>
 
                     <View style={[styles.flexcomponentsRow, { alignItems: 'center', margin: 0 }]}>
                       <TouchableOpacity onPress={() => { setEditTax(item); onViewModalTaxEdit() }}>
@@ -218,6 +219,7 @@ export default function EditCompanyPage({ route, navigation }: Props) {
 
                     <Text>{item.porcentaje} %</Text>
                     <Text style={[styles.smallText, { color: item.active ? 'green' : 'red' }]}>{item.active ? 'ACTIVE' : 'DEACTIVE'}</Text>
+                    <Text style={[styles.smallText, { color: item.active ? 'green' : 'red' }]}>{item.defaultTax ? 'DEFAULT' : 'NOT SET'}</Text>
 
                   </View>
                 )}

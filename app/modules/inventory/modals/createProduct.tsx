@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, Switch, TouchableOpacity } from "react-native";
 import styles from "@/assets/styles/styles";
 import { product } from "@/storage/modals/inventory";
+import { company } from "@/storage/modals/empresa";
 
 type props = {
     id_invo: number;
     _product_: product | undefined;
+    _comp_ : company | undefined;
     onCancel: () => void;
 };
 
