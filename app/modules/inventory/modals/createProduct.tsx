@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, Switch, TouchableOpacity } from "react-native";
 import styles from "@/assets/styles/styles";
 import { product } from "@/storage/modals/inventory";
-import { company } from "@/storage/modals/empresa";
+import { company, impuesto } from "@/storage/modals/empresa";
+import PickerTax from "../components/SelectTax";
 
 type props = {
     id_invo: number;
     _product_: product | undefined;
-    _comp_ : company | undefined;
+    _comp_: company | undefined;
     onCancel: () => void;
 };
 
@@ -48,6 +49,13 @@ const ProductMagane = ({ id_invo, _product_, onCancel }: props) => {
             }));
         }
     };
+
+    const UpdateTAX = (valor: impuesto | undefined) => {
+        if (valor) {
+            setNewProduct((prev) => ({ ...prev, specialTax: valor?.id }));
+        }
+    }
+
 
     useEffect(() => {
         if (_product_) setNewProduct(_product_);
@@ -99,10 +107,10 @@ const ProductMagane = ({ id_invo, _product_, onCancel }: props) => {
             />
 
             {/* Price (numeric) */}
-            <View style={[styles.flexcomponentsRow, {alignItems : 'center', justifyContent : 'space-between'}]}>
-                <Text style={{ color: "black", width : '10%', fontWeight : 'bold', fontSize : 20 }}>Price</Text>
+            <View style={[styles.flexcomponentsRow, { alignItems: 'center', justifyContent: 'space-between' }]}>
+                <Text style={{ color: "black", width: '10%', fontWeight: 'bold', fontSize: 20 }}>Price</Text>
                 <TextInput
-                    style={[styles.textinput, { padding: 10, marginBottom: 0, width : '90%'}]}
+                    style={[styles.textinput, { padding: 10, marginBottom: 0, width: '90%' }]}
                     placeholder="0.00"
                     keyboardType="numeric"
                     value={NewProduct.price.toString()}
@@ -178,6 +186,15 @@ const ProductMagane = ({ id_invo, _product_, onCancel }: props) => {
                     <Switch value={NewProduct.allow_negative_stock} onValueChange={(val) => UpdateData("allow_negative_stock", val, false)} />
                 </View>
             </View>
+
+
+            {/* TAX SELECTOR */}
+            <View style={[styles.flexcomponentsRow, { alignItems: 'center', justifyContent: 'space-between' }]}>
+                <Text style={{ color: "black", width: '10%', fontWeight: 'bold', fontSize: 20 }}>Select Tax</Text>
+                <PickerTax ToSelect={UpdateTAX} />
+            </View>
+
+
 
             <View style={[styles.flexcomponentsRow, { justifyContent: "space-between" }]}>
                 <TouchableOpacity style={{ marginTop: 12, backgroundColor: "black", padding: 12, borderRadius: 8, width: "45%" }}>

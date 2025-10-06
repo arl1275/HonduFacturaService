@@ -6,7 +6,7 @@ import styles from "@/assets/styles/styles";
 
 type Props = {
   impuestos?: impuesto[];
-  ToSelect: (value: impuesto | undefined) => void; // ← devolvemos el impuesto seleccionado (o undefined)
+  ToSelect: (value: impuesto | undefined) => void;
 };
 
 const PickerTax = ({ ToSelect, impuestos }: Props) => {
