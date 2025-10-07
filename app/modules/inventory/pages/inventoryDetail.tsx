@@ -1,21 +1,31 @@
-import { View, Text, TouchableOpacity, Button, Modal } from "react-native";
+import { View, Text, TouchableOpacity, Button, Modal, FlatList } from "react-native";
 import styles from "@/assets/styles/styles";
 import { StackParamList } from "../indexInventory";
 import { StackScreenProps } from "@react-navigation/stack";
-import { inventoryWH } from "@/storage/modals/inventory";
+//import { inventoryWH } from "@/storage/modals/inventory";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getAllProducts_by_WH_ID } from "@/storage/product.storage";
+import ProductRender from "../components/productRender";
 
 //--------- MODAL DESIG
 import ProductMagane from "../modals/createProduct";
+import { product } from "@/storage/modals/inventory";
 
 type props = StackScreenProps<StackParamList, "Inventorydetail">;
 
 const InventoryDetail = ({ route, navigation }: props) => {
     const inventory = route.params.invo;
     const [ShowModal, setShowModal] = useState<boolean>(false);
+    const [Productos, SetProductos] = useState<product[]>([])
 
     const OpenMaganeProduct = () => {setShowModal(!ShowModal)};
+
+    useEffect(()=>{
+        SetProductos(getAllProducts_by_WH_ID(route.params.invo.id))
+    }, [route.params, ShowModal])
+
+
     return (
         <View style={[{ flex: 1, margin: 10 }]}>
             {/*--------------------- THIS IS THE MODALS OF THE VIEW-------------------------*/}
@@ -47,6 +57,21 @@ const InventoryDetail = ({ route, navigation }: props) => {
                     <Button title="Insertion Lot" color={'black'} />
                 </View>
             </View>
+
+            <FlatList 
+            data={Productos}
+            keyExtractor={(item)=> item.id.toString()}
+            renderItem={({item})=>(
+                <View>
+                    <ProductRender prod={item} />
+                </View>
+            )}
+            ListEmptyComponent={(
+                <View style={[{alignSelf : 'center'}]}>
+                    <Text style={[styles.smallText]}>NOT PRODUCTS REGISTER</Text>
+                </View>
+            )}
+            />
 
         </View>
     )

@@ -31,6 +31,11 @@ export const deleteProduct_by_ID = (id: number) => {
   saveProduct(_NewArray_);
 };
 
+export const getAllProducts_by_WH_ID = (id: number) => {
+  const _NewArray_ = getAllProducts().filter(c => c.id_inventory == id);
+  return _NewArray_;
+};
+
 export const getProducts_by_WH = (id_WH : number) =>{
     const Products = getAllProducts().filter(c => c.id_inventory === id_WH);
     return Products.length ? Products : ["NON PRODUCTS", false];

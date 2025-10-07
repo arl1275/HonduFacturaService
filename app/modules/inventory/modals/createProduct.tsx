@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, Switch, TouchableOpacity } from "react-native";
+import { View, Text, TextInput, Switch, TouchableOpacity, Alert } from "react-native";
 import styles from "@/assets/styles/styles";
 import { product } from "@/storage/modals/inventory";
 import { company, impuesto } from "@/storage/modals/empresa";
 import PickerTax from "../components/SelectTax";
+import { addProduct } from "@/storage/product.storage";
 
 type props = {
     id_invo: number;
@@ -12,7 +13,8 @@ type props = {
     onCancel: () => void;
 };
 
-const ProductMagane = ({ id_invo, _product_, onCancel }: props) => {
+const ProductMagane = ({ id_invo, _product_, _comp_, onCancel }: props) => {
+    const [imp, setImp] = useState<impuesto[]>([]);
     const [NewProduct, setNewProduct] = useState<product>({
         id: Date.now(),
         created_at: new Date(),
@@ -25,7 +27,7 @@ const ProductMagane = ({ id_invo, _product_, onCancel }: props) => {
         amountStock: 0.0,
         type: {
             consumible: false,
-            discret: false,
+            discret: true,
         },
         expiration_date: null,
         id_inventory: id_invo,
@@ -35,11 +37,7 @@ const ProductMagane = ({ id_invo, _product_, onCancel }: props) => {
         block_edit: false,
     });
 
-    const UpdateData = (
-        valuename: string,
-        value: string | number | Date | boolean,
-        isType: boolean
-    ) => {
+    const UpdateData = ( valuename: string, value: string | number | Date | boolean, isType: boolean) => {
         if (!isType) {
             setNewProduct((prev) => ({ ...prev, [valuename]: value }));
         } else {
@@ -51,14 +49,22 @@ const ProductMagane = ({ id_invo, _product_, onCancel }: props) => {
     };
 
     const UpdateTAX = (valor: impuesto | undefined) => {
-        if (valor) {
-            setNewProduct((prev) => ({ ...prev, specialTax: valor?.id }));
-        }
+        if (valor) { setNewProduct((prev) => ({ ...prev, specialTax: valor?.id })); }
     }
 
+    const OnSaveProduct = () => {
+        if (NewProduct.name && NewProduct.code && NewProduct.barcode && NewProduct.specialTax && NewProduct.type && NewProduct.id_inventory) {
+            addProduct(NewProduct);
+            onCancel();
+        } else {
+            Alert.alert("Missing Fields", "Please Fill up all the fields to save a product.")
+        }
+
+    }
 
     useEffect(() => {
         if (_product_) setNewProduct(_product_);
+        if (_comp_ != undefined) { setImp(_comp_.impuestos) }
     }, [_product_]);
 
     return (
@@ -96,16 +102,6 @@ const ProductMagane = ({ id_invo, _product_, onCancel }: props) => {
                 onChangeText={(v) => UpdateData("extracode", v, false)}
             />
 
-            {/* Special Tax (numeric) */}
-            <Text style={{ color: "black", marginBottom: 4 }}>Special Tax (%)</Text>
-            <TextInput
-                style={[styles.textinput, { padding: 10, marginBottom: 10 }]}
-                placeholder="0"
-                keyboardType="numeric"
-                value={NewProduct.specialTax.toString()}
-                onChangeText={(v) => UpdateData("specialTax", parseFloat(v) || 0, false)}
-            />
-
             {/* Price (numeric) */}
             <View style={[styles.flexcomponentsRow, { alignItems: 'center', justifyContent: 'space-between' }]}>
                 <Text style={{ color: "black", width: '10%', fontWeight: 'bold', fontSize: 20 }}>Price</Text>
@@ -129,18 +125,20 @@ const ProductMagane = ({ id_invo, _product_, onCancel }: props) => {
                 onChangeText={(v) => UpdateData("amountStock", parseFloat(v) || 0, false)}
             />
 
-            {/* Expiration date (opcional simple) */}
-            <Text style={{ color: "black", marginBottom: 4 }}>Expiration Date (YYYY-MM-DD) </Text>
-            <TextInput
-                style={[styles.textinput, { padding: 10, marginBottom: 10 }]}
-                placeholder=" this will be changed 2026-12-31"
-                value={NewProduct.expiration_date ? new Date(NewProduct.expiration_date).toISOString().slice(0, 10) : ""}
-                onChangeText={(v) => {
-                    // guardamos como Date o null si viene vacío
-                    const d = v.trim() ? new Date(v) : null;
-                    UpdateData("expiration_date", d as any, false);
-                }}
-            />
+            {
+                NewProduct.type.consumible && (<View>
+                    <Text style={{ color: "black", marginBottom: 4 }}>Expiration Date (YYYY-MM-DD) </Text>
+                    <TextInput
+                        style={[styles.textinput, { padding: 10, marginBottom: 10 }]}
+                        placeholder=" this will be changed 2026-12-31"
+                        value={NewProduct.expiration_date ? new Date(NewProduct.expiration_date).toISOString().slice(0, 10) : ""}
+                        onChangeText={(v) => {
+                            // guardamos como Date o null si viene vacío
+                            const d = v.trim() ? new Date(v) : null;
+                            UpdateData("expiration_date", d as any, false);
+                        }}
+                    /></View>)
+            }
 
             {/* TYPE toggles */}
             <View style={[styles.cardborder, { marginTop: 4, marginBottom: 8 }]}>
@@ -191,17 +189,20 @@ const ProductMagane = ({ id_invo, _product_, onCancel }: props) => {
             {/* TAX SELECTOR */}
             <View style={[styles.flexcomponentsRow, { alignItems: 'center', justifyContent: 'space-between' }]}>
                 <Text style={{ color: "black", width: '10%', fontWeight: 'bold', fontSize: 20 }}>Select Tax</Text>
-                <PickerTax ToSelect={UpdateTAX} />
+                <PickerTax ToSelect={UpdateTAX} impuestos={imp} />
             </View>
 
 
-
             <View style={[styles.flexcomponentsRow, { justifyContent: "space-between" }]}>
-                <TouchableOpacity style={{ marginTop: 12, backgroundColor: "black", padding: 12, borderRadius: 8, width: "45%" }}>
+                <TouchableOpacity
+                    style={{ marginTop: 12, backgroundColor: "black", padding: 12, borderRadius: 8, width: "45%" }}
+                    onPress={OnSaveProduct}>
                     <Text style={{ color: "white", textAlign: "center", fontWeight: "bold" }}>SAVE PRODUCT</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{ marginTop: 12, backgroundColor: "red", padding: 12, borderRadius: 8, width: "45%" }} onPress={onCancel}>
+                <TouchableOpacity
+                    style={{ marginTop: 12, backgroundColor: "red", padding: 12, borderRadius: 8, width: "45%" }}
+                    onPress={onCancel}>
                     <Text style={{ color: "white", textAlign: "center", fontWeight: "bold" }}>CANCEL</Text>
                 </TouchableOpacity>
             </View>

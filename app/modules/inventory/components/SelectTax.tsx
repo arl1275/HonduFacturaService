@@ -26,7 +26,7 @@ const PickerTax = ({ ToSelect, impuestos }: Props) => {
       setSelectedId(0);
       ToSelect(undefined);
     }
-  }, [impuestos, ToSelect]);
+  }, [impuestos]);
 
   const onChange = (value: number | 0) => {
     setSelectedId(value);
@@ -44,7 +44,7 @@ const PickerTax = ({ ToSelect, impuestos }: Props) => {
           { alignSelf: "center", marginTop: 10, marginBottom: 5, width: "70%" },
         ]}
       >
-        <Picker.Item label="Select a TAX" value={0} key="placeholder" />
+        <Picker.Item label={impuestos?.length ? "Select a TAX" : "NONE TAXEs SET"} value={0} key="placeholder" />
         {list.map((tx) => (
           <Picker.Item label={tx.nombre} value={tx.id} key={String(tx.id)} />
         ))}
