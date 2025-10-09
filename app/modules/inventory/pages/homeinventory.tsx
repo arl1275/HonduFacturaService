@@ -24,8 +24,7 @@ const HomeInventory = ({navigation} : props) => {
 
   const SetCOMPANY = (value: company | undefined) => { setSelectedCompany(value) };
   const toggleModal = () => setOpenmodal(v => !v);
-  const navigateInventory = (inventory : inventoryWH) =>{ 
-    navigation.navigate("Inventorydetail", {invo : inventory, comp : SelectedCompany})};
+  const navigateInventory = (inventory : inventoryWH) =>{navigation.navigate("Inventorydetail", {invo : inventory, comp : SelectedCompany})};
 
   useEffect(() => {
     SelectedCompany != undefined && setInventories(getWareHouses_by_id(SelectedCompany?.id))

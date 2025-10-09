@@ -7,6 +7,7 @@ export interface product{
     extracode : string,
     specialTax : number,
     price : number,
+    cost : number,
     amountStock : number,
     type : {
         consumible : boolean,

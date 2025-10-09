@@ -4,9 +4,16 @@ import { StackParamList } from "../indexInventory";
 import { StackScreenProps } from "@react-navigation/stack";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useEffect, useState } from "react";
-import { getAllProducts_by_WH_ID } from "@/storage/product.storage";
+
+// functions
+import { getAllProducts_by_WH_ID, updateProduct } from "@/storage/product.storage";
+
+// componets importer
 import ProductRender from "../components/productRender";
 import ProductMagane from "../modals/createProduct";
+import ProductModal from "../modals/productModal";
+
+// modals
 import { product } from "@/storage/modals/inventory";
 
 type props = StackScreenProps<StackParamList, "Inventorydetail">;
@@ -18,7 +25,14 @@ const InventoryDetail = ({ route, navigation }: props) => {
     const [filteredProductos, setFilteredProductos] = useState<product[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>("");
 
-    const toggleProductModal = () => setShowModal(prev => !prev);
+    const [Editproduct, setEditProd] = useState<product | undefined>(undefined)
+
+    const toggleProductModal = () =>{ setShowModal(prev => !prev);}
+    const ClearEdit = () => setEditProd(undefined);
+
+    //------------------ MANAGE THE UPDATE PRODUCT-----------------------------//
+    const SetUpdaterproduct = (item : product) => {setEditProd(item)}
+    //-------------------------------------------------------------------------//
 
     useEffect(() => {
         const fetchData = async () => {
@@ -32,19 +46,16 @@ const InventoryDetail = ({ route, navigation }: props) => {
     // -------------------- BUSCADOR --------------------
     const handleSearch = (text: string) => {
         setSearchQuery(text);
-
         if (text.trim() === "") {
             setFilteredProductos(productos);
             return;
         }
-
         const lowerText = text.toLowerCase();
         const filtered = productos.filter(
             (item) =>
                 item.name.toLowerCase().includes(lowerText) ||
                 item.barcode?.toLowerCase().includes(lowerText)
         );
-
         setFilteredProductos(filtered);
     };
 
@@ -54,12 +65,8 @@ const InventoryDetail = ({ route, navigation }: props) => {
             <Modal visible={showModal} transparent={true} animationType="fade">
                 <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)", justifyContent: "center", alignItems: "center" }}>
                     <View style={{ width: "70%" }}>
-                        <ProductMagane
-                            id_invo={inventory.id}
-                            _product_={undefined}
-                            onCancel={toggleProductModal}
-                            _comp_={route.params.comp}
-                        />
+                        <ProductMagane id_invo={inventory.id} _product_={Editproduct != undefined ? Editproduct : undefined} onCancel={toggleProductModal} 
+                        _comp_={route.params.comp} UpdaterFunc={updateProduct} clearprd={ClearEdit} />
                     </View>
                 </View>
             </Modal>
@@ -111,13 +118,16 @@ const InventoryDetail = ({ route, navigation }: props) => {
                 data={filteredProductos}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => <ProductRender prod={item} />}
-                ListHeaderComponent={
-                    <View style={[styles.flexcomponentsRow, {justifyContent : 'space-between'}]}>
-                        <Text>Name</Text>
-                        <Text>Code</Text>
-                        <Text>Amount</Text>
-                        <Text>Price</Text>
-                    </View>}
+                ListHeaderComponent={(item) => (
+                    <TouchableOpacity onPress={() => {SetUpdaterproduct(item), toggleProductModal() }}>
+                        <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between' }]}>
+                            <Text>Name</Text>
+                            <Text>Code</Text>
+                            <Text>Amount</Text>
+                            <Text>Price</Text>
+                        </View>
+                    </TouchableOpacity>
+                )}
                 ListEmptyComponent={
                     <View style={{ alignSelf: "center", marginTop: 20 }}>
                         <Text style={[styles.smallText, { color: "gray" }]}>NO PRODUCTS FOUND</Text>

@@ -10,10 +10,12 @@ type props = {
     id_invo: number;
     _product_: product | undefined;
     _comp_: company | undefined;
+    UpdaterFunc : ( newVAl : product) => void;
     onCancel: () => void;
+    clearprd : () => void;
 };
 
-const ProductMagane = ({ id_invo, _product_, _comp_, onCancel }: props) => {
+const ProductMagane = ({ id_invo, _product_, _comp_, UpdaterFunc, onCancel, clearprd }: props) => {
     const [imp, setImp] = useState<impuesto[]>([]);
     const [NewProduct, setNewProduct] = useState<product>({
         id: Date.now(),
@@ -24,6 +26,7 @@ const ProductMagane = ({ id_invo, _product_, _comp_, onCancel }: props) => {
         extracode: "",
         specialTax: 0,
         price: 0,
+        cost :  0,
         amountStock: 0.0,
         type: {
             consumible: false,
@@ -48,18 +51,16 @@ const ProductMagane = ({ id_invo, _product_, _comp_, onCancel }: props) => {
         }
     };
 
-    const UpdateTAX = (valor: impuesto | undefined) => {
-        if (valor) { setNewProduct((prev) => ({ ...prev, specialTax: valor?.id })); }
-    }
-
+    const SaveUpdate = () =>{
+        UpdaterFunc(NewProduct), 
+        clearprd();
+         Alert.alert("SUCSSES", "The product have been updated.")
+    } 
+    const UpdateTAX = (valor: impuesto | undefined) => { if (valor) { setNewProduct((prev) => ({ ...prev, specialTax: valor?.id })); }}
     const OnSaveProduct = () => {
         if (NewProduct.name && NewProduct.code && NewProduct.barcode && NewProduct.specialTax && NewProduct.type && NewProduct.id_inventory) {
-            addProduct(NewProduct);
-            onCancel();
-        } else {
-            Alert.alert("Missing Fields", "Please Fill up all the fields to save a product.")
-        }
-
+            addProduct(NewProduct), onCancel();
+        } else { Alert.alert("Missing Fields", "Please Fill up all the fields to save a product.")}
     }
 
     useEffect(() => {
@@ -194,10 +195,9 @@ const ProductMagane = ({ id_invo, _product_, _comp_, onCancel }: props) => {
 
 
             <View style={[styles.flexcomponentsRow, { justifyContent: "space-between" }]}>
-                <TouchableOpacity
-                    style={{ marginTop: 12, backgroundColor: "black", padding: 12, borderRadius: 8, width: "45%" }}
-                    onPress={OnSaveProduct}>
-                    <Text style={{ color: "white", textAlign: "center", fontWeight: "bold" }}>SAVE PRODUCT</Text>
+                <TouchableOpacity style={{ marginTop: 12, backgroundColor: "black", padding: 12, borderRadius: 8, width: "45%" }}
+                    onPress={()=>{_product_ != undefined ? SaveUpdate() :OnSaveProduct()}}>
+                    <Text style={{ color: "white", textAlign: "center", fontWeight: "bold" }}>{_product_ != undefined ? "UPDATE PRODUCT" : 'SAVE PRODUCT'}</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
