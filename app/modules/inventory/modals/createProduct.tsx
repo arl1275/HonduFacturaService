@@ -202,7 +202,7 @@ const ProductMagane = ({ id_invo, _product_, _comp_, UpdaterFunc, onCancel, clea
 
                 <TouchableOpacity
                     style={{ marginTop: 12, backgroundColor: "red", padding: 12, borderRadius: 8, width: "45%" }}
-                    onPress={onCancel}>
+                    onPress={()=>{onCancel(), _product_ != undefined && clearprd()}}>
                     <Text style={{ color: "white", textAlign: "center", fontWeight: "bold" }}>CANCEL</Text>
                 </TouchableOpacity>
             </View>

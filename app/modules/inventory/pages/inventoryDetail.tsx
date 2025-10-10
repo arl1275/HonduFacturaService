@@ -1,39 +1,40 @@
 import { View, Text, TouchableOpacity, Button, Modal, FlatList, TextInput } from "react-native";
+import { useEffect, useState, useCallback } from "react";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { StackScreenProps } from "@react-navigation/stack";
+
 import styles from "@/assets/styles/styles";
 import { StackParamList } from "../indexInventory";
-import { StackScreenProps } from "@react-navigation/stack";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { useEffect, useState } from "react";
 
-// functions
+// funciones
 import { getAllProducts_by_WH_ID, updateProduct } from "@/storage/product.storage";
 
-// componets importer
+// componentes
 import ProductRender from "../components/productRender";
-import ProductMagane from "../modals/createProduct";
-import ProductModal from "../modals/productModal";
+import ProductManage from "../modals/createProduct"; // corregido
 
-// modals
+// tipos
 import { product } from "@/storage/modals/inventory";
 
-type props = StackScreenProps<StackParamList, "Inventorydetail">;
+type Props = StackScreenProps<StackParamList, "Inventorydetail">;
 
-const InventoryDetail = ({ route, navigation }: props) => {
+const InventoryDetail = ({ route, navigation }: Props) => {
     const inventory = route.params.invo;
+
     const [showModal, setShowModal] = useState<boolean>(false);
     const [productos, setProductos] = useState<product[]>([]);
     const [filteredProductos, setFilteredProductos] = useState<product[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>("");
 
-    const [Editproduct, setEditProd] = useState<product | undefined>(undefined)
+    const [editProduct, setEditProduct] = useState<product | undefined>(undefined);
 
-    const toggleProductModal = () =>{ setShowModal(prev => !prev);}
-    const ClearEdit = () => setEditProd(undefined);
+    //------------------ FUNCIONES DE MODAL -----------------------------//
+    const toggleProductModal = useCallback(() => setShowModal((prev) => !prev), []);
+    const clearEdit = () =>{setEditProduct(undefined)};
+    const setUpdaterProduct = useCallback((item: product) => setEditProduct(item), []);
+    //------------------------------------------------------------------//
 
-    //------------------ MANAGE THE UPDATE PRODUCT-----------------------------//
-    const SetUpdaterproduct = (item : product) => {setEditProd(item)}
-    //-------------------------------------------------------------------------//
-
+    //------------------ CARGAR PRODUCTOS -----------------------------//
     useEffect(() => {
         const fetchData = async () => {
             const data = await getAllProducts_by_WH_ID(inventory.id);
@@ -42,31 +43,52 @@ const InventoryDetail = ({ route, navigation }: props) => {
         };
         fetchData();
     }, [inventory.id, showModal]);
+    //------------------------------------------------------------------//
 
-    // -------------------- BUSCADOR --------------------
-    const handleSearch = (text: string) => {
-        setSearchQuery(text);
-        if (text.trim() === "") {
-            setFilteredProductos(productos);
-            return;
-        }
-        const lowerText = text.toLowerCase();
-        const filtered = productos.filter(
-            (item) =>
-                item.name.toLowerCase().includes(lowerText) ||
-                item.barcode?.toLowerCase().includes(lowerText)
-        );
-        setFilteredProductos(filtered);
-    };
+    //------------------ BUSCADOR -----------------------------//
+    const handleSearch = useCallback(
+        (text: string) => {
+            setSearchQuery(text);
+            const query = text.trim().toLowerCase();
+
+            if (query === "") {
+                setFilteredProductos(productos);
+                return;
+            }
+
+            const filtered = productos.filter(
+                (item) =>
+                    item.name.toLowerCase().includes(query) ||
+                    item.barcode?.toLowerCase().includes(query)
+            );
+
+            setFilteredProductos(filtered);
+        },
+        [productos]
+    );
+    //------------------------------------------------------------------//
 
     return (
         <View style={{ flex: 1, margin: 10 }}>
             {/*--------------------- MODAL -------------------------*/}
-            <Modal visible={showModal} transparent={true} animationType="fade">
-                <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)", justifyContent: "center", alignItems: "center" }}>
+            <Modal visible={showModal} transparent animationType="fade">
+                <View
+                    style={{
+                        flex: 1,
+                        backgroundColor: "rgba(0, 0, 0, 0.5)",
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}
+                >
                     <View style={{ width: "70%" }}>
-                        <ProductMagane id_invo={inventory.id} _product_={Editproduct != undefined ? Editproduct : undefined} onCancel={toggleProductModal} 
-                        _comp_={route.params.comp} UpdaterFunc={updateProduct} clearprd={ClearEdit} />
+                        <ProductManage
+                            id_invo={inventory.id}
+                            _product_={editProduct}
+                            onCancel={toggleProductModal}
+                            _comp_={route.params.comp}
+                            UpdaterFunc={updateProduct}
+                            clearprd={clearEdit}
+                        />
                     </View>
                 </View>
             </Modal>
@@ -76,19 +98,23 @@ const InventoryDetail = ({ route, navigation }: props) => {
                 <TouchableOpacity onPress={() => navigation.navigate("HomeInventory")}>
                     <Ionicons name="chevron-back" size={30} color="black" />
                 </TouchableOpacity>
-                <Text style={[styles.paragraph, styles.textalingleft, { color: "black" }]}>Inventory Page</Text>
+                <Text style={[styles.paragraph, styles.textalingleft, { color: "black" }]}>
+                    Inventory Page
+                </Text>
             </View>
 
             {/*--------------------- INVENTORY INFO -------------------------*/}
-            <View style={[styles.cardborder]}>
-                <Text style={[styles.paragraph, styles.textalingleft, { color: "black" }]}>{inventory.name}</Text>
-                <Text style={[styles.smallText, styles.textalingleft, { fontSize: 15 }]}>{inventory.code}</Text>
-                <Text style={[styles.smallText, styles.textalingleft, { fontSize: 15 }]}>{inventory.ubication}</Text>
-                <Text style={[styles.smallText, styles.textalingleft, { fontSize: 15 }]}>
+            <View style={[styles.cardborder, { padding: 10 }]}>
+                <Text style={[styles.paragraph, styles.textalingleft, { color: "black" }]}>
+                    {inventory.name}
+                </Text>
+                <Text style={[styles.smallText, { fontSize: 15 }]}>{inventory.code}</Text>
+                <Text style={[styles.smallText, { fontSize: 15 }]}>{inventory.ubication}</Text>
+                <Text style={[styles.smallText, { fontSize: 15 }]}>
                     {inventory.type.physical ? "PHYSICAL" : "VIRTUAL"}
                 </Text>
 
-                <View style={[styles.flexcomponentsRow, { justifyContent: "space-between" }]}>
+                <View style={[styles.flexcomponentsRow, { justifyContent: "space-between", marginTop: 10 }]}>
                     <Button title="Create Product" color={"green"} onPress={toggleProductModal} />
                     <Button title="Insertion Lot" color={"black"} />
                 </View>
@@ -116,21 +142,36 @@ const InventoryDetail = ({ route, navigation }: props) => {
             {/*--------------------- LISTA DE PRODUCTOS -------------------------*/}
             <FlatList
                 data={filteredProductos}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => <ProductRender prod={item} />}
-                ListHeaderComponent={(item) => (
-                    <TouchableOpacity onPress={() => {SetUpdaterproduct(item), toggleProductModal() }}>
-                        <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between' }]}>
-                            <Text>Name</Text>
-                            <Text>Code</Text>
-                            <Text>Amount</Text>
-                            <Text>Price</Text>
-                        </View>
+                keyExtractor={(item) => String(item.id)}
+                keyboardShouldPersistTaps="handled"
+                ListHeaderComponent={
+                    <View
+                        style={[
+                            styles.flexcomponentsRow,
+                            { justifyContent: "space-between", paddingVertical: 5 },
+                        ]}
+                    >
+                        <Text style={{ fontWeight: "bold" }}>Name</Text>
+                        <Text style={{ fontWeight: "bold" }}>Code</Text>
+                        <Text style={{ fontWeight: "bold" }}>Amount</Text>
+                        <Text style={{ fontWeight: "bold" }}>Price</Text>
+                    </View>
+                }
+                renderItem={({ item }) => (
+                    <TouchableOpacity
+                        onPress={() => {
+                            setUpdaterProduct(item);
+                            toggleProductModal();
+                        }}
+                    >
+                        <ProductRender prod={item} />
                     </TouchableOpacity>
                 )}
                 ListEmptyComponent={
                     <View style={{ alignSelf: "center", marginTop: 20 }}>
-                        <Text style={[styles.smallText, { color: "gray" }]}>NO PRODUCTS FOUND</Text>
+                        <Text style={[styles.smallText, { color: "gray" }]}>
+                            NO PRODUCTS FOUND
+                        </Text>
                     </View>
                 }
             />
