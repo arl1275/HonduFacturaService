@@ -5,18 +5,20 @@ import { product } from "@/storage/modals/inventory";
 import { company, impuesto } from "@/storage/modals/empresa";
 import PickerTax from "../components/SelectTax";
 import { addProduct } from "@/storage/product.storage";
+import Datepikcker from "../components/datepicker";
 
 type props = {
     id_invo: number;
     _product_: product | undefined;
     _comp_: company | undefined;
-    UpdaterFunc : ( newVAl : product) => void;
+    UpdaterFunc: (newVAl: product) => void;
     onCancel: () => void;
-    clearprd : () => void;
+    clearprd: () => void;
 };
 
 const ProductMagane = ({ id_invo, _product_, _comp_, UpdaterFunc, onCancel, clearprd }: props) => {
     const [imp, setImp] = useState<impuesto[]>([]);
+    const [disp, setDisp] = useState<boolean>(true);
     const [NewProduct, setNewProduct] = useState<product>({
         id: Date.now(),
         created_at: new Date(),
@@ -26,7 +28,7 @@ const ProductMagane = ({ id_invo, _product_, _comp_, UpdaterFunc, onCancel, clea
         extracode: "",
         specialTax: 0,
         price: 0,
-        cost :  0,
+        cost: 0,
         amountStock: 0.0,
         type: {
             consumible: false,
@@ -40,7 +42,7 @@ const ProductMagane = ({ id_invo, _product_, _comp_, UpdaterFunc, onCancel, clea
         block_edit: false,
     });
 
-    const UpdateData = ( valuename: string, value: string | number | Date | boolean, isType: boolean) => {
+    const UpdateData = (valuename: string, value: string | number | Date | boolean, isType: boolean) => {
         if (!isType) {
             setNewProduct((prev) => ({ ...prev, [valuename]: value }));
         } else {
@@ -51,20 +53,23 @@ const ProductMagane = ({ id_invo, _product_, _comp_, UpdaterFunc, onCancel, clea
         }
     };
 
-    const SaveUpdate = () =>{
-        UpdaterFunc(NewProduct), 
-        clearprd();
-         Alert.alert("SUCSSES", "The product have been updated.")
-    } 
-    const UpdateTAX = (valor: impuesto | undefined) => { if (valor) { setNewProduct((prev) => ({ ...prev, specialTax: valor?.id })); }}
+    const SaveUpdate = () => {
+        UpdaterFunc(NewProduct),
+            clearprd();
+        Alert.alert("SUCSSES", "The product have been updated.")
+    }
+    const UpdateTAX = (valor: impuesto | undefined) => { if (valor) { setNewProduct((prev) => ({ ...prev, specialTax: valor?.id })); } }
     const OnSaveProduct = () => {
         if (NewProduct.name && NewProduct.code && NewProduct.barcode && NewProduct.specialTax && NewProduct.type && NewProduct.id_inventory) {
             addProduct(NewProduct), onCancel();
-        } else { Alert.alert("Missing Fields", "Please Fill up all the fields to save a product.")}
+        } else { Alert.alert("Missing Fields", "Please Fill up all the fields to save a product.") }
     }
 
     useEffect(() => {
-        if (_product_) setNewProduct(_product_);
+        if (_product_) {
+            setNewProduct(_product_)
+            _product_.block_edit ? setDisp(false) : setDisp(true)
+        };
         if (_comp_ != undefined) { setImp(_comp_.impuestos) }
     }, [_product_]);
 
@@ -76,28 +81,32 @@ const ProductMagane = ({ id_invo, _product_, _comp_, UpdaterFunc, onCancel, clea
 
             {/* Name */}
             <TextInput
-                style={[styles.textinput, { padding: 10, marginBottom: 10 }]}
+                editable={disp}
+                style={[styles.textinput, { padding: 10, marginBottom: 10, color: disp ? 'black' : 'grey' }]}
                 placeholder="Product name"
                 value={NewProduct.name}
                 onChangeText={(v) => UpdateData("name", v, false)}
             />
 
             <TextInput
-                style={[styles.textinput, { padding: 10, marginBottom: 10 }]}
+                editable={disp}
+                style={[styles.textinput, { padding: 10, marginBottom: 10, color: disp ? 'black' : 'grey' }]}
                 placeholder="Code"
                 value={NewProduct.code}
                 onChangeText={(v) => UpdateData("code", v, false)}
             />
 
             <TextInput
-                style={[styles.textinput, { padding: 10, marginBottom: 10 }]}
+                editable={disp}
+                style={[styles.textinput, { padding: 10, marginBottom: 10, color: disp ? 'black' : 'grey' }]}
                 placeholder="Barcode"
                 value={NewProduct.barcode}
                 onChangeText={(v) => UpdateData("barcode", v, false)}
             />
 
             <TextInput
-                style={[styles.textinput, { padding: 10, marginBottom: 10 }]}
+                editable={disp}
+                style={[styles.textinput, { padding: 10, marginBottom: 10, color: disp ? 'black' : 'grey' }]}
                 placeholder="Extra code"
                 value={NewProduct.extracode}
                 onChangeText={(v) => UpdateData("extracode", v, false)}
@@ -107,7 +116,8 @@ const ProductMagane = ({ id_invo, _product_, _comp_, UpdaterFunc, onCancel, clea
             <View style={[styles.flexcomponentsRow, { alignItems: 'center', justifyContent: 'space-between' }]}>
                 <Text style={{ color: "black", width: '10%', fontWeight: 'bold', fontSize: 20 }}>Price</Text>
                 <TextInput
-                    style={[styles.textinput, { padding: 10, marginBottom: 0, width: '90%' }]}
+                    editable={disp}
+                    style={[styles.textinput, { padding: 10, marginBottom: 0, width: '90%', color: disp ? 'black' : 'grey' }]}
                     placeholder="0.00"
                     keyboardType="numeric"
                     value={NewProduct.price.toString()}
@@ -119,7 +129,8 @@ const ProductMagane = ({ id_invo, _product_, _comp_, UpdaterFunc, onCancel, clea
             {/* Amount in stock (numeric) */}
             <Text style={{ color: "black", marginBottom: 4 }}>Amount in Stock</Text>
             <TextInput
-                style={[styles.textinput, { padding: 10, marginBottom: 10 }]}
+                editable={disp}
+                style={[styles.textinput, { padding: 10, marginBottom: 10, color: disp ? 'black' : 'grey' }]}
                 placeholder="0"
                 keyboardType="numeric"
                 value={NewProduct.amountStock.toString()}
@@ -127,18 +138,11 @@ const ProductMagane = ({ id_invo, _product_, _comp_, UpdaterFunc, onCancel, clea
             />
 
             {
-                NewProduct.type.consumible && (<View>
-                    <Text style={{ color: "black", marginBottom: 4 }}>Expiration Date (YYYY-MM-DD) </Text>
-                    <TextInput
-                        style={[styles.textinput, { padding: 10, marginBottom: 10 }]}
-                        placeholder=" this will be changed 2026-12-31"
-                        value={NewProduct.expiration_date ? new Date(NewProduct.expiration_date).toISOString().slice(0, 10) : ""}
-                        onChangeText={(v) => {
-                            // guardamos como Date o null si viene vacío
-                            const d = v.trim() ? new Date(v) : null;
-                            UpdateData("expiration_date", d as any, false);
-                        }}
-                    /></View>)
+                NewProduct.type.consumible && (
+                <View>
+                    <Text style={{ color: "black", marginBottom: 4 }}>Expiration Date: {_product_ != undefined ? NewProduct.expiration_date?.toString() : 'Set the new Date'} </Text>
+                    <Datepikcker SendTimeFormta={UpdateData} DateSetted={_product_ != undefined ? _product_.expiration_date : null} />
+                </View>)
             }
 
             {/* TYPE toggles */}
@@ -184,6 +188,12 @@ const ProductMagane = ({ id_invo, _product_, _comp_, UpdaterFunc, onCancel, clea
                     <Text style={{ color: "black" }}>Allow Negative Stock</Text>
                     <Switch value={NewProduct.allow_negative_stock} onValueChange={(val) => UpdateData("allow_negative_stock", val, false)} />
                 </View>
+
+                <View style={[styles.flexcomponentsRow, { justifyContent: "space-between", marginBottom: 0 }]}>
+                    <Text style={{ color: "black" }}>Block Edit</Text>
+                    <Switch value={NewProduct.block_edit} onValueChange={(val) => UpdateData("block_edit", val, false)} />
+                </View>
+
             </View>
 
 
@@ -196,13 +206,13 @@ const ProductMagane = ({ id_invo, _product_, _comp_, UpdaterFunc, onCancel, clea
 
             <View style={[styles.flexcomponentsRow, { justifyContent: "space-between" }]}>
                 <TouchableOpacity style={{ marginTop: 12, backgroundColor: "black", padding: 12, borderRadius: 8, width: "45%" }}
-                    onPress={()=>{_product_ != undefined ? SaveUpdate() :OnSaveProduct()}}>
+                    onPress={() => { _product_ != undefined ? SaveUpdate() : OnSaveProduct() }}>
                     <Text style={{ color: "white", textAlign: "center", fontWeight: "bold" }}>{_product_ != undefined ? "UPDATE PRODUCT" : 'SAVE PRODUCT'}</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                     style={{ marginTop: 12, backgroundColor: "red", padding: 12, borderRadius: 8, width: "45%" }}
-                    onPress={()=>{onCancel(), _product_ != undefined && clearprd()}}>
+                    onPress={() => { onCancel(), _product_ != undefined && clearprd() }}>
                     <Text style={{ color: "white", textAlign: "center", fontWeight: "bold" }}>CANCEL</Text>
                 </TouchableOpacity>
             </View>
