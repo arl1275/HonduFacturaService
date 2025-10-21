@@ -34,6 +34,9 @@ const InventoryDetail = ({ route, navigation }: Props) => {
     const setUpdaterProduct = useCallback((item: product) => setEditProduct(item), []);
     //------------------------------------------------------------------//
 
+    //------------------ Navigate to insert lot page -------------------//
+    const GotoInsertingLot = () => {navigation.navigate("InsertingLot", {invo : inventory})}
+
     //------------------ CARGAR PRODUCTOS -----------------------------//
     useEffect(() => {
         const fetchData = async () => {
