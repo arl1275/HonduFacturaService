@@ -119,7 +119,7 @@ const InventoryDetail = ({ route, navigation }: Props) => {
 
                 <View style={[styles.flexcomponentsRow, { justifyContent: "space-between", marginTop: 10 }]}>
                     <Button title="Create Product" color={"green"} onPress={toggleProductModal} />
-                    <Button title="Insertion Lot" color={"black"} />
+                    <Button title="Insertion Lot" color={"black"} onPress={GotoInsertingLot}/>
                 </View>
             </View>
 

@@ -36,6 +36,6 @@ export const clearLotsInserted = () => {
 };
 
 export const getInsertLots_by_idWH = (id : number) =>{
-   const companies = getInsertLots().filter(c => c.inventory_destiny_id === id);
+   const companies = getInsertLots().filter(c => c.id_invo === id);
    return companies;
 }

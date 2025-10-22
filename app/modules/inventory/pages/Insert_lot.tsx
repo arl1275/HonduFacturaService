@@ -7,14 +7,18 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { StackParamList } from "../indexInventory";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { getAllProducts_by_WH_ID } from "@/storage/product.storage";
+import { getInsertLots_by_idWH } from "@/storage/insertlot.storage";
+import { InsertLot } from "@/storage/modals/insertlot_modal";
 
 type props = StackScreenProps<StackParamList, "InsertingLot">;
 
 const InsertLot = ({route, navigation} : props) =>{
     const [invoLocal, setInvoloca]= useState<inventoryWH>();
     const [ProducArray, setProducArray] = useState<product[]>([]);
+    const [InsertingLots, setInsertingLots] = useState<InsertLot[]>([]);
 
     const GetAllproducts= () => {setProducArray(getAllProducts_by_WH_ID(route.params.invo.id_company))};
+    const _GetInsertingLots_ = () => {setInsertingLots(getInsertLots_by_idWH(route.params.invo.id))}
 
     useEffect(()=>{
         setInvoloca(route.params.invo);
@@ -36,6 +40,9 @@ const InsertLot = ({route, navigation} : props) =>{
                 <Text style={[styles.smallText]}>This view is to show the format to insert an inserting lot</Text>
             </View>
 
+            <View>
+                <Text></Text>
+            </View>
             <View>
                 <Text></Text>
             </View>
