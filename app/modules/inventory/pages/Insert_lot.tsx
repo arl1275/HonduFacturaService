@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Pressable } from "react-native";
 import { product } from "@/storage/modals/inventory";
 import { inventoryWH } from "@/storage/modals/inventory";
 import { useEffect, useState } from "react";
@@ -23,6 +23,7 @@ const InsertLot = ({route, navigation} : props) =>{
     useEffect(()=>{
         setInvoloca(route.params.invo);
         GetAllproducts();
+        _GetInsertingLots_();
     }, [route.params])
     
     return(
@@ -41,7 +42,7 @@ const InsertLot = ({route, navigation} : props) =>{
             </View>
 
             <View>
-                <Text></Text>
+                <Pressable>Generate Insert Lot</Pressable>
             </View>
             <View>
                 <Text></Text>
