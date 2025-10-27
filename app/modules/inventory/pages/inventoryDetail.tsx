@@ -30,12 +30,12 @@ const InventoryDetail = ({ route, navigation }: Props) => {
 
     //------------------ FUNCIONES DE MODAL -----------------------------//
     const toggleProductModal = useCallback(() => setShowModal((prev) => !prev), []);
-    const clearEdit = () =>{setEditProduct(undefined)};
+    const clearEdit = () => { setEditProduct(undefined) };
     const setUpdaterProduct = useCallback((item: product) => setEditProduct(item), []);
     //------------------------------------------------------------------//
 
     //------------------ Navigate to insert lot page -------------------//
-    const GotoInsertingLot = () => {navigation.navigate("InsertingLot", {invo : inventory})}
+    const GotoInsertingLot = () => { navigation.navigate("InsertingLot", { invo: inventory }) }
 
     //------------------ CARGAR PRODUCTOS -----------------------------//
     useEffect(() => {
@@ -108,18 +108,14 @@ const InventoryDetail = ({ route, navigation }: Props) => {
 
             {/*--------------------- INVENTORY INFO -------------------------*/}
             <View style={[styles.cardborder, { padding: 10 }]}>
-                <Text style={[styles.paragraph, styles.textalingleft, { color: "black" }]}>
-                    {inventory.name}
-                </Text>
-                <Text style={[styles.smallText, { fontSize: 15 }]}>{inventory.code}</Text>
-                <Text style={[styles.smallText, { fontSize: 15 }]}>{inventory.ubication}</Text>
-                <Text style={[styles.smallText, { fontSize: 15 }]}>
-                    {inventory.type.physical ? "PHYSICAL" : "VIRTUAL"}
-                </Text>
+                <Text style={[styles.paragraph, styles.textalingleft, { color: "black" }]}>{inventory.name}</Text>
+                <Text style={[styles.smallText, styles.textalingleft, { fontSize: 15 }]}>{inventory.code}</Text>
+                <Text style={[styles.smallText, styles.textalingleft, { fontSize: 15 }]}>{inventory.ubication}</Text>
+                <Text style={[styles.smallText, styles.textalingleft, { fontSize: 15 }]}>{inventory.type.physical ? "PHYSICAL" : "VIRTUAL"}</Text>
 
                 <View style={[styles.flexcomponentsRow, { justifyContent: "space-between", marginTop: 10 }]}>
                     <Button title="Create Product" color={"green"} onPress={toggleProductModal} />
-                    <Button title="Insertion Lot" color={"black"} onPress={GotoInsertingLot}/>
+                    <Button title="Insertion Lot" color={"black"} onPress={GotoInsertingLot} />
                 </View>
             </View>
 
@@ -148,25 +144,16 @@ const InventoryDetail = ({ route, navigation }: Props) => {
                 keyExtractor={(item) => String(item.id)}
                 keyboardShouldPersistTaps="handled"
                 ListHeaderComponent={
-                    <View
-                        style={[
-                            styles.flexcomponentsRow,
-                            { justifyContent: "space-between", paddingVertical: 5 },
-                        ]}
-                    >
-                        <Text style={{ fontWeight: "bold" }}>Name</Text>
-                        <Text style={{ fontWeight: "bold" }}>Code</Text>
-                        <Text style={{ fontWeight: "bold" }}>Amount</Text>
-                        <Text style={{ fontWeight: "bold" }}>Price</Text>
-                    </View>
+                    filteredProductos.length > 0 ?
+                        <View style={[styles.flexcomponentsRow, { justifyContent: "space-between", paddingVertical: 5 }]}>
+                            <Text style={{ fontWeight: "bold" }}>Name</Text>
+                            <Text style={{ fontWeight: "bold" }}>Code</Text>
+                            <Text style={{ fontWeight: "bold" }}>Amount</Text>
+                            <Text style={{ fontWeight: "bold" }}>Price</Text>
+                        </View> : null
                 }
                 renderItem={({ item }) => (
-                    <TouchableOpacity
-                        onPress={() => {
-                            setUpdaterProduct(item);
-                            toggleProductModal();
-                        }}
-                    >
+                    <TouchableOpacity onPress={() => { setUpdaterProduct(item); toggleProductModal();}}>
                         <ProductRender prod={item} />
                     </TouchableOpacity>
                 )}

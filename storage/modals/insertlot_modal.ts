@@ -10,7 +10,7 @@ export interface InsertLot {
   id_invo : number,
   id_company : number,
   inventory_destiny_id : number,
-  insert_lot_num: string; // sequence: [Inventory - YYYY.MM.DD - xxxx]
+  insert_lot_num: string; // sequence: [InventoryCode-xxxxx]
   inserter: string;
   id_supplier: number;
   created_at: Date;

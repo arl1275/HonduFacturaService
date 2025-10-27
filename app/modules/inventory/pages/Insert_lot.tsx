@@ -12,7 +12,7 @@ import { InsertLot } from "@/storage/modals/insertlot_modal";
 
 type props = StackScreenProps<StackParamList, "InsertingLot">;
 
-const InsertLot = ({route, navigation} : props) =>{
+const InsertLot_view = ({route, navigation} : props) =>{
     const [invoLocal, setInvoloca]= useState<inventoryWH>();
     const [ProducArray, setProducArray] = useState<product[]>([]);
     const [InsertingLots, setInsertingLots] = useState<InsertLot[]>([]);
@@ -38,12 +38,13 @@ const InsertLot = ({route, navigation} : props) =>{
             {/*------------------------------------------------------*/}
 
             <View>
-                <Text style={[styles.smallText]}>This view is to show the format to insert an inserting lot</Text>
+                <Text style={[styles.smallText, styles.textalingleft]}>This view is to show the format to insert an inserting lot</Text>
             </View>
 
-            <View>
-                <Pressable>Generate Insert Lot</Pressable>
+            <View style={[styles.rectanglebutton, {width : '40%', alignItems : 'center', alignSelf : 'center'}]}>
+                <Pressable><Text>Generate Insert Lot</Text></Pressable>
             </View>
+            
             <View>
                 <Text></Text>
             </View>
@@ -52,4 +53,4 @@ const InsertLot = ({route, navigation} : props) =>{
     )
 }
 
-export default InsertLot;
+export default InsertLot_view;

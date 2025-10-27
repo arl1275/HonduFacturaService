@@ -5,7 +5,7 @@ import { inventoryWH, product } from '@/storage/modals/inventory';
 import HomeInventory from './pages/homeinventory';
 import InventoryDetail from './pages/inventoryDetail';
 import { company } from '@/storage/modals/empresa';
-import InsertLot from './pages/Insert_lot';
+import InsertLot_view from './pages/Insert_lot';
 
 export type StackParamList = {
   HomeInventory: undefined;
@@ -20,7 +20,7 @@ const IndexInventory = () => {
     <InventoryStack.Navigator initialRouteName="HomeInventory" screenOptions={{ headerShown: false }}>
       <InventoryStack.Screen name="HomeInventory" component={HomeInventory}/>
       <InventoryStack.Screen name="Inventorydetail" component={InventoryDetail}/>
-      <InventoryStack.Screen name="InsertingLot" component={InsertLot}/>
+      <InventoryStack.Screen name="InsertingLot" component={InsertLot_view}/>
     </InventoryStack.Navigator>
   );
 };
