@@ -34,7 +34,7 @@ const ReturnNewNum = (lastNum: string): string => {
   return `${prefix}-${padded}`;
 };
 
-const PreparationLot = (invo: inventoryWH) => {
+const PreparationLot = (invo: inventoryWH, _name_inserter_ : string, _sup_id_ : number, _destiny_INVO_id_ : number) => {
   const value: InsertLot | null = get_last_insertlot(invo.id);
     let lastNumber : string = "";
     value != null ? lastNumber = ReturnNewNum(value.insert_lot_num) : lastNumber = invo.code.toString() + "-00001" 
@@ -44,10 +44,10 @@ const PreparationLot = (invo: inventoryWH) => {
       id: Date.now(),
       id_invo: invo.id,
       id_company: invo.id_company,
-      inventory_destiny_id: 0,
+      inventory_destiny_id: _destiny_INVO_id_,
       insert_lot_num: lastNumber,
-      inserter: "", // this will be updated...
-      id_supplier: 0, // this will be updated
+      inserter: _name_inserter_, // this will be updated...
+      id_supplier: _sup_id_, // this will be updated
       created_at: new Date(),
       validated_at: null,
       status: {
