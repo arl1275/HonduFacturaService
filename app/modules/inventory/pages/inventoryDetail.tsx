@@ -75,14 +75,7 @@ const InventoryDetail = ({ route, navigation }: Props) => {
         <View style={{ flex: 1, margin: 10 }}>
             {/*--------------------- MODAL -------------------------*/}
             <Modal visible={showModal} transparent animationType="fade">
-                <View
-                    style={{
-                        flex: 1,
-                        backgroundColor: "rgba(0, 0, 0, 0.5)",
-                        justifyContent: "center",
-                        alignItems: "center",
-                    }}
-                >
+                <View style={{flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)", justifyContent: "center",alignItems: "center",}}>
                     <View style={{ width: "70%" }}>
                         <ProductManage
                             id_invo={inventory.id}

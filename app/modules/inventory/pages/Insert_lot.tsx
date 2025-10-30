@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Pressable } from "react-native";
+import { View, Text, TouchableOpacity, Pressable, FlatList } from "react-native";
 import { product } from "@/storage/modals/inventory";
 import { inventoryWH } from "@/storage/modals/inventory";
 import { useEffect, useState } from "react";
@@ -9,6 +9,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { getAllProducts_by_WH_ID } from "@/storage/product.storage";
 import { getInsertLots_by_idWH } from "@/storage/insertlot.storage";
 import { InsertLot } from "@/storage/modals/insertlot_modal";
+import PreparationLot from "../utils/preparateInsertLot"; // this function if to prepare the inserting lot
 
 type props = StackScreenProps<StackParamList, "InsertingLot">;
 
@@ -46,7 +47,15 @@ const InsertLot_view = ({route, navigation} : props) =>{
             </View>
             
             <View>
-                <Text></Text>
+                <FlatList 
+                data={InsertingLots}
+                keyExtractor={(item)=> item.id.toString()}
+                renderItem={(item)=>
+                <View>
+
+                </View>
+                }
+                />
             </View>
 
         </View>
