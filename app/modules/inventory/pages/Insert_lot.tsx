@@ -50,11 +50,15 @@ const InsertLot_view = ({route, navigation} : props) =>{
                 <FlatList 
                 data={InsertingLots}
                 keyExtractor={(item)=> item.id.toString()}
-                renderItem={(item)=>
+                renderItem={(item)=>(
                 <View>
 
-                </View>
-                }
+                </View>)}
+                ListEmptyComponent={
+                <View style={[{alignSelf : 'center'}]}>
+                    <Text style={[styles.smallText]}>Not inserting lots register yet</Text>
+                </View>}
+                
                 />
             </View>
 

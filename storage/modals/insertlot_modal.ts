@@ -20,4 +20,6 @@ export interface InsertLot {
     done: boolean;               
   };
   products: { id_prod: number; cost: number }[];
+  total : number,
+  subtotal : number,
 }

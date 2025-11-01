@@ -55,6 +55,8 @@ const PreparationLot = (invo: inventoryWH, _name_inserter_ : string, _sup_id_ : 
         done: false,
       },
       products: [],
+      total: 0.0,
+      subtotal: 0.0
     };
 
     return Prepared;
