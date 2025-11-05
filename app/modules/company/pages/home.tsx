@@ -37,7 +37,12 @@ export default function HomeCompany() {
       <View style={styles.flexcomponentsRow}>
         <TouchableOpacity onPress={() => navigation.navigate('Settings')} style={styles.squarebutton}>
           <Ionicons name={"create"} size={25} color={"black"} />
-          <Text>CREAR COMPAÑIA</Text>
+          <Text>CREATE COMPANY</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.navigate("suppliers")} style={styles.squarebutton}>
+          <Ionicons name={"cube"} size={25} color={"black"} />
+          <Text>CREATE SUPPLIER</Text>
         </TouchableOpacity>
       </View>
 

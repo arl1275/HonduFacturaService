@@ -1,0 +1,65 @@
+import React, { useEffect, useState } from "react";
+import { View, Text, FlatList, TouchableOpacity, Modal } from "react-native";
+import { supplier } from "@/storage/modals/supplier";
+import { getAllSuppliers, addSupplier, updateSupplier } from "@/storage/supplier.storage";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../indexcompany";
+import { useNavigation } from "expo-router";
+import SupplierCard from "../components/suppliersCard";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import styles from "@/assets/styles/styles";
+import ModalEditSupplier from "../modals/EditSupplier";
+
+type HomeCompanyNavigationProp = StackNavigationProp<RootStackParamList, "suppliers">;
+
+const SuppliersHomePage = () => {
+    const navigation = useNavigation<HomeCompanyNavigationProp>();
+    const [EditSupplier, setEditSupplier] = useState<boolean>(false);
+    const [ShowModalsupp, setShowModalsupp] = useState<boolean>(false);
+    const [SuppliersList, setSuppliersList] = useState<supplier[]>([]);
+    const [SelectedSupp, setSelectedSupp] = useState<supplier | undefined>(undefined);
+
+    const oncancel = () => { navigation.navigate("HomeCompany")}
+    const ModalView = () => { setShowModalsupp(!ShowModalsupp)};
+    const ToEditSupplier = (ToEd : supplier) => {setSelectedSupp(ToEd); ModalView();}
+
+    useEffect(() => {
+        setSuppliersList(getAllSuppliers());
+    }, [EditSupplier, ShowModalsupp]);
+
+    return (
+        <View style={[{ flex: 1 }]}>
+            {/*-------------------HEAD----------------------------------- */}
+            <View style={[styles.flexcomponentsRow, { margin: 5, alignItems: 'center' }]}>
+                <TouchableOpacity onPress={() => oncancel()}>
+                    <Ionicons name="chevron-back" size={30} color="black" />
+                </TouchableOpacity>
+                <Text style={[styles.paragraph, styles.textalingleft, { color: "black" }]}>GO BACK</Text>
+            </View>
+
+            {/*-------------------MODAL----------------------------------- */}
+            <Modal visible={ShowModalsupp} transparent={true} animationType="fade" >
+                <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)', justifyContent: 'center', alignItems: 'center' }}>
+                    <View style={[{ width: '70%' }]}>
+                        <ModalEditSupplier item={SelectedSupp} saveUpdate={updateSupplier} onclose={ModalView}/>
+                    </View>
+                </View>
+            </Modal>
+
+             {/*-------------------BODY----------------------------------- */}
+            <View>
+                <FlatList 
+                data={SuppliersList}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({item})=>(
+                    <View>
+                        <SupplierCard val={item} onEditPress={ToEditSupplier} />
+                    </View>
+                )}
+                />
+            </View>
+        </View>
+    )
+}
+
+export default SuppliersHomePage;

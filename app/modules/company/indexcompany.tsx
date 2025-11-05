@@ -12,6 +12,7 @@ export type RootStackParamList = {
     HomeCompany: undefined;
     Settings: undefined;
     Editpage: { item: company };
+    suppliers : undefined;
 };
 
 const IndexCompany = () => {
