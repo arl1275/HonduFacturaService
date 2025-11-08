@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import RegisterCompany from "./pages/registercompany";
 import HomeCompany from "./pages/home";
 import EditCompanyPage from "./pages/editcompany";
+import SuppliersHomePage from './pages/Suppliers_home';
 import { company } from "@/storage/modals/empresa";
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -21,6 +22,7 @@ const IndexCompany = () => {
             <Stack.Screen name="HomeCompany" component={HomeCompany}/>
             <Stack.Screen name="Settings" component={RegisterCompany} />
             <Stack.Screen name="Editpage" component={EditCompanyPage} />
+            <Stack.Screen name="suppliers" component={SuppliersHomePage} />
         </Stack.Navigator>
 
     )

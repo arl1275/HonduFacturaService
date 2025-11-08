@@ -34,7 +34,7 @@ export default function HomeCompany() {
         </Text>
       </View>
 
-      <View style={styles.flexcomponentsRow}>
+      <View style={[styles.flexcomponentsRow, {justifyContent : 'space-between'}]}>
         <TouchableOpacity onPress={() => navigation.navigate('Settings')} style={styles.squarebutton}>
           <Ionicons name={"create"} size={25} color={"black"} />
           <Text>CREATE COMPANY</Text>

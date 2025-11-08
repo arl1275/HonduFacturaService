@@ -26,7 +26,7 @@ const ModalEditSupplier = ({ item, saveUpdate, onclose }: props) => {
         if (typeof item != 'undefined') setNewSupplier(item);
     }, [item]);
 
-    const VAlItem = () => { return item != undefined ? false : true}
+    const VAlItem = () => { return item != undefined ? true : false}
 
     const OnUpdateValue = (e: string | number | boolean, field: string) => { setNewSupplier((prev) => ({ ...prev, [field]: e }))}
 
@@ -43,7 +43,7 @@ const ModalEditSupplier = ({ item, saveUpdate, onclose }: props) => {
         <View style={[{ width: '100%', alignSelf: 'center', justifyContent: 'space-between', padding: 5, borderBlockColor: 'black', borderWidth: 1, elevation: 10, borderRadius: 7, backgroundColor: 'white', marginBottom: 10 }]}>
 
             <View style={[styles.flexcomponentsRow, { margin: 5, alignItems: 'center', justifyContent: 'space-between' }]}>
-                <Text style={[styles.paragraph, { color: 'black' }]}>CREATE A TAX</Text>
+                <Text style={[styles.paragraph, { color: 'black' }]}>CREATE SUPPLIER</Text>
                 <TouchableOpacity style={[{ marginLeft: 5, marginRight: 5 }]} onPress={() => onclose()}>
                     <Ionicons name={"close-circle-outline"} size={25} color={"red"} />
                 </TouchableOpacity>

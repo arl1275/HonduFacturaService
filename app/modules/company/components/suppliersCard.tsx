@@ -11,7 +11,7 @@ type props = {
 const SupplierCard = ({ val, onEditPress }: props) => {
     return (
         <TouchableOpacity onPress={()=> onEditPress(val)}>
-            <View style={[styles.flexcomponentsRow, styles.cardborder]}>
+            <View style={[styles.flexcomponentsRow, styles.cardborder, {justifyContent : "space-between"}]}>
                 <Text style={[styles.smallText, { color: 'black' }]}>{val.code}</Text>
                 <Text style={[styles.smallText, { color: 'black' }]}>{val.name}</Text>
                 <Text style={[styles.smallText, { color: 'black' }]}>{val.phone_num}</Text>
