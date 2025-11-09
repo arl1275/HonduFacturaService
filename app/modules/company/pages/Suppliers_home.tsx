@@ -68,10 +68,11 @@ const SuppliersHomePage = () => {
                     keyExtractor={(item) => item.id.toString()}
                     ListHeaderComponent={(
                         <View style={[ styles.flexcomponentsRow ,{ justifyContent : 'space-between', marginLeft : 10, marginRight : 10}]}>
-                            <Text style={[styles.smallText, styles.textalingleft, { color: 'black' }]}>Code</Text>
-                            <Text style={[styles.smallText, styles.textalingleft, { color: 'black' }]}>Name</Text>
-                            <Text style={[styles.smallText, styles.textalingleft, { color: 'black' }]}>Phone</Text>
-                            <Text style={[styles.smallText, styles.textalingleft, { color: 'black' }]}>E-mail</Text>
+                            <Text style={[styles.smallText, styles.textalingleft, { color: 'grey' }]}>Code</Text>
+                            <Text style={[styles.smallText, styles.textalingleft, { color: 'grey' }]}>Name</Text>
+                            <Text style={[styles.smallText, styles.textalingleft, { color: 'grey' }]}>Phone</Text>
+                            <Text style={[styles.smallText, styles.textalingleft, { color: 'grey' }]}>E-mail</Text>
+                            <Text style={[styles.smallText, styles.textalingleft, { color: 'grey' }]}>Active</Text>
                         </View>
                     )}
                     renderItem={({ item }) => (

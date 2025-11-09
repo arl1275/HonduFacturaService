@@ -16,6 +16,7 @@ const SupplierCard = ({ val, onEditPress }: props) => {
                 <Text style={[styles.smallText, { color: 'black' }]}>{val.name}</Text>
                 <Text style={[styles.smallText, { color: 'black' }]}>{val.phone_num}</Text>
                 <Text style={[styles.smallText, { color: 'black' }]}>{val.email}</Text>
+                <Text style={[styles.smallText, { color: val.is_block ? "red" : "green" }]}>{val.is_block ? "BLOCK" : "ACTIVE"}</Text>
             </View>
         </TouchableOpacity>
     )

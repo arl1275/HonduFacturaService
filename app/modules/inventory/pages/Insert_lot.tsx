@@ -14,7 +14,7 @@ import PreparationLot from "../utils/preparateInsertLot"; // this function if to
 type props = StackScreenProps<StackParamList, "InsertingLot">;
 
 const InsertLot_view = ({route, navigation} : props) =>{
-    const [invoLocal, setInvoloca]= useState<inventoryWH>();
+    const [invoLocal, setInvoloca]= useState<inventoryWH | undefined>();
     const [ProducArray, setProducArray] = useState<product[]>([]);
     const [InsertingLots, setInsertingLots] = useState<InsertLot[]>([]);
 
@@ -28,7 +28,7 @@ const InsertLot_view = ({route, navigation} : props) =>{
     }, [route.params])
     
     return(
-        <View>
+        <View style={[{flex : 1}]}>
             {/*--------------------- HEADER -------------------------*/}
             <View style={[styles.flexcomponentsRow, { margin: 5, alignItems: "center" }]}>
                 <TouchableOpacity onPress={() => navigation.navigate("HomeInventory")}>
@@ -43,7 +43,9 @@ const InsertLot_view = ({route, navigation} : props) =>{
             </View>
 
             <View style={[styles.rectanglebutton, {width : '40%', alignItems : 'center', alignSelf : 'center'}]}>
-                <Pressable><Text>Generate Insert Lot</Text></Pressable>
+                <Pressable onPress={()=> navigation.navigate("InsertingLotPage", {invo : invoLocal})}>
+                    <Text>Generate Insert Lot</Text>
+                </Pressable>
             </View>
             
             <View>
