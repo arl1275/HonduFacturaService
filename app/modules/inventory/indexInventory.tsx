@@ -12,7 +12,7 @@ export type StackParamList = {
   HomeInventory: undefined;
   Inventorydetail : {invo : inventoryWH, comp : company | undefined};
   InsertingLot : {invo : inventoryWH};
-  InsertingLotPage : {invo : inventoryWH | undefined};
+  InsertingLotPage : {invo : inventoryWH | undefined, producsList : product[] | undefined};
 };
 
 const InventoryStack = createStackNavigator<StackParamList>();

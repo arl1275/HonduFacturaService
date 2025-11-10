@@ -9,7 +9,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { getAllProducts_by_WH_ID } from "@/storage/product.storage";
 import { getInsertLots_by_idWH } from "@/storage/insertlot.storage";
 import { InsertLot } from "@/storage/modals/insertlot_modal";
-import PreparationLot from "../utils/preparateInsertLot"; // this function if to prepare the inserting lot
+//import PreparationLot from "../utils/preparateInsertLot"; // this function if to prepare the inserting lot
 
 type props = StackScreenProps<StackParamList, "InsertingLot">;
 
@@ -43,7 +43,7 @@ const InsertLot_view = ({route, navigation} : props) =>{
             </View>
 
             <View style={[styles.rectanglebutton, {width : '40%', alignItems : 'center', alignSelf : 'center'}]}>
-                <Pressable onPress={()=> navigation.navigate("InsertingLotPage", {invo : invoLocal})}>
+                <Pressable onPress={()=> navigation.navigate("InsertingLotPage", {invo : invoLocal, producsList : ProducArray})}>
                     <Text>Generate Insert Lot</Text>
                 </Pressable>
             </View>

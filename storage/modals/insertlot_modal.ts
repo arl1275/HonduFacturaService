@@ -1,3 +1,5 @@
+import { product } from "./inventory";
+
 export interface supplier{
     id: number, 
     name : string, 
@@ -19,7 +21,7 @@ export interface InsertLot {
     draft: boolean;
     done: boolean;               
   };
-  products: { id_prod: number; cost: number }[];
+  products: product[];
   total : number,
   subtotal : number,
 }
