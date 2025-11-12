@@ -15,6 +15,8 @@ type props = StackScreenProps<StackParamList, "InsertingLotPage">;
 const InsertingLotPage = ({ route, navigation }: props) => {
     const [InsertingLotDraft, setInsertingLotDraft] = useState<InsertLot | undefined>(undefined);
     const [SuppLierSelected, setSuppLierSelected] = useState<supplier | undefined>(undefined);
+    const [ProductsWH, setProductsWH] = useState<product[]>([]);                                    // this are the products of this wh
+    const [ProdSelectedList, setProdSelectedList] = useState<product[]>([]);                        // this are the products selected for the Inserting lot
 
     const OnSelectSupplier = (Seleccted: supplier | undefined) => { setSuppLierSelected(Seleccted) };
     const ExistLot = () => { return InsertingLotDraft === undefined ? false : true };
@@ -29,14 +31,21 @@ const InsertingLotPage = ({ route, navigation }: props) => {
         ])
     }
 
+    // This function is to prepare the things of the inserting lot
     const Onpreparate = () => {
         if (typeof route.params.invo === "object") {
             const Result = PreparationLot(route.params.invo, "Inserter", 0, route.params.invo?.id)
             setInsertingLotDraft(Result);
         }
+        if(route.params.producsList != undefined){
+            setProductsWH(route.params.producsList);
+        }
     };
 
-    const UpdateInsertingLot = (field : string, value : supplier | product[] | string) => {
+    //this function is to add one product to the insertinglot
+    //const Addproduct = (newVal : product) => {setProdSelectedList(prev => [...prev, newVal])}
+
+    const UpdateInsertingLot = (field : string, value : supplier | product[] | string | number) => {
         if(InsertingLotDraft != undefined){
             setInsertingLotDraft(prev =>(prev ? {...prev, [field] : [value]} as InsertLot : prev))
         }
@@ -47,7 +56,7 @@ const InsertingLotPage = ({ route, navigation }: props) => {
     }, [route.params.invo]);
 
     useEffect(() => {
-        //UpdateInsertingLot("products", )
+        UpdateInsertingLot("id_supplier", SuppLierSelected != undefined ? SuppLierSelected.id : 0);
     }, [SuppLierSelected?.id]);
 
 
@@ -73,6 +82,10 @@ const InsertingLotPage = ({ route, navigation }: props) => {
                     <View>
                         <PickerSupplier SelectSup={OnSelectSupplier} />
                     </View>
+                </View>
+
+                <View>
+
                 </View>
 
             </View>
