@@ -10,6 +10,9 @@ import { supplier } from "@/storage/modals/supplier";
 import { PickerSupplier } from "@/components/Pickers";
 import { product } from "@/storage/modals/inventory";
 
+import ProductPicker from "../components/productspicker";
+import { addProduct } from "@/storage/product.storage";
+
 type props = StackScreenProps<StackParamList, "InsertingLotPage">;
 
 const InsertingLotPage = ({ route, navigation }: props) => {
@@ -43,7 +46,7 @@ const InsertingLotPage = ({ route, navigation }: props) => {
     };
 
     //this function is to add one product to the insertinglot
-    //const Addproduct = (newVal : product) => {setProdSelectedList(prev => [...prev, newVal])}
+    const Addproduct = (newVal : product) => {setProdSelectedList(prev => [...prev, newVal])}
 
     const UpdateInsertingLot = (field : string, value : supplier | product[] | string | number) => {
         if(InsertingLotDraft != undefined){
@@ -85,7 +88,7 @@ const InsertingLotPage = ({ route, navigation }: props) => {
                 </View>
 
                 <View>
-
+                        <ProductPicker products_of_this_wh={ProductsWH} onSelected={addProduct}/>
                 </View>
 
             </View>
