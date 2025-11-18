@@ -1,6 +1,6 @@
 import styles from "@/assets/styles/styles";
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Alert, Pressable } from "react-native";
 import { StackParamList } from "../indexInventory";
 import { StackScreenProps } from "@react-navigation/stack";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -28,7 +28,7 @@ const InsertingLotPage = ({ route, navigation }: props) => {
         Alert.alert("Cancel Insert Lot", "Are you sure; u want to cancel the insert lot?", [
             {
                 text: 'YES',
-                onPress: () => {route.params.invo && navigation.navigate("InsertingLot", { invo : route.params.invo})}
+                onPress: () => { route.params.invo && navigation.navigate("InsertingLot", { invo: route.params.invo }) }
             },
             { text: "NO" }
         ])
@@ -40,20 +40,20 @@ const InsertingLotPage = ({ route, navigation }: props) => {
             const Result = PreparationLot(route.params.invo, "Inserter", 0, route.params.invo?.id)
             setInsertingLotDraft(Result);
         }
-        if(route.params.producsList != undefined){
+        if (route.params.producsList != undefined) {
             setProductsWH(route.params.producsList);
         }
     };
 
     //this function is to add one product to the insertinglot
-    const Addproduct = (newVal : product) => {setProdSelectedList(prev => [...prev, newVal])}
+    const Addproduct = (newVal: product) => { setProdSelectedList(prev => [...prev, newVal]) }
 
-    const UpdateInsertingLot = (field : string, value : supplier | product[] | string | number) => {
-        if(InsertingLotDraft != undefined){
-            setInsertingLotDraft(prev =>(prev ? {...prev, [field] : [value]} as InsertLot : prev))
+    const UpdateInsertingLot = (field: string, value: supplier | product[] | string | number) => {
+        if (InsertingLotDraft != undefined) {
+            setInsertingLotDraft(prev => (prev ? { ...prev, [field]: [value] } as InsertLot : prev))
         }
     }
-    
+
     useEffect(() => {
         Onpreparate()
     }, [route.params.invo]);
@@ -88,7 +88,12 @@ const InsertingLotPage = ({ route, navigation }: props) => {
                 </View>
 
                 <View>
-                        <ProductPicker products_of_this_wh={ProductsWH} onSelected={addProduct}/>
+                    <ProductPicker products_of_this_wh={ProductsWH} onSelected={addProduct} />
+                    <View>
+                        <Pressable><Text>CONFIRM</Text></Pressable>
+                        <Pressable><Text>SAVE</Text></Pressable>
+                        <Pressable><Text>CANCEL</Text></Pressable>
+                    </View>
                 </View>
 
             </View>

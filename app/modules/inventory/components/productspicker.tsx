@@ -1,7 +1,7 @@
 import { product } from "@/storage/modals/inventory";
 import { View, Text, Pressable, TextInput, FlatList } from "react-native";
 import styles from "@/assets/styles/styles";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 
 type Props = {
   products_of_this_wh: product[];
@@ -20,23 +20,27 @@ const ProductPicker = ({ products_of_this_wh, onSelected }: Props) => {
   const norm = (s: string = "") =>
     s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
 
+  // clave estable por item (para borrar/identificar)
+  const stableKey = (item: product) =>
+    (item as any).id?.toString?.() ??
+    item.code?.toString?.() ??
+    item.extracode?.toString?.() ??
+    item.name;
+
+  const applySearch = (list: product[], qRaw: string) => {
+    const q = norm(qRaw);
+    if (!q) return list;
+    return list.filter((p: product) => {
+      const n = norm(p.name);
+      const c = norm(p.code ?? "");
+      const e = norm(p.extracode ?? "");
+      return n.includes(q) || c.includes(q) || e.includes(q);
+    });
+  };
+
   const searchProducts = (qRaw: string) => {
     setQuery(qRaw);
-    const q = norm(qRaw);
-
-    if (!q) {
-      setFiltered(Prods);
-      return;
-    }
-
-    setFiltered(
-      Prods.filter((p: product) => {
-        const n = norm(p.name);
-        const c = norm(p.code ?? "");
-        const e = norm(p.extracode ?? "");
-        return n.includes(q) || c.includes(q) || e.includes(q);
-      })
-    );
+    setFiltered(applySearch(Prods, qRaw));
   };
 
   const onchoose = (val: product) => {
@@ -46,26 +50,57 @@ const ProductPicker = ({ products_of_this_wh, onSelected }: Props) => {
     setFiltered(Prods);
   };
 
+  const deleteItem = (item: product) => {
+    setProds(prev => {
+      const updated = prev.filter(p => stableKey(p) !== stableKey(item));
+      // re-aplicar filtro actual sobre la nueva lista
+      setFiltered(applySearch(updated, query));
+      return updated;
+    });
+  };
+
   useEffect(() => {
-    setProds(products_of_this_wh ?? []);
-    setFiltered(products_of_this_wh ?? []);
+    const base = products_of_this_wh ?? [];
+    setProds(base);
+    setFiltered(applySearch(base, query));
   }, [products_of_this_wh]);
 
-  // key extractor robusto: usa code || extracode || name
+  // key extractor robusto (usa index solo para evitar colisiones)
   const keyExtractor = (item: product, index: number) =>
-    (item as any).id?.toString?.() ??
-    item.code?.toString?.() ??
-    item.extracode?.toString?.() ??
-    `${item.name}-${index}`;
+    `${stableKey(item)}-${index}`;
 
   const renderItem = ({ item }: { item: product }) => (
-    <Pressable onPress={() => onchoose(item)} style={{ paddingVertical: 8 }}>
-      <Text style={{ fontSize: 16 }}>{item.name}</Text>
-      {!!item.code && <Text style={{ opacity: 0.6 }}>{item.code}</Text>}
-      {!!item.extracode && (
-        <Text style={{ opacity: 0.6 }}>{item.extracode}</Text>
-      )}
-    </Pressable>
+    <View
+      style={{
+        paddingVertical: 8,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: 12,
+      }}
+    >
+      {/* Área seleccionable */}
+      <Pressable onPress={() => onchoose(item)} style={{ flex: 1 }}>
+        <Text style={{ fontSize: 16 }}>{item.name}</Text>
+        {!!item.code && <Text style={{ opacity: 0.6 }}>{item.code}</Text>}
+        {!!item.extracode && (
+          <Text style={{ opacity: 0.6 }}>{item.extracode}</Text>
+        )}
+      </Pressable>
+
+      {/* Botón eliminar */}
+      <Pressable
+        onPress={() => deleteItem(item)}
+        style={{
+          paddingHorizontal: 12,
+          paddingVertical: 6,
+          borderRadius: 8,
+          backgroundColor: "#e74c3c",
+        }}
+      >
+        <Text style={{ color: "white", fontWeight: "600" }}>Eliminar</Text>
+      </Pressable>
+    </View>
   );
 
   return (
@@ -92,6 +127,9 @@ const ProductPicker = ({ products_of_this_wh, onSelected }: Props) => {
             keyExtractor={keyExtractor}
             renderItem={renderItem}
             keyboardShouldPersistTaps="handled"
+            ItemSeparatorComponent={() => (
+              <View style={{ height: 1, backgroundColor: "#eee" }} />
+            )}
           />
         </View>
       ) : (
