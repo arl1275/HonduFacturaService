@@ -39,6 +39,7 @@ const ProductPicker = ({ products_of_this_wh, onSelected }: Props) => {
   };
 
   const searchProducts = (qRaw: string) => {
+    // this function is should add the product to the 
     setQuery(qRaw);
     setFiltered(applySearch(Prods, qRaw));
   };
@@ -53,7 +54,6 @@ const ProductPicker = ({ products_of_this_wh, onSelected }: Props) => {
   const deleteItem = (item: product) => {
     setProds(prev => {
       const updated = prev.filter(p => stableKey(p) !== stableKey(item));
-      // re-aplicar filtro actual sobre la nueva lista
       setFiltered(applySearch(updated, query));
       return updated;
     });
