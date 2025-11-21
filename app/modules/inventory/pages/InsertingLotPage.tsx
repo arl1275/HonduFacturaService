@@ -60,6 +60,8 @@ const InsertingLotPage = ({ route, navigation }: props) => {
 
     useEffect(() => {
         UpdateInsertingLot("id_supplier", SuppLierSelected != undefined ? SuppLierSelected.id : 0);
+        console.log(typeof ProductsWH[0]);
+        
     }, [SuppLierSelected?.id]);
 
 
@@ -76,20 +78,24 @@ const InsertingLotPage = ({ route, navigation }: props) => {
 
             <View>
                 <View style={[styles.cardborder, { padding: 10 }]}>
-                    <Text style={[styles.paragraph]}>Insert Lot: {ExistLot() ? InsertingLotDraft?.insert_lot_num : "Waiting Number"}</Text>
-                    <Text style={[styles.paragraph]}>Date: {ExistLot() ? InsertingLotDraft?.created_at.toString() : "Waiting Response"}</Text>
-                    <Text style={[styles.paragraph]}>Warehouse: {route.params.invo?.name}</Text>
-                    <View>
-                        <TextInput style={[styles.textinput]} placeholder="Insert Inserter" />
+                    <Text style={[styles.paragraph, { color: 'black', margin : 0 }]}>Insert Lot: {ExistLot() ? InsertingLotDraft?.insert_lot_num : "Waiting Number"}</Text>
+                    <Text style={[styles.paragraph, { color: 'black', margin : 0 }]}>Date: {ExistLot() ? InsertingLotDraft?.created_at.toString() : "Waiting Response"}</Text>
+                    <Text style={[styles.paragraph, { color: 'black', margin : 0 }]}>Warehouse: {route.params.invo?.name}</Text>
+                    <View style={[styles.flexcomponentsRow, {justifyContent : 'space-between'}]}>
+                        <View>
+                            <TextInput style={[styles.textinput]} placeholder="Insert Inserter" />
+                        </View>
+                        <View>
+                            <PickerSupplier SelectSup={OnSelectSupplier} />
+                        </View>
                     </View>
-                    <View>
-                        <PickerSupplier SelectSup={OnSelectSupplier} />
-                    </View>
+
                 </View>
 
                 <View>
-                    <ProductPicker products_of_this_wh={ProductsWH} onSaveList={_Add_product_in_InsertingLot_} />
-                    <View>
+                    <ProductPicker onSaveList={_Add_product_in_InsertingLot_} />
+
+                    <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between' }]}>
                         <Pressable><Text>CONFIRM</Text></Pressable>
                         <Pressable><Text>SAVE</Text></Pressable>
                         <Pressable><Text>CANCEL</Text></Pressable>

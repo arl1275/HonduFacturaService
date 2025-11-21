@@ -42,9 +42,9 @@ const InsertLot_view = ({route, navigation} : props) =>{
                 <Text style={[styles.smallText, styles.textalingleft]}>This view is to show the format to insert an inserting lot</Text>
             </View>
 
-            <View style={[styles.rectanglebutton, {width : '40%', alignItems : 'center', alignSelf : 'center'}]}>
+            <View style={[styles.rectanglebutton, {width : '20%', alignItems : 'center', alignSelf : 'flex-start', borderRadius : 5, marginLeft : 10}]}>
                 <Pressable onPress={()=> navigation.navigate("InsertingLotPage", {invo : invoLocal, producsList : ProducArray})}>
-                    <Text>Generate Insert Lot</Text>
+                    <Text style={[{textAlignVertical : 'center', alignSelf : 'center'}]}>Generate Insert Lot</Text>
                 </Pressable>
             </View>
             
