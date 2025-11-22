@@ -1,5 +1,5 @@
 import { product } from "@/storage/modals/inventory";
-import { View, Text, Pressable, TextInput, FlatList } from "react-native";
+import { View, Text, Pressable, TextInput, FlatList, Alert } from "react-native";
 import styles from "@/assets/styles/styles";
 import { useEffect, useState } from "react";
 import { Dropdown } from 'react-native-element-dropdown';
@@ -12,12 +12,10 @@ type Props = {
 
 const ItemRender = (val: product) => {
   return (
-    <View style={[styles.flexcomponentsRow, styles.cardborder]}>
-      <Text></Text>
-      <Text></Text>
-      <Text></Text>
-      <Text></Text>
-      <Text></Text>
+    <View style={[styles.flexcomponentsRow, styles.cardborder, {justifyContent : 'space-between'}]}>
+      <Text style={[styles.smallText, {color : 'black'}]}>{val.barcode}</Text>
+      <Text style={[styles.smallText, {color : 'black'}]}>{val.name}</Text>
+      <Text style={[styles.smallText, {color : 'black'}]}>{val.type.consumible ? "CONSUMIBLE" : "STOCK"}</Text>
       <View>
 
       </View>
@@ -25,13 +23,16 @@ const ItemRender = (val: product) => {
   )
 }
 
-const RenderDropdown = (Item : product) => {
-  return(
-    <View style={[styles.flexcomponentsRow, styles.cardborder, 
-    {justifyContent : 'space-between', marginTop : 0, marginBottom : 0, marginLeft : 10, marginRight : 10, borderRadius : 0}]}>
-      <Text>{Item.barcode}</Text>
-      <Text>{Item.name}</Text>
-    </View>
+const RenderDropdown = (Item: product, OnSelectItem : (value : product)=> void) => {
+  return (
+    <Pressable onPress={()=> OnSelectItem(Item)}>
+      <View
+        style={[styles.flexcomponentsRow, styles.cardborder,
+        { justifyContent: 'space-between', marginTop: 0, marginBottom: 0, marginLeft: 10, marginRight: 10, borderRadius: 0 }]}>
+        <Text>{Item.barcode}</Text>
+        <Text>{Item.name}</Text>
+      </View>
+    </Pressable>
   )
 }
 
@@ -41,6 +42,14 @@ const ProductPicker = ({ onSaveList }: Props) => {
   const [ProdsBrute, setProdsBrute] = useState<product[]>([]);
   const [Search, setSearch] = useState<string | null>(null);
 
+  const _AddProduct_ = (item : product) => {
+    if(ProdFinaList.includes(item)){
+      Alert.alert("Duplicated Item", "This item, is aready selected.")
+      return;
+    }
+    setProdFinaList(prev=> [...prev, item])
+    setSearch(null);
+  }
 
   useEffect(() => {
     setProdsBrute(getAllProducts());
@@ -50,15 +59,16 @@ const ProductPicker = ({ onSaveList }: Props) => {
     <View>
       <View>
         <Dropdown
-          placeholderStyle={[styles.paragraph, styles.cardborder, {margin : 5, color : 'black'}]}
+          placeholderStyle={[styles.paragraph, styles.cardborder, { margin: 5, color: 'black', backgroundColor : 'white' }]}
           data={ProdsBrute}
           search
+          value={Search != null ? Search : 'Search item'}
           labelField="label"
           valueField="value"
           placeholder="Select item"
           searchPlaceholder="Search..."
-          onChange={e=> setSearch(e)}
-          renderItem={(item)=> RenderDropdown(item)}
+          onChange={e => setSearch(e)}
+          renderItem={(item) => RenderDropdown(item, _AddProduct_)}
         />
       </View>
 
