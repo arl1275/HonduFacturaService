@@ -12,20 +12,25 @@ type Props = {
 
 const ItemRender = (val: product) => {
   return (
-    <View style={[styles.flexcomponentsRow, styles.cardborder, {justifyContent : 'space-between'}]}>
-      <Text style={[styles.smallText, {color : 'black'}]}>{val.barcode}</Text>
-      <Text style={[styles.smallText, {color : 'black'}]}>{val.name}</Text>
-      <Text style={[styles.smallText, {color : 'black'}]}>{val.type.consumible ? "CONSUMIBLE" : "STOCK"}</Text>
-      <View>
+    <View style={[styles.flexcomponentsRow, styles.cardborder,
+    { justifyContent: 'space-between', margin: 0, alignItems: 'center', padding : 5 }]}>
 
+      <Text style={[styles.smallText, { color: 'black', flex : 1 }]}>{val.barcode}</Text>
+      <Text style={[styles.smallText, { color: 'black', flex : 1 }]}>{val.name}</Text>
+      <Text style={[styles.smallText, { color: 'black', flex : 1 }]}>{val.type.consumible ? "CONSUMIBLE" : "STOCK"}</Text>
+
+      <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between', width: '20%' }]}>
+        <TextInput style={[styles.textinput, { width: '45%', height: 30, flex : 1 }]} placeholder="Cost" keyboardType="numeric" />
+        <TextInput style={[styles.textinput, { width: '45%', height: 30, flex : 1 }]} placeholder="Amount" keyboardType="numeric" />
       </View>
+
     </View>
   )
 }
 
-const RenderDropdown = (Item: product, OnSelectItem : (value : product)=> void) => {
+const RenderDropdown = (Item: product, OnSelectItem: (value: product) => void) => {
   return (
-    <Pressable onPress={()=> OnSelectItem(Item)}>
+    <Pressable onPress={() => OnSelectItem(Item)}>
       <View
         style={[styles.flexcomponentsRow, styles.cardborder,
         { justifyContent: 'space-between', marginTop: 0, marginBottom: 0, marginLeft: 10, marginRight: 10, borderRadius: 0 }]}>
@@ -42,12 +47,12 @@ const ProductPicker = ({ onSaveList }: Props) => {
   const [ProdsBrute, setProdsBrute] = useState<product[]>([]);
   const [Search, setSearch] = useState<string | null>(null);
 
-  const _AddProduct_ = (item : product) => {
-    if(ProdFinaList.includes(item)){
+  const _AddProduct_ = (item: product) => {
+    if (ProdFinaList.includes(item)) {
       Alert.alert("Duplicated Item", "This item, is aready selected.")
       return;
     }
-    setProdFinaList(prev=> [...prev, item])
+    setProdFinaList(prev => [...prev, item])
     setSearch(null);
   }
 
@@ -59,7 +64,7 @@ const ProductPicker = ({ onSaveList }: Props) => {
     <View>
       <View>
         <Dropdown
-          placeholderStyle={[styles.paragraph, styles.cardborder, { margin: 5, color: 'black', backgroundColor : 'white' }]}
+          placeholderStyle={[styles.paragraph, styles.cardborder, { margin: 5, color: 'black', backgroundColor: 'white' }]}
           data={ProdsBrute}
           search
           value={Search != null ? Search : 'Search item'}

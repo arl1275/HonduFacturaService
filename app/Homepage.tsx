@@ -18,10 +18,10 @@ const HomepageAPP = ({ route, navigation }: props) => {
                 Select one of the main options of this app, or configure the company in the other options.
             </Text>
 
-            <View>
+            <View style={[styles.flexcomponentsRow]}>
                 <TouchableOpacity 
                     onPress={()=> navigation.navigate("InventoryIndex")}
-                    style={[styles.flexcomponentsRow, 
+                    style={[styles.flexcomponentsRow, styles.squarebutton,
                     {justifyContent : 'space-between', alignItems : 'center', borderRadius : 7, marginTop : 5, marginBottom : 5, backgroundColor : 'black'}]}>
                     <View style={[{ margin: 10, marginLeft: 20 }]}>
                         <Icon name={"storage"} size={25} color="white" />
@@ -29,7 +29,7 @@ const HomepageAPP = ({ route, navigation }: props) => {
                     <Text style={[styles.paragraph, { color: 'white', marginRight: 20, fontSize: 20, fontWeight: 'semibold' }]}>Inventory Management</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={[styles.flexcomponentsRow, 
+                <TouchableOpacity style={[styles.flexcomponentsRow, styles.squarebutton,
                     {justifyContent : 'space-between', alignItems : 'center' ,  borderRadius : 7, marginTop : 5, marginBottom : 5,backgroundColor : 'black'}]}>
                     <View style={[{ margin: 10, marginLeft: 20 }]}>
                         <Icon name={"storefront"} size={25} color="white" />
