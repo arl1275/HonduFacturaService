@@ -4,6 +4,7 @@ import styles from "@/assets/styles/styles";
 import { useEffect, useState } from "react";
 import { Dropdown } from 'react-native-element-dropdown';
 import { getAllProducts } from "@/storage/product.storage";
+import ItemRender from "./productpicker_renderItem";
 
 type Props = {
   //WH_id: number;
@@ -11,26 +12,8 @@ type Props = {
 };
 
 interface DropdownItem {
-    label: string;
-    value: product;
-}
-
-const ItemRender = (val: product) => {
-  return (
-    <View style={[styles.flexcomponentsRow, styles.cardborder,
-    { justifyContent: 'space-between', margin: 0, alignItems: 'center', padding: 5 }]}>
-
-      <Text style={[styles.smallText, { color: 'black', flex: 1 }]}>{val.barcode}</Text>
-      <Text style={[styles.smallText, { color: 'black', flex: 1 }]}>{val.name}</Text>
-      <Text style={[styles.smallText, { color: 'black', flex: 1 }]}>{val.type.consumible ? "CONSUMIBLE" : "STOCK"}</Text>
-
-      <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between', width: '20%' }]}>
-        <TextInput style={[styles.textinput, { width: '45%', height: 30, flex: 1 }]} placeholder="Cost" keyboardType="numeric" />
-        <TextInput style={[styles.textinput, { width: '45%', height: 30, flex: 1 }]} placeholder="Amount" keyboardType="numeric" />
-      </View>
-
-    </View>
-  )
+  label: string;
+  value: product;
 }
 
 const RenderDropdown = (Item: DropdownItem, OnSelectItem: (value: product) => void) => {
@@ -53,8 +36,8 @@ const ProductPicker = ({ onSaveList }: Props) => {
   const [SelectedProduct, setSelectedProduct] = useState<product | null>(null);
 
   const DropdownData: DropdownItem[] = ProdsBrute.map(p => ({
-      label: `${p.barcode} - ${p.name}`,
-      value: p,
+    label: `${p.barcode} - ${p.name}`,
+    value: p,
   }));
 
 
@@ -68,7 +51,7 @@ const ProductPicker = ({ onSaveList }: Props) => {
 
       if (isItemInList) {
         // Opción 1: Actualizar el ítem existente (reemplazándolo)
-        return prev.map(p => 
+        return prev.map(p =>
           p.id === item.id ? item : p // Si el ID coincide, reemplaza 'p' con el nuevo 'item'
         );
       } else {
@@ -107,7 +90,10 @@ const ProductPicker = ({ onSaveList }: Props) => {
       <FlatList
         data={ProdFinaList}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => ItemRender(item)}
+        renderItem={({ item }) =>
+          <View key={item.id.toString()}>
+            <ItemRender val={item} UpdateProd={_AddProduct_} />
+          </View>}
         ListEmptyComponent={<View style={[styles.cardborder, { padding: 10 }]}><Text style={[styles.paragraph]}>CHOOSE A PRODUCT TO INSERT</Text></View>}
       />
 
