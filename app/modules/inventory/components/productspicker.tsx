@@ -22,8 +22,8 @@ const RenderDropdown = (Item: DropdownItem, OnSelectItem: (value: product) => vo
       <View
         style={[styles.flexcomponentsRow, styles.cardborder,
         { justifyContent: 'space-between', marginTop: 0, marginBottom: 0, marginLeft: 10, marginRight: 10, borderRadius: 0 }]}>
-        <Text>{Item.value.barcode}</Text>
-        <Text>{Item.value.name}</Text>
+        <Text style={[styles.smallText, {color : 'black'}]}>{Item.value.barcode}</Text>
+        <Text style={[styles.smallText, {color : 'black'}]}>{Item.value.name}</Text>
       </View>
     </Pressable>
   )
@@ -39,6 +39,10 @@ const ProductPicker = ({ onSaveList }: Props) => {
     label: `${p.barcode} - ${p.name}`,
     value: p,
   }));
+
+  const OnDel = (val: product) => {
+  setProdFinaList(prevList => prevList.filter((d) => d.id !== val.id));
+}
 
 
   const _AddProduct_ = (item: product) => {
@@ -79,10 +83,7 @@ const ProductPicker = ({ onSaveList }: Props) => {
           valueField="value.id"
           placeholder="Select item"
           searchPlaceholder="Search..."
-          onChange={item => {
-            setSelectedProduct(item.value);
-            _AddProduct_(item.value);
-          }}
+          onChange={item => {setSelectedProduct(item.value); _AddProduct_(item.value);}}
           renderItem={(item) => RenderDropdown(item, _AddProduct_)}
         />
       </View>
@@ -92,7 +93,7 @@ const ProductPicker = ({ onSaveList }: Props) => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) =>
           <View key={item.id.toString()}>
-            <ItemRender val={item} UpdateProd={_AddProduct_} />
+            <ItemRender val={item} UpdateProd={_AddProduct_} DelteProd={OnDel} />
           </View>}
         ListEmptyComponent={<View style={[styles.cardborder, { padding: 10 }]}><Text style={[styles.paragraph]}>CHOOSE A PRODUCT TO INSERT</Text></View>}
       />
