@@ -22,8 +22,8 @@ const RenderDropdown = (Item: DropdownItem, OnSelectItem: (value: product) => vo
       <View
         style={[styles.flexcomponentsRow, styles.cardborder,
         { justifyContent: 'space-between', marginTop: 0, marginBottom: 0, marginLeft: 10, marginRight: 10, borderRadius: 0 }]}>
-        <Text style={[styles.smallText, {color : 'black'}]}>{Item.value.barcode}</Text>
-        <Text style={[styles.smallText, {color : 'black'}]}>{Item.value.name}</Text>
+        <Text style={[styles.smallText, { color: 'black' }]}>{Item.value.barcode}</Text>
+        <Text style={[styles.smallText, { color: 'black' }]}>{Item.value.name}</Text>
       </View>
     </Pressable>
   )
@@ -41,9 +41,8 @@ const ProductPicker = ({ onSaveList }: Props) => {
   }));
 
   const OnDel = (val: product) => {
-  setProdFinaList(prevList => prevList.filter((d) => d.id !== val.id));
-}
-
+    setProdFinaList(prevList => prevList.filter((d) => d.id !== val.id));
+  }
 
   const _AddProduct_ = (item: product) => {
     if (ProdFinaList.some(p => p.id === item.id)) {
@@ -52,24 +51,24 @@ const ProductPicker = ({ onSaveList }: Props) => {
     }
     setProdFinaList(prev => {
       const isItemInList = prev.some(p => p.id === item.id);
-
       if (isItemInList) {
-        // Opción 1: Actualizar el ítem existente (reemplazándolo)
         return prev.map(p =>
-          p.id === item.id ? item : p // Si el ID coincide, reemplaza 'p' con el nuevo 'item'
+          p.id === item.id ? item : p
         );
       } else {
-        // Opción 2: Insertar el ítem si es nuevo
         return [...prev, item];
       }
     });
-
     setSelectedProduct(null);
   }
 
   useEffect(() => {
     setProdsBrute(getAllProducts());
   }, []);
+
+  useEffect(() => {
+    onSaveList(ProdFinaList);
+  }, [ProdFinaList]);
 
   return (
     <View>
@@ -83,7 +82,7 @@ const ProductPicker = ({ onSaveList }: Props) => {
           valueField="value.id"
           placeholder="Select item"
           searchPlaceholder="Search..."
-          onChange={item => {setSelectedProduct(item.value); _AddProduct_(item.value);}}
+          onChange={item => { setSelectedProduct(item.value); _AddProduct_(item.value); }}
           renderItem={(item) => RenderDropdown(item, _AddProduct_)}
         />
       </View>

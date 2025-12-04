@@ -20,6 +20,7 @@ const InsertingLotPage = ({ route, navigation }: props) => {
     const [SuppLierSelected, setSuppLierSelected] = useState<supplier | undefined>(undefined);
     const [ProductsWH, setProductsWH] = useState<product[]>([]);                                    // this are the products of this wh
     const [ProdSelectedList, setProdSelectedList] = useState<product[]>([]);                        // this are the products selected for the Inserting lot
+    //const [Results, setResults] = useState({total : Number, });
 
     const OnSelectSupplier = (Seleccted: supplier | undefined) => { setSuppLierSelected(Seleccted) };
     const ExistLot = () => { return InsertingLotDraft === undefined ? false : true };
@@ -60,8 +61,6 @@ const InsertingLotPage = ({ route, navigation }: props) => {
 
     useEffect(() => {
         UpdateInsertingLot("id_supplier", SuppLierSelected != undefined ? SuppLierSelected.id : 0);
-        console.log(typeof ProductsWH[0]);
-        
     }, [SuppLierSelected?.id]);
 
 
@@ -77,30 +76,34 @@ const InsertingLotPage = ({ route, navigation }: props) => {
             {/*------------------------------------------------------*/}
 
             <View>
-                <View style={[styles.cardborder, { margin : 10, padding : 15, backgroundColor : 'white' }]}>
-                    <Text style={[styles.paragraph, { color: 'black', margin : 0, fontWeight : 'bold' }]}>Insert Lot: {ExistLot() ? InsertingLotDraft?.insert_lot_num : "Waiting Number"}</Text>
-                    <Text style={[styles.paragraph, { color: 'grey', margin : 0 }]}>Date: {ExistLot() ? InsertingLotDraft?.created_at.toString() : "Waiting Response"}</Text>
-                    <Text style={[styles.paragraph, { color: 'grey', margin : 0 }]}>Warehouse: {route.params.invo?.name}</Text>
-                    <View style={[styles.flexcomponentsRow, {justifyContent : 'space-between'}]}>
-                        <View style={[styles.textinput, styles.cardborder, {width : '40%'}]}>
+                <View style={[styles.cardborder, { margin: 10, padding: 15, backgroundColor: 'white' }]}>
+                    <Text style={[styles.paragraph, { color: 'black', margin: 0, fontWeight: 'bold' }]}>Insert Lot: {ExistLot() ? InsertingLotDraft?.insert_lot_num : "Waiting Number"}</Text>
+                    <Text style={[styles.paragraph, { color: 'grey', margin: 0 }]}>Date: {ExistLot() ? InsertingLotDraft?.created_at.toString() : "Waiting Response"}</Text>
+                    <Text style={[styles.paragraph, { color: 'grey', margin: 0 }]}>Warehouse: {route.params.invo?.name}</Text>
+                    <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between' }]}>
+                        <View style={[styles.textinput, styles.cardborder, { width: '40%' }]}>
                             <TextInput style={[styles.smallText, {}]} placeholder="Insert Inserter" />
                         </View>
-                        <View style={[{width : '50%'}]}>
+                        <View style={[{ width: '50%' }]}>
                             <PickerSupplier SelectSup={OnSelectSupplier} />
                         </View>
                     </View>
                 </View>
 
-                <View style={[{margin : 10}]}>
+                <View style={[{ margin: 10 }]}>
                     <ProductPicker onSaveList={_Add_product_in_InsertingLot_} />
-
-                    <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between' }]}>
-                        <Pressable style={[styles.rectanglebutton, { width : "20%", backgroundColor : 'green'}]}><Text style={[{color : 'white', fontWeight : 'bold'}]}>CONFIRM</Text></Pressable>
-                        <Pressable style={[styles.rectanglebutton, { width : "20%", backgroundColor : 'black'}]}><Text style={[{color : 'white', fontWeight : 'bold'}]}>SAVE</Text></Pressable>
-                        <Pressable style={[styles.rectanglebutton, { width : "20%", backgroundColor : 'red'}]}><Text style={[{color : 'white', fontWeight : 'bold'}]}>CANCEL</Text></Pressable>
-                    </View>
                 </View>
 
+            </View>
+
+            <View>
+
+            </View>
+
+            <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between', bottom: 0, position: "absolute", width : '95%' }]}>
+                <Pressable style={[styles.rectanglebutton, { width: "20%", backgroundColor: 'green' }]}><Text style={[{ color: 'white', fontWeight: 'bold' }]}>CONFIRM</Text></Pressable>
+                <Pressable style={[styles.rectanglebutton, { width: "20%", backgroundColor: 'black' }]}><Text style={[{ color: 'white', fontWeight: 'bold' }]}>SAVE</Text></Pressable>
+                <Pressable style={[styles.rectanglebutton, { width: "20%", backgroundColor: 'red' }]}><Text style={[{ color: 'white', fontWeight: 'bold' }]}>CANCEL</Text></Pressable>
             </View>
 
         </View>
