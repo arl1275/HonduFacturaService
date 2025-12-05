@@ -20,10 +20,21 @@ const InsertingLotPage = ({ route, navigation }: props) => {
     const [SuppLierSelected, setSuppLierSelected] = useState<supplier | undefined>(undefined);
     const [ProductsWH, setProductsWH] = useState<product[]>([]);                                    // this are the products of this wh
     const [ProdSelectedList, setProdSelectedList] = useState<product[]>([]);                        // this are the products selected for the Inserting lot
-    //const [Results, setResults] = useState({total : Number, });
+    const [Results, setResults] = useState({
+            total : 0.0,
+            subtotal : 0.0,
+            qty : 0.0
+        });
 
     const OnSelectSupplier = (Seleccted: supplier | undefined) => { setSuppLierSelected(Seleccted) };
     const ExistLot = () => { return InsertingLotDraft === undefined ? false : true };
+
+    const CalculateValues =  () => {
+        setResults((prev)=>({...prev, 
+            total :  ProdSelectedList.reduce((sum, prd)=> sum + prd.price, 0),
+            qty : ProdSelectedList.reduce((sum, prd)=> sum + prd.amountStock, 0)
+        }))
+    }
 
     const OnCancel = () => {
         Alert.alert("Cancel Insert Lot", "Are you sure; u want to cancel the insert lot?", [
@@ -62,6 +73,10 @@ const InsertingLotPage = ({ route, navigation }: props) => {
     useEffect(() => {
         UpdateInsertingLot("id_supplier", SuppLierSelected != undefined ? SuppLierSelected.id : 0);
     }, [SuppLierSelected?.id]);
+
+    useEffect(() => {
+        
+    }, [ProdSelectedList]);
 
 
     return (
