@@ -9,8 +9,10 @@ import { InsertLot } from "@/storage/modals/insertlot_modal";
 import { supplier } from "@/storage/modals/supplier";
 import { PickerSupplier } from "@/components/Pickers";
 import { product } from "@/storage/modals/inventory";
+import { getCompany_by_ID } from "@/storage/company.storage";
 
 import ProductPicker from "../components/productspicker";
+import { company } from "@/storage/modals/empresa";
 //import { addProduct } from "@/storage/product.storage";
 
 type props = StackScreenProps<StackParamList, "InsertingLotPage">;
@@ -18,7 +20,7 @@ type props = StackScreenProps<StackParamList, "InsertingLotPage">;
 const InsertingLotPage = ({ route, navigation }: props) => {
     const [InsertingLotDraft, setInsertingLotDraft] = useState<InsertLot | undefined>(undefined);
     const [SuppLierSelected, setSuppLierSelected] = useState<supplier | undefined>(undefined);
-    const [ProductsWH, setProductsWH] = useState<product[]>([]);                                    // this are the products of this wh
+   // const [ProductsWH, setProductsWH] = useState<product[]>([]);                                    // this are the products of this wh
     const [ProdSelectedList, setProdSelectedList] = useState<product[]>([]);                        // this are the products selected for the Inserting lot
     const [Results, setResults] = useState({
             total : 0.0,
@@ -30,9 +32,13 @@ const InsertingLotPage = ({ route, navigation }: props) => {
     const ExistLot = () => { return InsertingLotDraft === undefined ? false : true };
 
     const CalculateValues =  () => {
+        let TaxDef : company | number | undefined = route.params.invo != undefined ? getCompany_by_ID(route.params.invo?.id_company) : 0;
+        let TaxApplied = typeof TaxDef === 'object' ? TaxDef.impuestos.find((e)=> e.defaultTax === true)?.porcentaje : 0;
+
         setResults((prev)=>({...prev, 
             total :  ProdSelectedList.reduce((sum, prd)=> sum + prd.price, 0),
-            qty : ProdSelectedList.reduce((sum, prd)=> sum + prd.amountStock, 0)
+            qty : ProdSelectedList.reduce((sum, prd)=> sum + prd.amountStock, 0),
+            subtotal : ProdSelectedList.reduce((sum, prd)=> sum + prd.price, 0) * (typeof TaxApplied != "undefined" ? TaxApplied : 0)
         }))
     }
 
@@ -52,9 +58,9 @@ const InsertingLotPage = ({ route, navigation }: props) => {
             const Result = PreparationLot(route.params.invo, "Inserter", 0, route.params.invo?.id)
             setInsertingLotDraft(Result);
         }
-        if (route.params.producsList != undefined) {
-            setProductsWH(route.params.producsList);
-        }
+        // if (route.params.producsList != undefined) {
+        //     setProductsWH(route.params.producsList);
+        // }
     };
 
     //this function is to add one product to the insertinglot
@@ -75,6 +81,7 @@ const InsertingLotPage = ({ route, navigation }: props) => {
     }, [SuppLierSelected?.id]);
 
     useEffect(() => {
+        CalculateValues();
         
     }, [ProdSelectedList]);
 
