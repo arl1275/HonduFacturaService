@@ -20,25 +20,26 @@ type props = StackScreenProps<StackParamList, "InsertingLotPage">;
 const InsertingLotPage = ({ route, navigation }: props) => {
     const [InsertingLotDraft, setInsertingLotDraft] = useState<InsertLot | undefined>(undefined);
     const [SuppLierSelected, setSuppLierSelected] = useState<supplier | undefined>(undefined);
-   // const [ProductsWH, setProductsWH] = useState<product[]>([]);                                    // this are the products of this wh
+    // const [ProductsWH, setProductsWH] = useState<product[]>([]);                                    // this are the products of this wh
     const [ProdSelectedList, setProdSelectedList] = useState<product[]>([]);                        // this are the products selected for the Inserting lot
     const [Results, setResults] = useState({
-            total : 0.0,
-            subtotal : 0.0,
-            qty : 0.0
-        });
+        total: 0.0,
+        subtotal: 0.0,
+        qty: 0.0
+    });
 
     const OnSelectSupplier = (Seleccted: supplier | undefined) => { setSuppLierSelected(Seleccted) };
     const ExistLot = () => { return InsertingLotDraft === undefined ? false : true };
 
-    const CalculateValues =  () => {
-        let TaxDef : company | number | undefined = route.params.invo != undefined ? getCompany_by_ID(route.params.invo?.id_company) : 0;
-        let TaxApplied = typeof TaxDef === 'object' ? TaxDef.impuestos.find((e)=> e.defaultTax === true)?.porcentaje : 0;
+    const CalculateValues = () => {
+        let TaxDef: company | number | undefined = route.params.invo != undefined ? getCompany_by_ID(route.params.invo?.id_company) : 0;
+        let TaxApplied = typeof TaxDef === 'object' ? TaxDef.impuestos.find((e) => e.defaultTax === true)?.porcentaje : 0;
 
-        setResults((prev)=>({...prev, 
-            total :  ProdSelectedList.reduce((sum, prd)=> sum + prd.price, 0),
-            qty : ProdSelectedList.reduce((sum, prd)=> sum + prd.amountStock, 0),
-            subtotal : ProdSelectedList.reduce((sum, prd)=> sum + prd.price, 0) * (typeof TaxApplied != "undefined" ? TaxApplied : 0)
+        setResults((prev) => ({
+            ...prev,
+            total: ProdSelectedList.reduce((sum, prd) => sum + (prd.price * prd.amountStock), 0),
+            qty: ProdSelectedList.reduce((sum, prd) => sum + prd.amountStock, 0),
+            subtotal: ProdSelectedList.reduce((sum, prd) => sum + prd.price, 0) * (typeof TaxApplied != "undefined" ? TaxApplied : 0)
         }))
     }
 
@@ -68,7 +69,7 @@ const InsertingLotPage = ({ route, navigation }: props) => {
 
     const UpdateInsertingLot = (field: string, value: supplier | product[] | string | number) => {
         if (InsertingLotDraft != undefined) {
-            setInsertingLotDraft(prev => (prev ? { ...prev, [field]: [value] } as InsertLot : prev))
+            setInsertingLotDraft(prev => (prev ? { ...prev, [field]: [value], total : Results.total, subtotal : Results.subtotal } as InsertLot : prev))
         }
     }
 
@@ -82,7 +83,6 @@ const InsertingLotPage = ({ route, navigation }: props) => {
 
     useEffect(() => {
         CalculateValues();
-        
     }, [ProdSelectedList]);
 
 
@@ -118,14 +118,29 @@ const InsertingLotPage = ({ route, navigation }: props) => {
 
             </View>
 
-            <View>
+            <View style={[ { justifyContent: 'space-between', bottom: 0, position: "absolute", width: '95%' }]}>
 
-            </View>
+                <View style={[styles.cardborder, { margin: 10, width: '95%', height: 'auto', alignSelf: 'center' }]}>
+                    <View style={[, styles.flexcomponentsRow]}>
+                        <Text style={[styles.smallText]}>Total</Text>
+                        <Text style={[styles.smallText]}>{InsertingLotDraft?.total}</Text>
+                    </View>
+                    <View style={[, styles.flexcomponentsRow]}>
+                        <Text style={[styles.smallText]}>Sub Total</Text>
+                        <Text style={[styles.smallText]}>{InsertingLotDraft?.subtotal}</Text>
+                    </View>
+                    <View style={[, styles.flexcomponentsRow]}>
+                        <Text style={[styles.smallText]}></Text>
+                        <Text style={[styles.smallText]}>{ }</Text>
+                    </View>
+                </View>
 
-            <View style={[styles.flexcomponentsRow, { justifyContent: 'space-between', bottom: 0, position: "absolute", width : '95%' }]}>
-                <Pressable style={[styles.rectanglebutton, { width: "20%", backgroundColor: 'green' }]}><Text style={[{ color: 'white', fontWeight: 'bold' }]}>CONFIRM</Text></Pressable>
-                <Pressable style={[styles.rectanglebutton, { width: "20%", backgroundColor: 'black' }]}><Text style={[{ color: 'white', fontWeight: 'bold' }]}>SAVE</Text></Pressable>
-                <Pressable style={[styles.rectanglebutton, { width: "20%", backgroundColor: 'red' }]}><Text style={[{ color: 'white', fontWeight: 'bold' }]}>CANCEL</Text></Pressable>
+                <View style={[styles.flexcomponentsRow, {justifyContent : 'space-between'}]}>
+                    <Pressable style={[styles.rectanglebutton, { width: "20%", backgroundColor: 'green' }]}><Text style={[{ color: 'white', fontWeight: 'bold' }]}>CONFIRM</Text></Pressable>
+                    <Pressable style={[styles.rectanglebutton, { width: "20%", backgroundColor: 'black' }]}><Text style={[{ color: 'white', fontWeight: 'bold' }]}>SAVE</Text></Pressable>
+                    <Pressable style={[styles.rectanglebutton, { width: "20%", backgroundColor: 'red' }]}><Text style={[{ color: 'white', fontWeight: 'bold' }]}>CANCEL</Text></Pressable>
+                </View>
+
             </View>
 
         </View>

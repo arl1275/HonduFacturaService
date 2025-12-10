@@ -6,7 +6,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 
 type props = {
   val: product,
-  UpdateProd: (prod: product) => void,
+  UpdateProd: (prod: product, updatading : boolean) => void,
   DelteProd: (prod: product) => void
 }
 
@@ -30,7 +30,7 @@ const ItemRender = ({ val, UpdateProd, DelteProd }: props) => {
   };
 
   useEffect(() => {
-    UpdateProd(Local);
+    UpdateProd(Local, true);
   }, [cost, amount]);
 
   return (

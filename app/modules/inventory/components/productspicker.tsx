@@ -16,9 +16,9 @@ interface DropdownItem {
   value: product;
 }
 
-const RenderDropdown = (Item: DropdownItem, OnSelectItem: (value: product) => void) => {
+const RenderDropdown = (Item: DropdownItem, OnSelectItem: (value: product, isUpdate : boolean) => void) => {
   return (
-    <Pressable onPress={() => OnSelectItem(Item.value)}>
+    <Pressable onPress={() => OnSelectItem(Item.value, false)}>
       <View
         style={[styles.flexcomponentsRow, styles.cardborder,
         { justifyContent: 'space-between', marginTop: 0, marginBottom: 0, marginLeft: 10, marginRight: 10, borderRadius: 0 }]}>
@@ -44,8 +44,8 @@ const ProductPicker = ({ onSaveList }: Props) => {
     setProdFinaList(prevList => prevList.filter((d) => d.id !== val.id));
   }
 
-  const _AddProduct_ = (item: product) => {
-    if (ProdFinaList.some(p => p.id === item.id)) {
+  const _AddProduct_ = (item: product, isUpdate : boolean) => {
+    if (ProdFinaList.some(p => p.id === item.id) && isUpdate === false) {
       Alert.alert("Duplicated Item", "This item is already selected.")
       return;
     }
@@ -82,7 +82,7 @@ const ProductPicker = ({ onSaveList }: Props) => {
           valueField="value.id"
           placeholder="Select item"
           searchPlaceholder="Search..."
-          onChange={item => { setSelectedProduct(item.value); _AddProduct_(item.value); }}
+          onChange={item => { setSelectedProduct(item.value); _AddProduct_(item.value, false); }}
           renderItem={(item) => RenderDropdown(item, _AddProduct_)}
         />
       </View>
